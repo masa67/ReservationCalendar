@@ -10,7 +10,8 @@ namespace ReservationCalendar.Models
     public class ReservationBookAbs
     {
         public ReservationBook reservationBook { get; set; }
-        public ICollection<CalendarTemplate> calendarTemplates { get; set; }
+        public ICollection<CalendarTemplate> calendarLayers { get; set; }
+        public CalendarTemplate combinedCalendar { get; set; }
 
         public ReservationBookAbs()
         {
@@ -19,7 +20,7 @@ namespace ReservationCalendar.Models
         public ReservationBookAbs(ReservationBook rBook)
         {
             reservationBook = rBook;
-            calendarTemplates = new List<CalendarTemplate>();
+            calendarLayers = new List<CalendarTemplate>();
 
             TimePeriod timePeriod = new TimePeriod{ unitsAsDays=true, startTime=rBook.StartTime, endTime=rBook.EndTime };
 
@@ -27,12 +28,12 @@ namespace ReservationCalendar.Models
             {
                 CalendarTemplate calTempl;
 
-                switch (cal.CalendarType)
+                switch (cal.CalendarDbType)
                 {
-                    case CalendarType.Absolute:
+                    case CalendarDbType.Absolute:
                         calTempl = new CalendarTemplate(cal.AbsCalendarTemplate, timePeriod);
                         break;
-                    case CalendarType.Relative:
+                    case CalendarDbType.Relative:
                         calTempl = new CalendarTemplate(cal.RelCalendarTemplate, timePeriod);
                         break;
                     default:
@@ -40,8 +41,10 @@ namespace ReservationCalendar.Models
                 }
 
                 calTempl.weight = cal.Weight;
-                calendarTemplates.Add(calTempl);
+                calendarLayers.Add(calTempl);
             }
+
+            combinedCalendar = new CalendarTemplate(calendarLayers);
         }
     }
 }

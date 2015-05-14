@@ -76,8 +76,8 @@ namespace ReservationCalendar.DAL
 
             var calendarBookAllocations = new List<CalendarBookAllocation>
             {
-                new CalendarBookAllocation{ReservationBookID=1, CalendarType=CalendarType.Absolute, AbsCalendarTemplateID=1, Weight=0},
-                new CalendarBookAllocation{ReservationBookID=1, CalendarType=CalendarType.Relative, RelCalendarTemplateID=1, Weight=10}
+                new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Absolute, AbsCalendarTemplateID=1, Weight=0},
+                new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Relative, RelCalendarTemplateID=1, Weight=10}
             };
 
             calendarBookAllocations.ForEach(a => context.CalendarBookAllocations.Add(a));

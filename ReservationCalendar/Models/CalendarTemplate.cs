@@ -7,15 +7,19 @@ namespace ReservationCalendar.Models
 {
     public class CalendarTemplate
     {
-        public CalendarType dbCalendarType { get; set; }
-        public int dbCalendarTemplateID { get; set; }
+        public CalendarSourceType calendarSourceType { get; set; }
+        public CalendarDbType? calendarDbType { get; set; }
+        public int? dbCalendarTemplateID { get; set; }
         public string description { get; set; }
-        public int weight { get; set; }
+        public int? weight { get; set; }
         public ICollection<TimeSlot> timeSlots { get; set; }
+
+        # region DB constructors 
 
         public CalendarTemplate(AbsCalendarTemplate aCal, TimePeriod timePeriod)
         {
-            dbCalendarType = CalendarType.Absolute;
+            calendarSourceType = CalendarSourceType.Database;
+            calendarDbType = CalendarDbType.Absolute;
             dbCalendarTemplateID = aCal.ID;
             description = aCal.Description;
             timeSlots = new List<TimeSlot>();
@@ -27,7 +31,9 @@ namespace ReservationCalendar.Models
                     if ((aSlot.StartTime >= timePeriod.startTime && aSlot.StartTime <= timePeriod.endTime) ||
                         (aSlot.EndTime >= timePeriod.startTime && aSlot.EndTime <= timePeriod.endTime))
                     {
-                        timeSlots.Add(new TimeSlot(aSlot));
+                        TimeSlot ts = new TimeSlot(aSlot);
+                        ts.parentCalendar = this;
+                        timeSlots.Add(ts);
                     }
                 }
             }
@@ -39,7 +45,8 @@ namespace ReservationCalendar.Models
 
         public CalendarTemplate(RelCalendarTemplate rCal, TimePeriod timePeriod)
         {
-            dbCalendarType = CalendarType.Relative;
+            calendarSourceType = CalendarSourceType.Database;
+            calendarDbType = CalendarDbType.Relative;
             dbCalendarTemplateID = rCal.ID;
             description = rCal.Description;
             timeSlots = new List<TimeSlot>();
@@ -57,7 +64,9 @@ namespace ReservationCalendar.Models
                                 (rCal.RelCalendarType == RelCalendarType.Weekly &&
                                  rSlot.Weekday == day.DayOfWeek))
                             {
-                                timeSlots.Add(new TimeSlot(rSlot, day));
+                                TimeSlot ts = new TimeSlot(rSlot, day);
+                                ts.parentCalendar = this;
+                                timeSlots.Add(ts);
                             }
 
                         }
@@ -70,5 +79,30 @@ namespace ReservationCalendar.Models
                 throw new System.ArgumentException("Handling the case where unitsAsDays is false is missing", "timePeriod");
             }
         }
+
+        # endregion
+
+        #region Layered constructors
+
+        public CalendarTemplate(ICollection<CalendarTemplate> cals)
+        {
+            calendarSourceType = CalendarSourceType.Layered;
+            timeSlots = new List<TimeSlot>();
+
+            List<CalendarTemplate> orderdCals = cals.OrderBy(x => -x.weight).ToList();
+
+            foreach (CalendarTemplate cal in orderdCals)
+            {
+                foreach (TimeSlot slot in cal.timeSlots)
+                {
+                    foreach (TimeSlot mSlot in timeSlots)
+                    {
+                        
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }

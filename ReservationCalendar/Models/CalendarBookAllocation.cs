@@ -9,7 +9,7 @@ namespace ReservationCalendar.Models
     {
         public int ID { get; set; }
         public int ReservationBookID { get; set; }
-        public CalendarType CalendarType { get; set; }
+        public CalendarDbType CalendarDbType { get; set; }
         public int? AbsCalendarTemplateID { get; set; }
         public int? RelCalendarTemplateID { get; set; }
         public int Weight { get; set; } // 0...100

@@ -12,10 +12,25 @@ namespace ReservationCalendar.Models
         Excluded
     }
 
-    public enum CalendarType
+    public enum CalendarDbType
     {
         Absolute,
         Relative
+    }
+
+    public enum CalendarSourceType
+    {
+        Database,
+        Layered
+    }
+
+    public enum TimeSlotOverlap
+    {
+        None,
+        LateOverlap,
+        EarlyOverlap,
+        Override,
+        SplitOverlap
     }
 
     public class TimePeriod

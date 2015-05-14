@@ -7,7 +7,8 @@ namespace ReservationCalendar.Models
 {
     public class TimeSlot
     {
-        public int dbId { get; set; }
+        public int? dbId { get; set; }
+        public CalendarTemplate parentCalendar { get; set; } // in combined calendars, we need to know where the time slots are coming from
         public Boolean fullDay { get; set; }
         public DateTime startTime { get; set; }
         public DateTime? endTime { get; set; }
@@ -46,6 +47,37 @@ namespace ReservationCalendar.Models
 
             timeSlotStatus = rSlot.TimeSlotStatus;
             description = rSlot.Description;
+        }
+
+        public TimeSlotOverlap checkOverlap(TimeSlot ts)
+        {
+            if (startTime >= ts.endTime || endTime <= ts.startTime)
+            {
+                return TimeSlotOverlap.None;
+            }
+            
+            if (startTime > ts.startTime)
+            {
+                if (endTime >= ts.endTime)
+                {
+                    return TimeSlotOverlap.LateOverlap;
+                }
+                else
+                {
+                    return TimeSlotOverlap.SplitOverlap;
+                }
+            }
+            else
+            {
+                if (endTime >= ts.endTime)
+                {
+                    return TimeSlotOverlap.Override;
+                }
+                else
+                {
+                    return TimeSlotOverlap.EarlyOverlap;
+                }
+            }
         }
     }
 }

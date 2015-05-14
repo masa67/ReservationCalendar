@@ -34,15 +34,14 @@
             @Html.DisplayFor(model => model.reservationBook.EndTime)
         </dd>
     </dl>
-    @{int i = 0;}
-    @foreach (var item in Model.calendarTemplates)
+    @foreach (var item in Model.calendarLayers)
     {
         <dl class="dl-horizontal">
             <dt>
-                @Html.DisplayNameFor(modelItem => item.dbCalendarType)
+                @Html.DisplayNameFor(modelItem => item.calendarDbType)
             </dt>
             <dd>
-                @Html.DisplayFor(modelItem => item.dbCalendarType)
+                @Html.DisplayFor(modelItem => item.calendarDbType)
             </dd>
             <dt>
                 @Html.DisplayNameFor(modelItem => item.description)
