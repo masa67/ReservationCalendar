@@ -9,7 +9,7 @@ namespace ReservationCalendar.Models
     {
         public int ID { get; set; }
         public int RelCalendarTemplateID { get; set; }
-        public Weekday? Weekday { get; set; }
+        public DayOfWeek? Weekday { get; set; }
         public Boolean FullDay { get; set; }
         public int StartTimeHrs { get; set; }
         public int StartTimeMin { get; set; }

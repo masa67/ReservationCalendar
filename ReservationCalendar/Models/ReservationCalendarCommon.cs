@@ -5,17 +5,6 @@ using System.Web;
 
 namespace ReservationCalendar.Models
 {
-    public enum Weekday
-    {
-        Monday,
-        Tuesday,
-        Wednesday,
-        Thursday,
-        Friday,
-        Saturday,
-        Sunday
-    }
-
     public enum TimeSlotStatus
     {
         Free,
@@ -27,5 +16,12 @@ namespace ReservationCalendar.Models
     {
         Absolute,
         Relative
+    }
+
+    public class TimePeriod
+    {
+        public Boolean unitsAsDays { get; set; }
+        public DateTime startTime { get; set; }
+        public DateTime endTime { get; set; }
     }
 }

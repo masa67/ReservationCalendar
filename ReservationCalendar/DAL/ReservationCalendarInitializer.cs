@@ -47,11 +47,11 @@ namespace ReservationCalendar.DAL
 
             var relTimeSlots = new List<RelTimeSlot>
             {
-                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=Weekday.Monday, FullDay=false, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
-                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=Weekday.Tuesday, FullDay=false, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
-                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=Weekday.Wednesday, FullDay=false, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
-                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=Weekday.Thursday, FullDay=false, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
-                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=Weekday.Friday, FullDay=false, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free}
+                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=DayOfWeek.Monday, FullDay=false, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
+                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=DayOfWeek.Tuesday, FullDay=false, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
+                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=DayOfWeek.Wednesday, FullDay=false, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
+                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=DayOfWeek.Thursday, FullDay=false, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
+                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=DayOfWeek.Friday, FullDay=false, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free}
             };
 
             relTimeSlots.ForEach(s => context.RelTimeSlots.Add(s));
@@ -77,7 +77,7 @@ namespace ReservationCalendar.DAL
             var calendarBookAllocations = new List<CalendarBookAllocation>
             {
                 new CalendarBookAllocation{ReservationBookID=1, CalendarType=CalendarType.Absolute, AbsCalendarTemplateID=1, Weight=0},
-                new CalendarBookAllocation{ReservationBookID=1, CalendarType=CalendarType.Relative, AbsCalendarTemplateID=1, Weight=10}
+                new CalendarBookAllocation{ReservationBookID=1, CalendarType=CalendarType.Relative, RelCalendarTemplateID=1, Weight=10}
             };
 
             calendarBookAllocations.ForEach(a => context.CalendarBookAllocations.Add(a));

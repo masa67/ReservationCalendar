@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ReservationCalendar.Models.ReservationBookAbs>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <tr>
+        <th>Description</th>
+        <th>StartTime</th>
+        <th>EndTime</th>
+        <th></th>
+    </tr>
+    @{int i = 0;}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.reservationBook.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.reservationBook.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.reservationBook.EndTime)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = @i }) |
+            </td>
+        </tr>
+        i++;
+    }
+</table>
+

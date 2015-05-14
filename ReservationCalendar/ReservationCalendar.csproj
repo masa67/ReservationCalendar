@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ReservationCalendar</RootNamespace>
     <AssemblyName>ReservationCalendar</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -50,9 +50,9 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -162,8 +162,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ReservationBookAbsController.cs" />
     <Compile Include="Controllers\ReservationBookController.cs" />
-    <Compile Include="Controllers\ReservationsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAL\ReservationCalendarContext.cs" />
     <Compile Include="DAL\ReservationCalendarInitializer.cs" />
@@ -173,13 +173,16 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AbsCalendarTemplate.cs" />
     <Compile Include="Models\CalendarBookAllocation.cs" />
+    <Compile Include="Models\CalendarTemplate.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\RelCalendarTemplate.cs" />
     <Compile Include="Models\RelTimeSlot.cs" />
     <Compile Include="Models\ReservationBook.cs" />
     <Compile Include="Models\AbsTimeSlot.cs" />
+    <Compile Include="Models\ReservationBookAbs.cs" />
     <Compile Include="Models\ReservationCalendarCommon.cs" />
+    <Compile Include="Models\TimeSlot.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserBookAllocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -258,9 +261,12 @@
     <Content Include="Views\ReservationBook\Details.cshtml" />
     <Content Include="Views\ReservationBook\Edit.cshtml" />
     <Content Include="Views\ReservationBook\Index.cshtml" />
+    <Content Include="Views\ReservationBookAbs\Index.cshtml" />
+    <Content Include="Views\ReservationBookAbs\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Helpers\" />
     <Folder Include="Views\Reservations\" />
   </ItemGroup>
   <ItemGroup>

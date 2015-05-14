@@ -1,0 +1,94 @@
+﻿@model ReservationCalendar.Models.ReservationBookAbs
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ReservationBook</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.reservationBook.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.reservationBook.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.reservationBook.StartTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.reservationBook.StartTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.reservationBook.EndTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.reservationBook.EndTime)
+        </dd>
+    </dl>
+    @{int i = 0;}
+    @foreach (var item in Model.calendarTemplates)
+    {
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(modelItem => item.dbCalendarType)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelItem => item.dbCalendarType)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(modelItem => item.description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelItem => item.description)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(modelItem => item.weight)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelItem => item.weight)
+            </dd>
+        </dl>
+        <table class="table">
+            <tr>
+                <th>fullDay</th>
+                <th>startTime</th>
+                <th>endTime</th>
+                <th>timeSlotStatus</th>
+                <th>description</th>
+            </tr>
+
+            @foreach (var slot in item.timeSlots)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => slot.fullDay)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => slot.startTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => slot.endTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => slot.timeSlotStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => slot.description)
+                    </td>
+                </tr>
+             }
+        </table>
+    }
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
