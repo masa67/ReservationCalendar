@@ -58,6 +58,7 @@
         </dl>
         <table class="table">
             <tr>
+                <th>dbId</th>
                 <th>fullDay</th>
                 <th>startTime</th>
                 <th>endTime</th>
@@ -68,6 +69,9 @@
             @foreach (var slot in item.timeSlots)
             {
                 <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => slot.dbId)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => slot.fullDay)
                     </td>
@@ -87,6 +91,76 @@
              }
         </table>
     }
+    <h4>Combined Calendar</h4>
+    <table class="table">
+        <tr>
+            <th>dbType</th>
+            <th>dbId</th>
+            <th>fullDay</th>
+            <th>startTime</th>
+            <th>endTime</th>
+            <th>timeSlotStatus</th>
+            <th>description</th>
+        </tr>
+
+        @foreach (var slot in Model.combinedCalendar.timeSlots)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => slot.dbType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => slot.dbId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => slot.fullDay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => slot.startTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => slot.endTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => slot.timeSlotStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => slot.description)
+                </td>
+            </tr>
+        }
+    </table>
+    <h4>Conflicting Time Slots</h4>
+    <table class="table">
+        <tr>
+            <th>Slot#1 dbType</th>
+            <th>Slot#1 dbId</th>
+            <th>Slot#2 dbType</th>
+            <th>Slot#2 dbId</th>
+            <th>Conflict Type</th>
+            
+        </tr>
+        @foreach (var item in Model.combinedCalendar.timeSlotConflicts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.aSlot.dbType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.aSlot.dbId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.bSlot.dbType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.bSlot.dbId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.timeSlotOverlap)
+                </td>
+            </tr>
+        }
+    </table>
 </div>
 <p>
     @Html.ActionLink("Back to List", "Index")

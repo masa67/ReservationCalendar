@@ -7,8 +7,10 @@ namespace ReservationCalendar.Models
 {
     public class TimeSlot
     {
-        public int? dbId { get; set; }
+        public CalendarDbType dbType { get; set; }
+        public int dbId { get; set; }
         public CalendarTemplate parentCalendar { get; set; } // in combined calendars, we need to know where the time slots are coming from
+        public TimeSlot origTimeSlot { get; set; }
         public Boolean fullDay { get; set; }
         public DateTime startTime { get; set; }
         public DateTime? endTime { get; set; }
@@ -17,6 +19,7 @@ namespace ReservationCalendar.Models
 
         public TimeSlot(AbsTimeSlot aSlot)
         {
+            dbType = CalendarDbType.Absolute;
             dbId = aSlot.ID;
             fullDay = aSlot.FullDay;
             startTime = aSlot.StartTime;
@@ -31,6 +34,7 @@ namespace ReservationCalendar.Models
 
         public TimeSlot(RelTimeSlot rSlot, DateTime timeBase)
         {
+            dbType = CalendarDbType.Relative;
             dbId = rSlot.ID;
             fullDay = rSlot.FullDay;
 
@@ -49,8 +53,86 @@ namespace ReservationCalendar.Models
             description = rSlot.Description;
         }
 
+        public TimeSlot(TimeSlot tSlot)
+        {
+            dbType = tSlot.dbType;
+            dbId = tSlot.dbId;
+            parentCalendar = tSlot.parentCalendar;
+            origTimeSlot = tSlot;
+            fullDay = tSlot.fullDay;
+            startTime = tSlot.startTime;
+
+            if (tSlot.endTime != null)
+            {
+                endTime = tSlot.endTime;
+            }
+
+            timeSlotStatus = tSlot.timeSlotStatus;
+            description = tSlot.description;
+        }
+
         public TimeSlotOverlap checkOverlap(TimeSlot ts)
         {
+            if (fullDay || ts.fullDay)
+            {
+                DateTime aStartDate = startTime.Date, bStartDate = ts.startTime.Date;
+
+                if (fullDay)
+                {
+                    if (ts.fullDay)
+                    {
+                        if (aStartDate.Equals(bStartDate))
+                        {
+                            return TimeSlotOverlap.Override;
+                        }
+                        else
+                        {
+                            return TimeSlotOverlap.None;
+                        }
+                    }
+
+                    if (aStartDate < bStartDate)
+                    {
+                        return TimeSlotOverlap.None;
+                    }
+                    else
+                    {
+                        DateTime bEndDate = ts.startTime.Date;
+
+                        if (aStartDate.Equals(bStartDate))
+                        {
+                            if (aStartDate.Equals(bEndDate))
+                            {
+                                return TimeSlotOverlap.Override;
+                            }
+                            else
+                            {
+                                return TimeSlotOverlap.EarlyOverlap;
+                            }
+                        }
+                        else
+                        {
+                            if (aStartDate > bEndDate)
+                            {
+                                return TimeSlotOverlap.None;
+                            }
+                            else
+                            {
+                                if (aStartDate.Equals(bEndDate))
+                                {
+                                    return TimeSlotOverlap.LateOverlap;
+                                } 
+                                else
+                                {
+                                    return TimeSlotOverlap.SplitOverlap;
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+            
             if (startTime >= ts.endTime || endTime <= ts.startTime)
             {
                 return TimeSlotOverlap.None;

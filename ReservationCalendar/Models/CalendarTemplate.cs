@@ -5,6 +5,13 @@ using System.Web;
 
 namespace ReservationCalendar.Models
 {
+    public class TimeSlotConflict
+    {
+        public TimeSlot aSlot { get; set; }
+        public TimeSlot bSlot { get; set; }
+        public TimeSlotOverlap timeSlotOverlap { get; set; }
+    }
+
     public class CalendarTemplate
     {
         public CalendarSourceType calendarSourceType { get; set; }
@@ -13,6 +20,7 @@ namespace ReservationCalendar.Models
         public string description { get; set; }
         public int? weight { get; set; }
         public ICollection<TimeSlot> timeSlots { get; set; }
+        public ICollection<TimeSlotConflict> timeSlotConflicts { get; set; }
 
         # region DB constructors 
 
@@ -88,6 +96,7 @@ namespace ReservationCalendar.Models
         {
             calendarSourceType = CalendarSourceType.Layered;
             timeSlots = new List<TimeSlot>();
+            timeSlotConflicts = new List<TimeSlotConflict>();
 
             List<CalendarTemplate> orderdCals = cals.OrderBy(x => -x.weight).ToList();
 
@@ -95,12 +104,72 @@ namespace ReservationCalendar.Models
             {
                 foreach (TimeSlot slot in cal.timeSlots)
                 {
+                    ICollection<TimeSlot> timeSlotsToDelete = new List<TimeSlot>();
+
                     foreach (TimeSlot mSlot in timeSlots)
                     {
-                        
+                        TimeSlotOverlap tsCmp = slot.checkOverlap(mSlot);
+
+                        if (tsCmp != TimeSlotOverlap.None)
+                        {
+                            timeSlotConflicts.Add(new TimeSlotConflict { aSlot = slot, bSlot = mSlot, timeSlotOverlap = tsCmp });
+                        }
+
+                        switch (slot.checkOverlap(mSlot))
+                        {
+                            case TimeSlotOverlap.None:
+                                break;
+                            case TimeSlotOverlap.LateOverlap:
+                                mSlot.fullDay = false;
+                                mSlot.endTime = slot.startTime;
+                                break;
+                            case TimeSlotOverlap.EarlyOverlap:
+                                if (mSlot.fullDay) {
+                                    mSlot.fullDay = false;
+                                    mSlot.endTime = mSlot.startTime.AddDays(1);
+                                }
+                                if (slot.fullDay)
+                                {
+                                    mSlot.startTime = slot.startTime.AddDays(1);
+                                }
+                                else
+                                {
+                                    mSlot.startTime = slot.endTime ?? default(DateTime);
+                                }
+                                break;
+                            case TimeSlotOverlap.Override:
+                                timeSlotsToDelete.Add(mSlot);
+                                break;
+                            case TimeSlotOverlap.SplitOverlap:
+                                TimeSlot dSlot = new TimeSlot(mSlot);
+                                dSlot.origTimeSlot = mSlot.origTimeSlot;
+
+                                mSlot.endTime = slot.startTime;
+                                if (slot.fullDay)
+                                {
+                                    dSlot.startTime = slot.startTime.AddDays(1);
+                                }
+                                else
+                                {
+                                    dSlot.startTime = slot.endTime ?? default(DateTime);
+                                }
+                                timeSlots.Add(dSlot);
+                                break;
+                            default:
+                                throw new InvalidOperationException("Unhandled return value of TimeSlot.checkOverlap()");
+                        }
                     }
+
+                    foreach (TimeSlot dSlot in timeSlotsToDelete)
+                    {
+                        timeSlots.Remove(dSlot);
+                    }
+
+                    timeSlots.Add(new TimeSlot(slot));
                 }
             }
+
+            timeSlots = timeSlots.OrderBy(x => x.startTime).ToList();
         }
 
         #endregion
