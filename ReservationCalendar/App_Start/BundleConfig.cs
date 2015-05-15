@@ -61,7 +61,7 @@ namespace ReservationCalendar
                 // BEGIN PAGE LEVEL PLUGIN STYLES
                 .Include("~/Metronic/global/plugins/gritter/css/jquery.gritter.css")
                 .Include("~/Metronic/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css")
-                .Include("~/Metronic/global/plugins/fullcalendar/fullcalendar/fullcalendar.css")
+                .Include("~/Metronic/global/plugins/fullcalendar/fullcalendar.css")
                 .Include("~/Metronic/global/plugins/jqvmap/jqvmap/jqvmap.css")
                 // END PAGE LEVEL PLUGIN STYLES
                 // BEGIN PAGE STYLES

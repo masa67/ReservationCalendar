@@ -107,3 +107,4 @@ G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCal
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.dll
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.pdb
 C:\Workarea\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.csprojResolveAssemblyReference.cache
+G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.csprojResolveAssemblyReference.cache

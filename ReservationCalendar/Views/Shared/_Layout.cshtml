@@ -1,46 +1,73 @@
 ﻿<!DOCTYPE html>
-<html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+ <!--<![endif]-->
 <head>
     <meta charset="utf-8" />
+    <title>@ViewBag.Title - Calendar Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
     @Styles.Render("~/bundles/metronic/css")
-    @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/angular")
     @Scripts.Render("~/bundles/metronic")
     @Scripts.Render("~/bundles/calendarApp")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+    <!-- BEGIN HEADER -->
+    <div class="page-header navbar navbar-fixed-top">
+        <!-- BEGIN HEADER INNER -->
+        <div class="page-header-inner">
+            <!-- BEGIN LOGO -->
+            <div class="page-logo">
+                <a href="/" style="padding-top: 15px">
+                    <i class="icon-home" style="font-size: 17px; vertical-align: middle; color: #999999;"></i>
+                </a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Users", "Index", "User")</li>
-                    <li>@Html.ActionLink("Books", "Index", "ReservationBookAbs")</li>
+            <!-- END LOGO -->
+            <!-- BEGIN TOP NAVIGATION MENU -->
+            <div class="top-menu">
+                <ul class="nav navbar-nav pull-right">
+                    <!-- BEGIN CALENDAR LINK -->
+                    <li>
+                        <a href="@Url.Action("Index", "ReservationBookAbs")"><i class="icon-calendar"></i></a>
+                    </li>
+                    <!-- END CALENDAR LINK -->
                 </ul>
-                @Html.Partial("_LoginPartial")
             </div>
+            <!-- END TOP NAVIGATION MENU -->
+        </div>
+        <!-- END HEADER INNER -->
+    </div>
+    <!-- END HEADER -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row">
+                <div class="col-md-12">
+                    @RenderBody()
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+    <!-- END CONTENT -->
+    <!-- BEGIN FOOTER -->
+    <div class="page-footer">
+        <div class="page-footer-inner">
+            <p>&copy; @DateTime.Now.Year - Calendar Demo</p>
+        </div>
+        <div class="page-footer-tools">
+            <span class="go-top">
+                <i class="fa fa-angle-up"></i>
+            </span>
+        </div>
     </div>
-
+    <!-- END FOOTER -->
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
