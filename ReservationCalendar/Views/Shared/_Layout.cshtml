@@ -12,9 +12,6 @@
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
     @Styles.Render("~/bundles/metronic/css")
     @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/angular")
-    @Scripts.Render("~/bundles/metronic")
-    @Scripts.Render("~/bundles/calendarApp")
 </head>
 <body>
     <!-- BEGIN HEADER -->
@@ -68,8 +65,25 @@
         </div>
     </div>
     <!-- END FOOTER -->
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/metronic")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/calendarApp")
     @RenderSection("scripts", required: false)
+    <script>
+        jQuery(document).ready(function() {
+            Metronic.init(); // init metronic core componets
+            Layout.init(); // init layout
+            QuickSidebar.init() // init quick sidebar
+            Index.init();
+            Index.initDashboardDaterange();
+            Index.initJQVMAP(); // init index page's custom scripts
+            Index.initCalendar(); // init index page's custom scripts
+            Index.initCharts(); // init index page's custom scripts
+            Index.initChat();
+            Index.initMiniCharts();
+            Index.initIntro();
+            Tasks.initDashboardWidget();
+        });
+    </script>
 </body>
 </html>

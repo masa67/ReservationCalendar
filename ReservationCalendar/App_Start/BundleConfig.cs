@@ -75,8 +75,46 @@ namespace ReservationCalendar
                 .Include("~/Metronic/admin/layout/css/custom.css"));
                 // END THEME STYLES
 
-            bundles.Add(new ScriptBundle("~/bundles/metronic").Include());
-                      
+            bundles.Add(new ScriptBundle("~/bundles/metronic").ForceOrdered()
+                // BEGIN CORE PLUGINS
+                .Include("~/Metronic/global/plugins/jquery.min.js")
+                .Include("~/Metronic/global/plugins/jquery-migrate.min.js")
+                .Include("~/Metronic/global/plugins/jquery-ui/jquery-ui.min.js")
+                .Include("~/Metronic/global/plugins/bootstrap/js/bootstrap.min.js")
+                .Include("~/Metronic/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js")
+                .Include("~/Metronic/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js")
+                .Include("~/Metronic/global/plugins/jquery.blockui.min.js")
+                .Include("~/Metronic/global/plugins/jquery.cokie.min.js")
+                .Include("~/Metronic/global/plugins/uniform/jquery.uniform.min.js")
+                .Include("~/Metronic/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js")
+                // END CORE PLUGINS
+                // BEGIN PAGE LEVEL PLUGINS
+                .Include("~/Metronic/global/plugins/jqvmap/jqvmap/jquery.vmap.js")
+                .Include("~/Metronic/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js")
+                .Include("~/Metronic/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js")
+                .Include("~/Metronic/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.europe.js")
+                .Include("~/Metronic/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js")
+                .Include("~/Metronic/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js")
+                .Include("~/Metronic/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js")
+                .Include("~/Metronic/global/plugins/flot/jquery.flot.min.js")
+                .Include("~/Metronic/global/plugins/flot/jquery.flot.resize.min.js")
+                .Include("~/Metronic/global/plugins/flot/jquery.flot.categories.min.js")
+                .Include("~/Metronic/global/plugins/jquery.pulsate.min.js")
+                .Include("~/Metronic/global/plugins/bootstrap-daterangepicker/moment.min.js")
+                .Include("~/Metronic/global/plugins/bootstrap-daterangepicker/daterangepicker.js")
+                .Include("~/Metronic/global/plugins/fullcalendar/fullcalendar/fullcalendar.min.js")
+                .Include("~/Metronic/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js")
+                .Include("~/Metronic/global/plugins/jquery.sparkline.min.js")
+                .Include("~/Metronic/global/plugins/gritter/js/jquery.gritter.js")
+                // END PAGE LEVEL PLUGINS
+                // BEGIN PAGE LEVEL SCRIPTS
+                .Include("~/Metronic/global/scripts/metronic.js")
+                .Include("~/Metronic/admin/layout/scripts/layout.js")
+                .Include("~/Metronic/admin/layout/scripts/quick-sidebar.js")
+                .Include("~/Metronic/admin/pages/scripts/index.js")
+                .Include("~/Metronic/admin/pages/scripts/tasks.js"));
+                // END PAGE LEVEL SCRIPTS
+
             bundles.Add(new ScriptBundle("~/bundles/calendarApp").Include(
                       "~/Areas/Calendar/Scripts/client/app.js",
                       "~/Areas/Calendar/Scripts/client/Controllers/calendarCtrl.js"));
