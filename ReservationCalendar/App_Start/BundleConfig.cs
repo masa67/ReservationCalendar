@@ -26,6 +26,15 @@ namespace ReservationCalendar
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
+                      "~/Scripts/angular.js",
+                      "~/Scripts/angular-route.js",
+                      "~/Scripts/angular-resource.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/calendarApp").Include(
+                      "~/Areas/Calendar/Scripts/client/app.js",
+                      "~/Areas/Calendar/Scripts/client/Controllers/calendarCtrl.js"));
         }
     }
 }
