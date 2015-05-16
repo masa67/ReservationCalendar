@@ -102,7 +102,7 @@ namespace ReservationCalendar
                 .Include("~/Metronic/global/plugins/jquery.pulsate.min.js")
                 .Include("~/Metronic/global/plugins/bootstrap-daterangepicker/moment.min.js")
                 .Include("~/Metronic/global/plugins/bootstrap-daterangepicker/daterangepicker.js")
-                .Include("~/Metronic/global/plugins/fullcalendar/fullcalendar/fullcalendar.min.js")
+                .Include("~/Metronic/global/plugins/fullcalendar/fullcalendar.min.js")
                 .Include("~/Metronic/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js")
                 .Include("~/Metronic/global/plugins/jquery.sparkline.min.js")
                 .Include("~/Metronic/global/plugins/gritter/js/jquery.gritter.js")
@@ -112,7 +112,8 @@ namespace ReservationCalendar
                 .Include("~/Metronic/admin/layout/scripts/layout.js")
                 .Include("~/Metronic/admin/layout/scripts/quick-sidebar.js")
                 .Include("~/Metronic/admin/pages/scripts/index.js")
-                .Include("~/Metronic/admin/pages/scripts/tasks.js"));
+                .Include("~/Metronic/admin/pages/scripts/tasks.js")
+                .Include("~/Metronic/admin/pages/scripts/calendar.js"));
                 // END PAGE LEVEL SCRIPTS
 
             bundles.Add(new ScriptBundle("~/bundles/calendarApp").Include(
