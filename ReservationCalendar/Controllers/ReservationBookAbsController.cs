@@ -1,4 +1,5 @@
-﻿using ReservationCalendar.DAL;
+﻿using Newtonsoft.Json;
+using ReservationCalendar.DAL;
 using ReservationCalendar.Models;
 using System;
 using System.Collections;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace ReservationCalendar.Controllers
 {
@@ -34,7 +36,7 @@ namespace ReservationCalendar.Controllers
         }
 
         // GET: ReservationBookAbs/Details/1
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, string data)
         {
             if (id == null)
             {
@@ -43,9 +45,20 @@ namespace ReservationCalendar.Controllers
             if (id >= rBooksAbs.Count)
             {
                 return HttpNotFound();
-            }        
+            }
 
-            return View(rBooksAbs[id ?? default(int)]);
+            if (!string.IsNullOrEmpty(data) && data.Equals("true"))
+            {
+                return Content(JsonConvert.SerializeObject(
+                    rBooksAbs[id ?? default(int)],
+                    Formatting.Indented,
+                    new JsonSerializerSettings {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        NullValueHandling = NullValueHandling.Ignore
+                    }));
+            } else {
+                return View(rBooksAbs[id ?? default(int)]);
+            }
         }
     }
 }

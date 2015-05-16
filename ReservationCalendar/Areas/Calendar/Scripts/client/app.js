@@ -1,2 +1,2 @@
 ﻿
-var app = angular.module('calApp', []);
+var app = angular.module('calApp', [ 'ngResource' ]);

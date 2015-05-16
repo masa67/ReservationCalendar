@@ -40,7 +40,6 @@ namespace ReservationCalendar.Models
                         (aSlot.EndTime >= timePeriod.startTime && aSlot.EndTime <= timePeriod.endTime))
                     {
                         TimeSlot ts = new TimeSlot(aSlot);
-                        ts.parentCalendar = this;
                         timeSlots.Add(ts);
                     }
                 }
@@ -73,7 +72,6 @@ namespace ReservationCalendar.Models
                                  rSlot.Weekday == day.DayOfWeek))
                             {
                                 TimeSlot ts = new TimeSlot(rSlot, day);
-                                ts.parentCalendar = this;
                                 timeSlots.Add(ts);
                             }
 

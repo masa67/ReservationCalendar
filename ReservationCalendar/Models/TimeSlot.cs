@@ -9,7 +9,6 @@ namespace ReservationCalendar.Models
     {
         public CalendarDbType dbType { get; set; }
         public int dbId { get; set; }
-        public CalendarTemplate parentCalendar { get; set; } // in combined calendars, we need to know where the time slots are coming from
         public TimeSlot origTimeSlot { get; set; }
         public Boolean fullDay { get; set; }
         public DateTime startTime { get; set; }
@@ -57,7 +56,7 @@ namespace ReservationCalendar.Models
         {
             dbType = tSlot.dbType;
             dbId = tSlot.dbId;
-            parentCalendar = tSlot.parentCalendar;
+
             origTimeSlot = tSlot;
             fullDay = tSlot.fullDay;
             startTime = tSlot.startTime;

@@ -1,7 +1,7 @@
 ﻿
 app.controller('CalendarCtrl', ['$scope', function ($scope) {
 }])
-.directive('reservationCalendar', function ($window) {
+.directive('reservationCalendar', function ($window, $resource) {
     return {
         restrict: 'E',
         templateUrl: '/Areas/Calendar/Templates/reservationCalendar.html',
@@ -22,51 +22,85 @@ app.controller('CalendarCtrl', ['$scope', function ($scope) {
             var calBody = angular.element(elem.find('.calendar-body'));
             var calBody2 = $('.calendar-body');
 
+            var calEvents = [];
+
+            var RBook = $resource('/ReservationBookAbs/Details/0?data=true');
+            scope.rBook = RBook.get(function () {
+                var i, tSlots = scope.rBook.combinedCalendar.timeSlots, tSlot, ts;
+
+                calEvents = [];
+                for (i = 0; i < tSlots.length; i++) {
+                    tSlot = tSlots[i];
+
+                    ts = {
+                        title: tSlot.description,
+                        start: tSlot.startTime,
+                        backgroundColor:
+                            (tSlot.timeSlotStatus === 2)
+                                ? Metronic.getBrandColor('green')
+                                : Metronic.getBrandColor('yellow'),
+                    };
+
+                    if (tSlot.fullDay) {
+                        ts.allDay = true;
+                    } else {
+                        ts.allDay = false;
+                        ts.end = tSlot.endTime
+                    }
+
+                    calEvents.push(ts);
+                }
+
+                redrawCal();
+            });
+            
             scope.isMobile = false;
 
             scope.$watch(
                 function () {
                     return child[0].offsetWidth;
                 },
-                modOnResize
+                redrawCal
             );
 
             angular.element($window).bind('resize', function () {
                 scope.$apply();
             });
 
-            function modOnResize(width) {
-                if (Metronic.isRTL()) {
-                    if (width <= 720) {
-                        scope.isMobile = true;
-                        h = {
-                            right: 'title, prev, next',
-                            center: '',
-                            left: 'agendaDay, agendaWeek, month, today'
-                        };
+            function redrawCal(width) {
+                if (width) {
+                    if (Metronic.isRTL()) {
+                        if (width <= 720) {
+                            scope.isMobile = true;
+                            h = {
+                                right: 'title, prev, next',
+                                center: '',
+                                left: 'agendaDay, agendaWeek, month, today'
+                            };
+                        } else {
+                            scope.isMobile = false;
+                            h = {
+                                right: 'title',
+                                center: '',
+                                left: 'agendaDay, agendaWeek, month, today, prev,next'
+                            };
+                        }
                     } else {
-                        scope.isMobile = false;
-                        h = {
-                            right: 'title',
-                            center: '',
-                            left: 'agendaDay, agendaWeek, month, today, prev,next'
-                        };
-                    }
-                } else {
-                    if (width <= 720) {
-                        scope.isMobile = true;
-                        h = {
-                            left: 'title, prev, next',
-                            center: '',
-                            right: 'today,month,agendaWeek,agendaDay'
-                        };
-                    } else {
-                        scope.isMobile = false;
-                        h = {
-                            left: 'title',
-                            center: '',
-                            right: 'prev,next,today,month,agendaWeek,agendaDay'
-                        };
+                        if (width <= 720) {
+                            scope.isMobile = true;
+                            h = {
+                                left: 'title, prev, next',
+                                center: '',
+                                right: 'today,month,agendaWeek,agendaDay'
+                            };
+                        } else {
+                            scope.isMobile = false;
+                            h = {
+                                left: 'title',
+                                center: '',
+                                right: 'prev,next,today,month,agendaWeek,agendaDay'
+                            };
+                        }
                     }
                 }
 
@@ -76,7 +110,10 @@ app.controller('CalendarCtrl', ['$scope', function ($scope) {
                     defaultView: 'month', // change default view with available options from http://arshaw.com/fullcalendar/docs/views/Available_Views/ 
                     slotMinutes: 15,
                     editable: true,
-                    events: [{
+                    events: calEvents
+
+                        /*
+                        [{
                         title: 'All Day Event',
                         start: new Date(y, m, 1),
                         backgroundColor: Metronic.getBrandColor('yellow')
@@ -118,6 +155,7 @@ app.controller('CalendarCtrl', ['$scope', function ($scope) {
                         backgroundColor: Metronic.getBrandColor('yellow'),
                         url: 'http://google.com/',
                     }]
+                        */
                 });
             }
         }
