@@ -19,7 +19,8 @@ app.controller('CalendarCtrl', ['$scope', function ($scope) {
             var h = {};
 
             var child = elem.find('.calendar');
-            var calBody = elem[0].querySelector('.calendar-body');
+            var calBody = angular.element(elem.find('.calendar-body'));
+            var calBody2 = $('.calendar-body');
 
             scope.isMobile = false;
 
@@ -70,7 +71,6 @@ app.controller('CalendarCtrl', ['$scope', function ($scope) {
                 }
             }
             
-            /*
             calBody.fullCalendar('destroy'); // destroy the calendar
             calBody.fullCalendar({ //re-initialize the calendar
                 header: h,
@@ -120,7 +120,6 @@ app.controller('CalendarCtrl', ['$scope', function ($scope) {
                     url: 'http://google.com/',
                 }]
             });
-            */
         }
     };
 });
