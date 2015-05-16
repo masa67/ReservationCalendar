@@ -278,6 +278,7 @@
     <Content Include="Views\ReservationBook\Index.cshtml" />
     <Content Include="Views\ReservationBookAbs\Index.cshtml" />
     <Content Include="Views\ReservationBookAbs\Details.cshtml" />
+    <Content Include="Areas\Calendar\Templates\reservationCalendar.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
