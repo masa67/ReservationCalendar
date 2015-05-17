@@ -96,7 +96,7 @@ namespace ReservationCalendar.Models
                     }
                     else
                     {
-                        DateTime bEndDate = ts.startTime.Date;
+                        DateTime bEndDate = (ts.endTime ?? default(DateTime)).Date;
 
                         if (aStartDate.Equals(bStartDate))
                         {

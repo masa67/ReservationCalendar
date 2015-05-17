@@ -21,6 +21,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>99d9c6a3</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -190,6 +191,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Calendar\Helpers\calendar.js" />
     <Content Include="Areas\Calendar\Scripts\client\app.js" />
     <Content Include="Areas\Calendar\Scripts\client\Controllers\calendarCtrl.js" />
     <Content Include="Content\bootstrap.css" />

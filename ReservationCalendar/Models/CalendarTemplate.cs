@@ -113,7 +113,7 @@ namespace ReservationCalendar.Models
                             timeSlotConflicts.Add(new TimeSlotConflict { aSlot = slot, bSlot = mSlot, timeSlotOverlap = tsCmp });
                         }
 
-                        switch (slot.checkOverlap(mSlot))
+                        switch (tsCmp)
                         {
                             case TimeSlotOverlap.None:
                                 break;

@@ -7,30 +7,30 @@ namespace ReservationCalendar.Models
 {
     public enum TimeSlotStatus
     {
-        Free,
-        Reserved,
-        Excluded
+        Free = 0,
+        Reserved = 1,
+        Excluded = 2
     }
 
     public enum CalendarDbType
     {
-        Absolute,
-        Relative
+        Absolute = 0,
+        Relative = 1
     }
 
     public enum CalendarSourceType
     {
-        Database,
-        Layered
+        Database = 0,
+        Layered = 1
     }
 
     public enum TimeSlotOverlap
     {
-        None,
-        LateOverlap,
-        EarlyOverlap,
-        Override,
-        SplitOverlap
+        None = 0,
+        LateOverlap = 1,
+        EarlyOverlap = 2,
+        Override = 3,
+        SplitOverlap = 4
     }
 
     public class TimePeriod

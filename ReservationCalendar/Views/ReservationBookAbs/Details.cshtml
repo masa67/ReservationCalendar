@@ -6,7 +6,7 @@
 
 <h2>Details</h2>
 
-<div ng-app="calApp" ng-controller="CalendarCtrl"> 
+<div ng-app="calApp"> 
     <h4>ReservationBook</h4>
     <hr />
     <div class="row">
@@ -14,6 +14,7 @@
             <reservation-calendar></reservation-calendar>
         </div>
     </div>
+    @*
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.reservationBook.Description)
@@ -166,6 +167,7 @@
             </tr>
         }
     </table>
+        *@
 </div>
 <p>
     @Html.ActionLink("Back to List", "Index")
