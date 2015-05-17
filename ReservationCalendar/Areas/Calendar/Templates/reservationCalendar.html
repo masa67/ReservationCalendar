@@ -1,6 +1,4 @@
-﻿<style>
-</style>
-<div class="portlet box green-meadow calendar">
+﻿<div class="portlet box green-meadow calendar">
     <div class="portlet-title">
         <div class="caption">
             <i class="fa fa-gift"></i>Calendar
@@ -8,10 +6,14 @@
     </div>
     <div class="portlet-body">
         <div class="row">
-            <div class="col-sm-12 col-md-3">
+            <div class="hidden-xs col-sm-3">
+                <reservation-calendar-controls></reservation-calendar-controls>
             </div>
-            <div class="col-sm-12 col-md-9">
+            <div class="col-xs-12 col-sm-9">
                 <div class="calendar-body" ng-class="{mobile: isMobile}"></div>
+            </div>
+            <div class="col-xs-12 hidden-sm">
+                <reservation-calendar-controls></reservation-calendar-controls>
             </div>
         </div>
     </div>

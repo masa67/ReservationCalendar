@@ -114,6 +114,7 @@ namespace ReservationCalendar
                 .Include("~/Metronic/admin/pages/scripts/index.js")
                 .Include("~/Metronic/admin/pages/scripts/tasks.js")
                 .Include("~/Metronic/admin/pages/scripts/calendar.js"));
+                
                 // END PAGE LEVEL SCRIPTS
 
             bundles.Add(new ScriptBundle("~/bundles/calendarApp").Include(

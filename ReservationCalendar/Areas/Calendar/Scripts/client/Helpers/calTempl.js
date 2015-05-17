@@ -91,6 +91,15 @@ var calTemplHelpers = (function () {
             }
 
             return retObj;
+        },
+        listAllTimeSlots: function (cals) {
+            var i, retObj = [];
+
+            for (i = 0; i < cals.length; i += 1) {
+                retObj.push.apply(retObj, cals[i].timeSlots);
+            }
+
+            return retObj;
         }
     };
 }());

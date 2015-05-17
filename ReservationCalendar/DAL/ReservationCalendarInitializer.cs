@@ -39,7 +39,7 @@ namespace ReservationCalendar.DAL
 
             var relCalendarTemplates = new List<RelCalendarTemplate>
             {
-                new RelCalendarTemplate{RelCalendarType=RelCalendarType.Weekly, ValidStart=new DateTime(2015, 5, 1), ValidEnd=new DateTime(2015, 5, 31)}
+                new RelCalendarTemplate{Description="standard weekly", RelCalendarType=RelCalendarType.Weekly, ValidStart=new DateTime(2015, 5, 1), ValidEnd=new DateTime(2015, 5, 31)}
             };
 
             relCalendarTemplates.ForEach(c => context.RelCalendarTemplates.Add(c));

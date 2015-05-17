@@ -16,10 +16,7 @@ var timeSlotHelpers = (function () {
 
         if (aTS.fullDay || bTS.fullDay) {
             aStartDate = moment(aTS.startTime.split('T')[0]).unix();
-            // aStartDate = aStartDate.unix();
-
-            bStartDate = moment(bTS.startTime.split('T')[0]);
-            bStartDate = bStartDate.unix();
+            bStartDate = moment(bTS.startTime.split('T')[0]).unix();
 
             if (aTS.fullDay) {
                 if (bTS.fullDay) {
@@ -33,8 +30,7 @@ var timeSlotHelpers = (function () {
                     return calHelpers.TimeSlotOverlap.NONE;
                 }
 
-                bEndDate = moment(bTS.endTime.split('T')[0]);
-                bEndDate = bEndDate.unix();
+                bEndDate = moment(bTS.endTime.split('T')[0]).unix();
 
                 if (aStartDate === bStartDate) {
                     if (aStartDate === bEndDate) {
@@ -52,15 +48,11 @@ var timeSlotHelpers = (function () {
             }
         }
 
-        aStartTime = moment(aTS.startTime);
-        aStartTime = aStartTime.unix();
-        aEndTime = moment(aTS.endTime);
-        aEndTime = aEndTime.unix();
+        aStartTime = moment(aTS.startTime).unix();
+        aEndTime = moment(aTS.endTime).unix();
 
-        bStartTime = moment(bTS.startTime);
-        bStartTime = bStartTime.unix();
-        bEndTime = moment(bTS.endTime);
-        bEndTime = bEndTime.unix();
+        bStartTime = moment(bTS.startTime).unix();
+        bEndTime = moment(bTS.endTime).unix();
 
         if (aStartTime >= bEndTime || aEndTime <= bStartTime) {
             return calHelpers.TimeSlotOverlap.NONE;
