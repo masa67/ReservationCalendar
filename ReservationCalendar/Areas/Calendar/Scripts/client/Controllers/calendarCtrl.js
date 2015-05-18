@@ -8,8 +8,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
         templateUrl: '/Areas/Calendar/Templates/reservationCalendar.html',
         link: function (scope, elem) {
 
-            var allTSlots = {},
-                child = elem.find('.calendar'),
+            var child = elem.find('.calendar'),
                 calBody = angular.element(elem.find('.calendar-body')),
                 calEvents = [],
                 combCal = {},
@@ -51,7 +50,10 @@ app.directive('reservationCalendar', function ($window, $resource) {
                 if (scope.model.calMode === 'combined') {
                     tSlots = combCal.timeSlots;
                 } else {
-                    tSlots = allTSlots;
+                    tSlots = calTemplHelpers.listAllTimeSlots(
+                        scope.rBook.calendarLayers,
+                        scope.model.calendarLayerSelected
+                    );
                 }
 
                 calEvents = [];
@@ -94,13 +96,28 @@ app.directive('reservationCalendar', function ($window, $resource) {
             }
 
             scope.model = scope.model || {};
+            scope.model.calendarLayerSelected = [];
+
             scope.rBook = RBook.get(function () {
+                var i, sel;
+
+                calTemplHelpers.sortCalByWeight(scope.rBook.calendarLayers);
+                sel = scope.model.calendarLayerSelected;
+                sel.length = 0;
+                for (i = 0; i < scope.rBook.calendarLayers.length; i++) {
+                    sel.push(true);
+                }
+
                 combCal = calTemplHelpers.createCombinedCalTempl(scope.rBook.calendarLayers);
-                allTSlots = calTemplHelpers.listAllTimeSlots(scope.rBook.calendarLayers);
                 updateCalEvents();
             });
 
             scope.model.calMode = 'combined';
+
+            scope.changeCalLayers = function () {
+                updateCalEvents();
+            }
+
             scope.changeCalMode = function () {
                 updateCalEvents();
             };
@@ -115,6 +132,6 @@ app.directive('reservationCalendar', function ($window, $resource) {
 
         return {
             restrict: 'E',
-            templateUrl: '/Areas/Calendar/Templates/reservationCalendarControls.html',
+            templateUrl: '/Areas/Calendar/Templates/reservationCalendarControls.html'
         };
     });

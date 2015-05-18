@@ -9,10 +9,10 @@ var calTemplHelpers = (function () {
 
     function cmpCalByWeight(a, b) {
         if (a.weight > b.weight) {
-            return -1;
+            return 1;
         }
         if (a.weight < b.weight) {
-            return 1;
+            return -1;
         }
         return 0;
     }
@@ -26,10 +26,10 @@ var calTemplHelpers = (function () {
                     timeSlotConflicts: []
                 };
 
-            cals.sort(cmpCalByWeight);
+            this.sortCalByWeight(cals);
 
             for (i = 0; i < cals.length; i += 1) {
-                cal = cals[i];
+                cal = cals[cals.length - i - 1];
                 for (j = 0; j < cal.timeSlots.length; j += 1) {
                     slot = cal.timeSlots[j];
                     timeSlotsToDelete = [];
@@ -92,14 +92,19 @@ var calTemplHelpers = (function () {
 
             return retObj;
         },
-        listAllTimeSlots: function (cals) {
+        listAllTimeSlots: function (cals, sel) {
             var i, retObj = [];
 
             for (i = 0; i < cals.length; i += 1) {
-                retObj.push.apply(retObj, cals[i].timeSlots);
+                if (!sel || sel[i]) {
+                    retObj.push.apply(retObj, cals[i].timeSlots);
+                }
             }
 
             return retObj;
+        },
+        sortCalByWeight: function (cals) {
+            cals.sort(cmpCalByWeight);
         }
     };
 }());

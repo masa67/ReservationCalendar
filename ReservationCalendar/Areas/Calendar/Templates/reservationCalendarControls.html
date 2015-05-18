@@ -2,5 +2,13 @@
     <form>
         <input type="radio" ng-model="model.calMode" ng-change="changeCalMode()" value="combined" />Combined<br />
         <input type="radio" ng-model="model.calMode" ng-change="changeCalMode()" value="separate"/>Separate<br />
+        <hr />
+        <div ng-repeat="layer in rBook.calendarLayers">
+            <input type="checkbox"
+                   ng-disabled="model.calMode === 'combined'"
+                   ng-model="model.calendarLayerSelected[$index]"
+                   ng-change="changeCalLayers()"
+            />{{layer.description}} ({{layer.weight}})<br/>
+        </div>
     </form>
 </div>
