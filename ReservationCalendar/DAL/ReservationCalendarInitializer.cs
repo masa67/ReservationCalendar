@@ -59,7 +59,8 @@ namespace ReservationCalendar.DAL
 
             var absCalendarTemplates = new List<AbsCalendarTemplate>
             {
-                new AbsCalendarTemplate{Description="public holidays"}
+                new AbsCalendarTemplate{Description="public holidays"},
+                new AbsCalendarTemplate{Description="reservations"}
             };
 
             absCalendarTemplates.ForEach(c => context.AbsCalendarTemplates.Add(c));
@@ -77,6 +78,7 @@ namespace ReservationCalendar.DAL
             var calendarBookAllocations = new List<CalendarBookAllocation>
             {
                 new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Absolute, AbsCalendarTemplateID=1, Weight=0},
+                new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Absolute, AbsCalendarTemplateID=2, Weight=5},
                 new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Relative, RelCalendarTemplateID=1, Weight=10}
             };
 

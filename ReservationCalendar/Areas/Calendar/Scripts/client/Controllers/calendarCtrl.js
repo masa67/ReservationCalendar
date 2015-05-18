@@ -12,10 +12,13 @@ app.directive('reservationCalendar', function ($window, $resource) {
                 calBody = angular.element(elem.find('.calendar-body')),
                 calEvents = [],
                 combCal = {},
+                fcState = {
+                    view: 'month'
+                },
                 h = {},
                 RBook = $resource('/ReservationBookAbs/Details/0?data=true');
 
-            function redrawCal(width) {
+            function fcRedraw(width) {
                 if (width) {
                     if (Metronic.isRTL()) {
                         h = {
@@ -34,14 +37,26 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     }
                 }
 
+
                 calBody.fullCalendar('destroy'); // destroy the calendar
                 calBody.fullCalendar({ //re-initialize the calendar
-                    header: h,
-                    defaultView: 'month', // change default view with available options from http://arshaw.com/fullcalendar/docs/views/Available_Views/
-                    slotMinutes: 15,
+                    defaultView: fcState.view,
                     editable: true,
+                    events: calEvents,
+                    firstDay: 1,
+                    header: h,
+                    slotMinutes: 15,
+                    viewRender: function(view, elem) {
+                        fcState.view = view.name;
+                    }
+                });
+            }
+
+            function fcUpdateEvents() {
+                calBody.fullCalendar({
                     events: calEvents
                 });
+                calBody.fullCalendar('rerenderEvents');
             }
 
             function updateCalEvents() {
@@ -79,7 +94,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     calEvents.push(ts);
                 }
 
-                redrawCal();
+                fcUpdateEvents();
             }
 
             function watchWidthChanges() {
@@ -87,7 +102,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     function () {
                         return child[0].offsetWidth;
                     },
-                    redrawCal
+                    fcRedraw
                 );
 
                 angular.element($window).bind('resize', function () {
