@@ -1,5 +1,5 @@
 ﻿
-/*global angular, app, calHelpers, calTemplHelpers, jQuery, Metronic, moment, timeSlotHelpers */
+/*global alert, angular, app, calHelpers, calTemplHelpers, jQuery, Metronic, moment, timeSlotHelpers */
 app.directive('reservationCalendar', function ($window, $resource) {
     'use strict';
 
@@ -86,7 +86,8 @@ app.directive('reservationCalendar', function ($window, $resource) {
                                     title: '',
                                     start: start,
                                     end: end,
-                                    allDay: !start.hasTime()
+                                    allDay: false,
+                                    fullDay: !start.hasTime()
                                 },
                                 true // make the event "stick"
                                 );
@@ -127,8 +128,10 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     tSlot = tSlots[i];
 
                     ts = {
+                        allDay: false,
+                        fullDay: tSlot.fullDay,
                         title: tSlot.description,
-                        start: moment(1000 * tSlot.startTime).format(), // 'YYYY-MM-DDTHH:mm:ss'),
+                        start: moment(1000 * tSlot.startTime).format(),
                         backgroundColor:
                             (tSlot.timeSlotStatus === calHelpers.TimeSlotStatus.EXCLUDED) ?
                                     Metronic.getBrandColor('green') :
@@ -136,10 +139,9 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     };
 
                     if (tSlot.fullDay) {
-                        ts.allDay = true;
+                        ts.end = moment(1000 * tSlot.startTime).add(1, 'days').subtract(1, 'seconds').format();
                     } else {
-                        ts.allDay = false;
-                        ts.end = moment(1000 * tSlot.endTime).format(); // ('YYYY-MM-DDTHH:mm:ss');
+                        ts.end = moment(1000 * tSlot.endTime).format();
                     }
 
                     calEvents.push(ts);
