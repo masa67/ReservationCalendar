@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReservationCalendar.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,8 +12,8 @@ namespace ReservationCalendar.Models
         public int dbId { get; set; }
         public TimeSlot origTimeSlot { get; set; }
         public Boolean fullDay { get; set; }
-        public DateTime startTime { get; set; }
-        public DateTime? endTime { get; set; }
+        public long startTime { get; set; }
+        public long? endTime { get; set; }
         public TimeSlotStatus timeSlotStatus { get; set; }
         public string description { get; set; }
 
@@ -31,7 +32,7 @@ namespace ReservationCalendar.Models
             description = aSlot.Description;
         }
 
-        public TimeSlot(RelTimeSlot rSlot, DateTime timeBase)
+        public TimeSlot(RelTimeSlot rSlot, long timeBase)
         {
             dbType = CalendarDbType.Relative;
             dbId = rSlot.ID;
@@ -44,8 +45,12 @@ namespace ReservationCalendar.Models
             }
             else
             {
-                startTime = timeBase.AddHours(rSlot.StartTimeHrs).AddMinutes(rSlot.StartTimeMin);
-                endTime = timeBase.AddHours(rSlot.EndTimeHrs).AddMinutes(rSlot.EndTimeMin);
+                startTime = TimeHelper.DateTimeToUTCTimeStamp(
+                    TimeHelper.UTCTimeStampToLocalDateTime(timeBase).AddHours(rSlot.StartTimeHrs).AddMinutes(rSlot.StartTimeMin), false
+                );
+                endTime = TimeHelper.DateTimeToUTCTimeStamp(
+                    TimeHelper.UTCTimeStampToLocalDateTime(timeBase).AddHours(rSlot.EndTimeHrs).AddMinutes(rSlot.EndTimeMin), false
+                );
             }
 
             timeSlotStatus = rSlot.TimeSlotStatus;
@@ -74,7 +79,8 @@ namespace ReservationCalendar.Models
         {
             if (fullDay || ts.fullDay)
             {
-                DateTime aStartDate = startTime.Date, bStartDate = ts.startTime.Date;
+                DateTime aStartDate = TimeHelper.UTCTimeStampToLocalDateTime(startTime).Date, 
+                         bStartDate = TimeHelper.UTCTimeStampToLocalDateTime(ts.startTime).Date;
 
                 if (fullDay)
                 {
@@ -96,7 +102,7 @@ namespace ReservationCalendar.Models
                     }
                     else
                     {
-                        DateTime bEndDate = (ts.endTime ?? default(DateTime)).Date;
+                        DateTime bEndDate = TimeHelper.UTCTimeStampToLocalDateTime(ts.endTime ?? default(long)).Date;
 
                         if (aStartDate.Equals(bStartDate))
                         {

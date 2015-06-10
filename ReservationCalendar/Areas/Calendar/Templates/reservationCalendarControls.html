@@ -10,5 +10,13 @@
                    ng-change="changeCalLayers()"
             />{{layer.description}}<br/>
         </div>
+        <hr />
+        <div>
+            <div>Edit</div>
+            <form>
+                <input type="radio" ng-model="model.editArea" value="meetings">meetings<br/>
+                <input type="radio" ng-model="model.editArea" value="freeSlots" checked>free slots<br/>
+            </form>
+        </div>
     </form>
 </div>

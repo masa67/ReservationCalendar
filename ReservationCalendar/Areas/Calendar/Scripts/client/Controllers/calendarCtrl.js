@@ -1,5 +1,5 @@
 ﻿
-/*global angular, app, calHelpers, calTemplHelpers, jQuery, Metronic */
+/*global angular, app, calHelpers, calTemplHelpers, jQuery, Metronic, moment, timeSlotHelpers */
 app.directive('reservationCalendar', function ($window, $resource) {
     'use strict';
 
@@ -8,15 +8,35 @@ app.directive('reservationCalendar', function ($window, $resource) {
         templateUrl: '/Areas/Calendar/Templates/reservationCalendar.html',
         link: function (scope, elem) {
 
-            var child = elem.find('.calendar'),
+            var aTS,
+                child = elem.find('.calendar'),
                 calBody = angular.element(elem.find('.calendar-body')),
                 calEvents = [],
                 combCal = {},
                 fcState = {
-                    view: 'month'
+                    view: 'agendaWeek'
                 },
                 h = {},
                 RBook = $resource('/ReservationBookAbs/Details/0?data=true');
+
+            function isOverlapping(aTS) {
+                var bTS, calEv = calBody.fullCalendar('clientEvents'), ev, i;
+
+                for (i = 0; i < calEv.length; i += 1) {
+                    ev = calEv[i];
+                    if (!aTS.id || ev.id !== aTS.id) {
+                        bTS = {
+                            fullDay: !ev.start.hasTime(),
+                            startTime: ev.start.unix(),
+                            endTime: ev.end && ev.end.unix()
+                        };
+                        if (timeSlotHelpers.checkOverlap(aTS, bTS) !== calHelpers.TimeSlotOverlap.NONE) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
 
             function fcRedraw(width) {
                 if (width) {
@@ -37,27 +57,58 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     }
                 }
 
-
                 calBody.fullCalendar('destroy'); // destroy the calendar
                 calBody.fullCalendar({ //re-initialize the calendar
+                    defaultDate: moment('2015-05-15'),
                     defaultView: fcState.view,
                     editable: true,
+                    evenDrop: function (ev, delta, revertFunc, jsEv, ui, view) {
+                        alert('event dropped');
+                    },
+                    eventResize: function (ev, delta, revertFunc, jsEv, ui, view) {
+                        alert('event resized');
+                    },
                     events: calEvents,
                     firstDay: 1,
                     header: h,
+                    selectable: true,
+                    selectHelper: true,
+                    select: function (start, end) {
+                        aTS = {
+                            fullDay: !start.hasTime(),
+                            startTime: start.unix(),
+                            endTime: end.unix()
+                        };
+
+                        if (!isOverlapping(aTS)) {
+                            calBody.fullCalendar('renderEvent',
+                                {
+                                    title: '',
+                                    start: start,
+                                    end: end,
+                                    allDay: !start.hasTime()
+                                },
+                                true // make the event "stick"
+                                );
+                        }
+                        calBody.fullCalendar('unselect');
+                    },
                     slotMinutes: 15,
-                    viewRender: function(view, elem) {
+                    viewRender: function (view) {
                         fcState.view = view.name;
-                    }
+                    },
+                    weekends: false
                 });
             }
 
+            /*
             function fcUpdateEvents() {
                 calBody.fullCalendar({
                     events: calEvents
                 });
                 calBody.fullCalendar('rerenderEvents');
             }
+            */
 
             function updateCalEvents() {
                 var i, tSlots, tSlot, ts;
@@ -77,7 +128,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
 
                     ts = {
                         title: tSlot.description,
-                        start: tSlot.startTime,
+                        start: moment(1000 * tSlot.startTime).format(), // 'YYYY-MM-DDTHH:mm:ss'),
                         backgroundColor:
                             (tSlot.timeSlotStatus === calHelpers.TimeSlotStatus.EXCLUDED) ?
                                     Metronic.getBrandColor('green') :
@@ -88,13 +139,13 @@ app.directive('reservationCalendar', function ($window, $resource) {
                         ts.allDay = true;
                     } else {
                         ts.allDay = false;
-                        ts.end = tSlot.endTime;
+                        ts.end = moment(1000 * tSlot.endTime).format(); // ('YYYY-MM-DDTHH:mm:ss');
                     }
 
                     calEvents.push(ts);
                 }
 
-                fcUpdateEvents();
+                fcRedraw(); // fcUpdateEvents();
             }
 
             function watchWidthChanges() {
@@ -112,6 +163,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
 
             scope.model = scope.model || {};
             scope.model.calendarLayerSelected = [];
+            scope.model.editArea = "freeSlots";
 
             scope.rBook = RBook.get(function () {
                 var i, sel;
@@ -119,7 +171,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
                 calTemplHelpers.sortCalByWeight(scope.rBook.calendarLayers);
                 sel = scope.model.calendarLayerSelected;
                 sel.length = 0;
-                for (i = 0; i < scope.rBook.calendarLayers.length; i++) {
+                for (i = 0; i < scope.rBook.calendarLayers.length; i += 1) {
                     sel.push(true);
                 }
 
@@ -131,7 +183,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
 
             scope.changeCalLayers = function () {
                 updateCalEvents();
-            }
+            };
 
             scope.changeCalMode = function () {
                 updateCalEvents();

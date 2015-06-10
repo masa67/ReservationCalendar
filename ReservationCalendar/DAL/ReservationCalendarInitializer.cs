@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using ReservationCalendar.Helpers;
 using ReservationCalendar.Models;
 
 namespace ReservationCalendar.DAL
 {
-    public class ReservationCalendarInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<ReservationCalendarContext>
+    public class ReservationCalendarInitializer : System.Data.Entity.DropCreateDatabaseAlways<ReservationCalendarContext>
     {
         protected override void Seed(ReservationCalendarContext context)
         {
@@ -21,8 +22,12 @@ namespace ReservationCalendar.DAL
 
             var reservationBooks = new List<ReservationBook>
             {
-                new ReservationBook{Description="Book #1", StartTime=DateTime.Parse("2015-01-01"), EndTime = DateTime.Parse("2015-12-31")},
-                new ReservationBook{Description="Book #2", StartTime=DateTime.Parse("2015-01-01"), EndTime = DateTime.Parse("2015-12-31")}
+                new ReservationBook{Description="Book #1",
+                                    StartTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 1, 1), false),
+                                    EndTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 12, 31), false)},
+                new ReservationBook{Description="Book #2",
+                                    StartTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 1, 1), false),
+                                    EndTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 12, 31), false)}
             };
 
             reservationBooks.ForEach(r => context.ReservationBooks.Add(r));
@@ -39,7 +44,10 @@ namespace ReservationCalendar.DAL
 
             var relCalendarTemplates = new List<RelCalendarTemplate>
             {
-                new RelCalendarTemplate{Description="standard weekly", RelCalendarType=RelCalendarType.Weekly, ValidStart=new DateTime(2015, 5, 1), ValidEnd=new DateTime(2015, 5, 31)}
+                new RelCalendarTemplate{Description="standard weekly",
+                                        RelCalendarType=RelCalendarType.Weekly,
+                                        ValidStart=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 1), false),
+                                        ValidEnd=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 31), false)}
             };
 
             relCalendarTemplates.ForEach(c => context.RelCalendarTemplates.Add(c));
@@ -60,7 +68,8 @@ namespace ReservationCalendar.DAL
             var absCalendarTemplates = new List<AbsCalendarTemplate>
             {
                 new AbsCalendarTemplate{Description="public holidays"},
-                new AbsCalendarTemplate{Description="reservations"}
+                new AbsCalendarTemplate{Description="meetings"},
+                new AbsCalendarTemplate{Description="free slots"}
             };
 
             absCalendarTemplates.ForEach(c => context.AbsCalendarTemplates.Add(c));
@@ -68,8 +77,8 @@ namespace ReservationCalendar.DAL
 
             var absTimeSlots = new List<AbsTimeSlot>
             {
-                new AbsTimeSlot{AbsCalendarTemplateID=1, FullDay=true, StartTime=new DateTime(2015, 5, 1), TimeSlotStatus=TimeSlotStatus.Excluded, Description="1st of May"},
-                new AbsTimeSlot{AbsCalendarTemplateID=1, FullDay=true, StartTime=new DateTime(2015, 5, 14), TimeSlotStatus=TimeSlotStatus.Excluded, Description="Ascension Day"}
+                new AbsTimeSlot{AbsCalendarTemplateID=1, FullDay=true, StartTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 1), false), TimeSlotStatus=TimeSlotStatus.Excluded, Description="1st of May"},
+                new AbsTimeSlot{AbsCalendarTemplateID=1, FullDay=true, StartTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 14), false), TimeSlotStatus=TimeSlotStatus.Excluded, Description="Ascension Day"}
             };
 
             absTimeSlots.ForEach(s => context.AbsTimeSlots.Add(s));
@@ -79,7 +88,8 @@ namespace ReservationCalendar.DAL
             {
                 new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Absolute, AbsCalendarTemplateID=1, Weight=0},
                 new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Absolute, AbsCalendarTemplateID=2, Weight=5},
-                new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Relative, RelCalendarTemplateID=1, Weight=10}
+                new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Absolute, AbsCalendarTemplateID=3, Weight=10},
+                // new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Relative, RelCalendarTemplateID=1, Weight=15}
             };
 
             calendarBookAllocations.ForEach(a => context.CalendarBookAllocations.Add(a));

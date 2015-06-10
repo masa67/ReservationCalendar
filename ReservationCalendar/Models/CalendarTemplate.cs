@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReservationCalendar.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -60,7 +61,9 @@ namespace ReservationCalendar.Models
 
             if (timePeriod.unitsAsDays)
             {
-                DateTime day = timePeriod.startTime;
+                long day = timePeriod.startTime;
+                DateTime dt = TimeHelper.UTCTimeStampToLocalDateTime(timePeriod.startTime);
+
                 while (day <= timePeriod.endTime)
                 {
                     if (day >= rCal.ValidStart && day <= rCal.ValidEnd)
@@ -69,7 +72,7 @@ namespace ReservationCalendar.Models
                         {
                             if (rCal.RelCalendarType == RelCalendarType.Daily ||
                                 (rCal.RelCalendarType == RelCalendarType.Weekly &&
-                                 rSlot.Weekday == day.DayOfWeek))
+                                 rSlot.Weekday == dt.DayOfWeek))
                             {
                                 TimeSlot ts = new TimeSlot(rSlot, day);
                                 timeSlots.Add(ts);
@@ -77,7 +80,8 @@ namespace ReservationCalendar.Models
 
                         }
                     }
-                    day = day.AddDays(1);
+                    dt = dt.AddDays(1);
+                    day = TimeHelper.DateTimeToUTCTimeStamp(dt, false);
                 }
             }
             else
@@ -124,15 +128,15 @@ namespace ReservationCalendar.Models
                             case TimeSlotOverlap.EarlyOverlap:
                                 if (mSlot.fullDay) {
                                     mSlot.fullDay = false;
-                                    mSlot.endTime = mSlot.startTime.AddDays(1);
+                                    mSlot.endTime = TimeHelper.DateTimeToUTCTimeStamp(TimeHelper.UTCTimeStampToLocalDateTime(mSlot.startTime).AddDays(1), false);
                                 }
                                 if (slot.fullDay)
                                 {
-                                    mSlot.startTime = slot.startTime.AddDays(1);
+                                    mSlot.startTime = TimeHelper.DateTimeToUTCTimeStamp(TimeHelper.UTCTimeStampToLocalDateTime(slot.startTime).AddDays(1), false);
                                 }
                                 else
                                 {
-                                    mSlot.startTime = slot.endTime ?? default(DateTime);
+                                    mSlot.startTime = slot.endTime ?? default(long);
                                 }
                                 break;
                             case TimeSlotOverlap.Override:
@@ -145,11 +149,11 @@ namespace ReservationCalendar.Models
                                 mSlot.endTime = slot.startTime;
                                 if (slot.fullDay)
                                 {
-                                    dSlot.startTime = slot.startTime.AddDays(1);
+                                    dSlot.startTime = TimeHelper.DateTimeToUTCTimeStamp(TimeHelper.UTCTimeStampToLocalDateTime(slot.startTime).AddDays(1), false);
                                 }
                                 else
                                 {
-                                    dSlot.startTime = slot.endTime ?? default(DateTime);
+                                    dSlot.startTime = TimeHelper.DateTimeToUTCTimeStamp(TimeHelper.UTCTimeStampToLocalDateTime(slot.endTime ?? default(long)), false);
                                 }
                                 timeSlots.Add(dSlot);
                                 break;

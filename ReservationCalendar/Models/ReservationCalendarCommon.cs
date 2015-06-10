@@ -36,7 +36,7 @@ namespace ReservationCalendar.Models
     public class TimePeriod
     {
         public Boolean unitsAsDays { get; set; }
-        public DateTime startTime { get; set; }
-        public DateTime endTime { get; set; }
+        public long startTime { get; set; }
+        public long endTime { get; set; }
     }
 }

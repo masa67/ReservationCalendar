@@ -15,8 +15,8 @@ namespace ReservationCalendar.Models
         public int ID { get; set; }
         public string Description { get; set; }
         public RelCalendarType RelCalendarType { get; set; }
-        public DateTime ValidStart { get; set; }
-        public DateTime ValidEnd { get; set; }
+        public long ValidStart { get; set; }
+        public long ValidEnd { get; set; }
 
         public virtual ICollection<RelTimeSlot> relTimeSlots { get; set; }
     }

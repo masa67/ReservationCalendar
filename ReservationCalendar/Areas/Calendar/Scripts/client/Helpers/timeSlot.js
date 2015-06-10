@@ -5,6 +5,10 @@ var timeSlotHelpers = (function () {
 
     var retObj = {};
 
+    retObj.timestampToLocalDate = function (ts) {
+        return moment(1000 * ts).hours(0).minutes(0).seconds(0);
+    };
+
     retObj.checkOverlap = function (aTS, bTS) {
         var aStartDate,
             aStartTime,
@@ -15,8 +19,8 @@ var timeSlotHelpers = (function () {
             bEndTime;
 
         if (aTS.fullDay || bTS.fullDay) {
-            aStartDate = moment(aTS.startTime.split('T')[0]).unix();
-            bStartDate = moment(bTS.startTime.split('T')[0]).unix();
+            aStartDate = retObj.timestampToLocalDate(aTS.startTime);
+            bStartDate = retObj.timestampToLocalDate(bTS.startTime);
 
             if (aTS.fullDay) {
                 if (bTS.fullDay) {
@@ -30,7 +34,7 @@ var timeSlotHelpers = (function () {
                     return calHelpers.TimeSlotOverlap.NONE;
                 }
 
-                bEndDate = moment(bTS.endTime.split('T')[0]).unix();
+                bEndDate = retObj.timestampToLocalDate(bTS.endTime);
 
                 if (aStartDate === bStartDate) {
                     if (aStartDate === bEndDate) {
