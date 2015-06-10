@@ -59,13 +59,17 @@ app.directive('reservationCalendar', function ($window, $resource) {
 
                 calBody.fullCalendar('destroy'); // destroy the calendar
                 calBody.fullCalendar({ //re-initialize the calendar
+                    allDaySlot: false,
                     defaultDate: moment('2015-05-15'),
                     defaultView: fcState.view,
                     editable: true,
-                    evenDrop: function (ev, delta, revertFunc, jsEv, ui, view) {
+                    eventDrop: function (ev, delta, revertFunc, jsEv, ui, view) {
                         alert('event dropped');
                     },
                     eventResize: function (ev, delta, revertFunc, jsEv, ui, view) {
+                        console.log(ev);
+                        console.log(delta);
+                        console.log(view);
                         alert('event resized');
                     },
                     events: calEvents,
