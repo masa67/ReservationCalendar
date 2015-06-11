@@ -10,12 +10,9 @@ var timeSlotHelpers = (function () {
     };
 
     retObj.checkOverlap = function (aTS, bTS) {
-        var aStartDate,
-            aStartTime,
+        var aStartTime,
             aEndTime,
-            bStartDate,
             bStartTime,
-            bEndDate,
             bEndTime;
 
         aStartTime = moment(aTS.startTime).unix();
@@ -40,8 +37,15 @@ var timeSlotHelpers = (function () {
         return calHelpers.TimeSlotOverlap.EARLY_OVERLAP;
     };
 
-    retObj.checkAdjacent = function (aTS, bTS) {
-        return (aTS.startTime === bTS.endTime) && (aTS.endTime === bTS.startTime);
+    retObj.delete = function (aTS, tsArr) {
+        var i;
+
+        for (i = 0; i < tsArr.length; i += 1) {
+            if (tsArr[i] === aTS) {
+                tsArr.splice(i, 1);
+                return;
+            }
+        }
     };
 
     retObj.isOverlapping = function (aTS, tsArr) {
@@ -56,12 +60,41 @@ var timeSlotHelpers = (function () {
         return false;
     };
 
-    retObj.hasAdjacent = function (aTS, tsArr) {
-        var i;
+    retObj.combineAdjacent = function (aTS, tsArr) {
+        var bTS, i, delArr = [], pre, post;
 
-        for (i = 0; i < tsArr.length; i += 1) {
-
+        for (i = 0; i < tsArr.length && (!pre || !post); i += 1) {
+            bTS = tsArr[i];
+            if (aTS.startTime === bTS.endTime) {
+                pre = bTS;
+            } else {
+                if (aTS.endTime === bTS.startTime) {
+                    post = bTS;
+                }
+            }
         }
+
+        if (pre && post) {
+            pre.endTime = post.endTime;
+            delArr.push(aTS);
+            delArr.push(post);
+        } else {
+            if (pre) {
+                pre.endTime = aTS.endTime;
+                delArr.push(aTS);
+            } else {
+                if (post) {
+                    aTS.endTime = post.endTime;
+                    delArr.push(post);
+                }
+            }
+        }
+
+        for (i = 0; i < delArr.length; i += 1) {
+            retObj.delete(delArr[i], tsArr);
+        }
+
+        return delArr.length;
     };
 
     return retObj;

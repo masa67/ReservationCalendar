@@ -12,12 +12,14 @@ app.directive('reservationCalendar', function ($window, $resource) {
                 child = elem.find('.calendar'),
                 calBody = angular.element(elem.find('.calendar-body')),
                 calEvents = [],
+                calTplNdx = 2, // maps to editArea 'freeSlots'
                 combCal = {},
                 fcState = {
                     view: 'agendaWeek'
                 },
                 h = {},
-                RBook = $resource('/ReservationBookAbs/Details/0?data=true');
+                RBook = $resource('/ReservationBookAbs/Details/0?data=true'),
+                tSlotsToEdit;
 
             fullCalendarHelpers.init(calBody);
 
@@ -60,6 +62,12 @@ app.directive('reservationCalendar', function ($window, $resource) {
 
                         if (isOverlapping(aTS)) {
                             revertFunc();
+                        } else {
+                            ev.tSlot.startTime = aTS.startTime;
+                            ev.tSlot.endTime = aTS.endTime;
+                            if (timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit)) {
+                                recalcCalContent();
+                            }
                         }
                     },
                     eventResize: function (ev, delta, revertFunc) {
@@ -72,6 +80,12 @@ app.directive('reservationCalendar', function ($window, $resource) {
 
                         if (isOverlapping(aTS)) {
                             revertFunc();
+                        } else {
+                            ev.tSlot.startTime = aTS.startTime;
+                            ev.tSlot.endTime = aTS.endTime;
+                            if (timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit)) {
+                                recalcCalContent();
+                            }
                         }
                     },
                     events: calEvents,
@@ -86,15 +100,21 @@ app.directive('reservationCalendar', function ($window, $resource) {
                         };
 
                         if (!isOverlapping(aTS)) {
-                            calBody.fullCalendar('renderEvent',
-                                {
-                                    title: '',
-                                    start: start,
-                                    end: end,
-                                    allDay: false
-                                },
-                                true // make the event "stick"
-                                );
+                            tSlotsToEdit.push(aTS);
+                            if (timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit)) {
+                                recalcCalContent();
+                            } else {
+                                calBody.fullCalendar('renderEvent',
+                                    {
+                                        allDay: false,
+                                        end: end,
+                                        start: start,
+                                        title: '',
+                                        tSlot: aTS
+                                    },
+                                    true // make the event "stick"
+                                    );
+                            }
                         }
                         calBody.fullCalendar('unselect');
                     },
@@ -115,6 +135,11 @@ app.directive('reservationCalendar', function ($window, $resource) {
                 calBody.fullCalendar('rerenderEvents');
             }
             */
+
+            function recalcCalContent() {
+                combCal = calTemplHelpers.createCombinedCalTempl(scope.rBook.calendarLayers);
+                updateCalEvents();
+            }
 
             function updateCalEvents() {
                 var i, tSlots, tSlot, ts;
@@ -138,12 +163,12 @@ app.directive('reservationCalendar', function ($window, $resource) {
                             (tSlot.timeSlotStatus === calHelpers.TimeSlotStatus.EXCLUDED) ?
                                     Metronic.getBrandColor('green') :
                                     Metronic.getBrandColor('yellow'),
-                        title: tSlot.description,
+                        end: moment(1000 * tSlot.endTime).format(),
                         start: moment(1000 * tSlot.startTime).format(),
+                        title: tSlot.description,
                         tSlot: tSlot
                     };
 
-                    ts.end = moment(1000 * tSlot.endTime).format();
                     calEvents.push(ts);
                 }
 
@@ -177,8 +202,10 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     sel.push(true);
                 }
 
-                combCal = calTemplHelpers.createCombinedCalTempl(scope.rBook.calendarLayers);
-                updateCalEvents();
+                recalcCalContent();
+
+                // FFS: misplaced
+                tSlotsToEdit = scope.rBook.calendarLayers[calTplNdx].timeSlots;
             });
 
             scope.model.calMode = 'combined';
