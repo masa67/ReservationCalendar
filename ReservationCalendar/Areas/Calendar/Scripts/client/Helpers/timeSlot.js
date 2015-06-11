@@ -18,40 +18,6 @@ var timeSlotHelpers = (function () {
             bEndDate,
             bEndTime;
 
-        if (aTS.fullDay || bTS.fullDay) {
-            aStartDate = retObj.timestampToLocalDate(aTS.startTime);
-            bStartDate = retObj.timestampToLocalDate(bTS.startTime);
-
-            if (aTS.fullDay) {
-                if (bTS.fullDay) {
-                    if (aStartDate === bStartDate) {
-                        return calHelpers.TimeSlotOverlap.OVERRIDE;
-                    }
-                    return calHelpers.TimeSlotOverlap.NONE;
-                }
-
-                if (aStartDate < bStartDate) {
-                    return calHelpers.TimeSlotOverlap.NONE;
-                }
-
-                bEndDate = retObj.timestampToLocalDate(bTS.endTime);
-
-                if (aStartDate === bStartDate) {
-                    if (aStartDate === bEndDate) {
-                        return calHelpers.TimeSlotOverlap.OVERRIDE;
-                    }
-                    return calHelpers.TimeSlotOverlap.EARLY_OVERLAP;
-                }
-                if (aStartDate > bEndDate) {
-                    return calHelpers.TimeSlotOverlap.NONE;
-                }
-                if (aStartDate === bEndDate) {
-                    return calHelpers.TimeSlotOverlap.LATE_OVERLAP;
-                }
-                return calHelpers.TimeSlotOverlap.SPLIT_OVERLAP;
-            }
-        }
-
         aStartTime = moment(aTS.startTime).unix();
         aEndTime = moment(aTS.endTime).unix();
 
@@ -75,11 +41,6 @@ var timeSlotHelpers = (function () {
     };
 
     retObj.checkAdjacent = function (aTS, bTS) {
-        if (aTS.fullDay || bTS.fullDay) {
-            return false;
-        }
-
-
         return (aTS.startTime === bTS.endTime) && (aTS.endTime === bTS.startTime);
     };
 

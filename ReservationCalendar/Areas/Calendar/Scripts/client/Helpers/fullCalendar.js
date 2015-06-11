@@ -17,7 +17,6 @@ var fullCalendarHelpers = (function () {
                 /*jslint nomen: true */
                 retArr.push({
                     id: ev._id,
-                    fullDay: !ev.start.hasTime(),
                     startTime: ev.start.unix(),
                     endTime: ev.end && ev.end.unix()
                 });

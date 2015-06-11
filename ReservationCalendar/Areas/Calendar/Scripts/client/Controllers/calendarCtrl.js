@@ -53,7 +53,6 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     eventDrop: function (ev, delta, revertFunc) {
                         /*jslint nomen: true */
                         aTS = {
-                            fullDay: false,
                             id: ev._id,
                             startTime: ev.start.unix(),
                             endTime: ev.end.unix()
@@ -66,7 +65,6 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     eventResize: function (ev, delta, revertFunc) {
                         /*jslint nomen: true */
                         aTS = {
-                            fullDay: false,
                             id: ev._id,
                             startTime: ev.start.unix(),
                             endTime: ev.end.unix()
@@ -83,7 +81,6 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     selectHelper: true,
                     select: function (start, end) {
                         aTS = {
-                            fullDay: !start.hasTime(),
                             startTime: start.unix(),
                             endTime: end.unix()
                         };
@@ -94,8 +91,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
                                     title: '',
                                     start: start,
                                     end: end,
-                                    allDay: false,
-                                    fullDay: !start.hasTime()
+                                    allDay: false
                                 },
                                 true // make the event "stick"
                                 );
@@ -147,12 +143,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
                         tSlot: tSlot
                     };
 
-                    if (tSlot.fullDay) {
-                        ts.end = moment(1000 * tSlot.startTime).add(1, 'days').format();
-                    } else {
-                        ts.end = moment(1000 * tSlot.endTime).format();
-                    }
-
+                    ts.end = moment(1000 * tSlot.endTime).format();
                     calEvents.push(ts);
                 }
 

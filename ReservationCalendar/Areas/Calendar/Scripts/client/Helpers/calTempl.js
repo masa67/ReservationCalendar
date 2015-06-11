@@ -51,19 +51,10 @@ var calTemplHelpers = (function () {
                         case calHelpers.TimeSlotOverlap.NONE:
                             break;
                         case calHelpers.TimeSlotOverlap.LATE_OVERLAP:
-                            mSlot.fullDay = false;
                             mSlot.endTime = slot.startTime;
                             break;
                         case calHelpers.TimeSlotOverlap.EARLY_OVERLAP:
-                            if (mSlot.fullDay) {
-                                mSlot.fullDay = false;
-                                mSlot.endTime = moment(mSlot.startTime).add(1, 'days');
-                            }
-                            if (slot.fullDay) {
-                                mSlot.startTime = moment(slot.startTime).add(1, 'days');
-                            } else {
-                                mSlot.startTime = slot.endTime;
-                            }
+                            mSlot.startTime = slot.endTime;
                             break;
                         case calHelpers.TimeSlotOverlap.OVERRIDE:
                             timeSlotsToDelete.push(mSlot);
@@ -72,11 +63,7 @@ var calTemplHelpers = (function () {
                             dSlot = duplicateObject(mSlot);
 
                             mSlot.endTime = slot.startTime;
-                            if (slot.fullDay) {
-                                dSlot.startTime = moment(slot.startTime).add(1, 'days');
-                            } else {
-                                dSlot.startTime = slot.endTime;
-                            }
+                            dSlot.startTime = slot.endTime;
                             retObj.timeSlots.push(dSlot);
                             break;
                         }
