@@ -10,9 +10,8 @@ namespace ReservationCalendar.Models
     {
         public int ID { get; set; }
         public int AbsCalendarTemplateID { get; set; }
-        public Boolean FullDay { get; set; }
         public long StartTime { get; set; }
-        public long? EndTime { get; set; }
+        public long EndTime { get; set; }
         public TimeSlotStatus TimeSlotStatus { get; set; }
         public string Description { get; set; }
 

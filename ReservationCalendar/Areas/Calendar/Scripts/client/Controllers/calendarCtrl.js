@@ -1,5 +1,5 @@
 ﻿
-/*global alert, angular, app, calHelpers, calTemplHelpers, jQuery, Metronic, moment, timeSlotHelpers */
+/*global alert, angular, app, calHelpers, calTemplHelpers, fullCalendarHelpers, jQuery, Metronic, moment, timeSlotHelpers */
 app.directive('reservationCalendar', function ($window, $resource) {
     'use strict';
 
@@ -19,25 +19,10 @@ app.directive('reservationCalendar', function ($window, $resource) {
                 h = {},
                 RBook = $resource('/ReservationBookAbs/Details/0?data=true');
 
-            function isOverlapping(aTS) {
-                var bTS, calEv = calBody.fullCalendar('clientEvents'), ev, i;
+            fullCalendarHelpers.init(calBody);
 
-                for (i = 0; i < calEv.length; i += 1) {
-                    ev = calEv[i];
-                    if (!aTS.id || ev._id !== aTS.id) {
-                        bTS = {
-                            fullDay: !ev.start.hasTime(),
-                            startTime: ev.start.unix(),
-                            endTime: ev.end && ev.end.unix()
-                        };
-                        if (timeSlotHelpers.checkOverlap(aTS, bTS) !== calHelpers.TimeSlotOverlap.NONE) {
-                            console.log(aTS.id);
-                            console.log(ev);
-                            return true;
-                        }
-                    }
-                }
-                return false;
+            function isOverlapping(aTS) {
+                return timeSlotHelpers.isOverlapping(aTS, fullCalendarHelpers.eventsToTS());
             }
 
             function fcRedraw(width) {
@@ -65,7 +50,8 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     defaultDate: moment('2015-05-15'),
                     defaultView: fcState.view,
                     editable: true,
-                    eventDrop: function (ev, delta, revertFunc, jsEv, ui, view) {
+                    eventDrop: function (ev, delta, revertFunc) {
+                        /*jslint nomen: true */
                         aTS = {
                             fullDay: false,
                             id: ev._id,
@@ -77,7 +63,8 @@ app.directive('reservationCalendar', function ($window, $resource) {
                             revertFunc();
                         }
                     },
-                    eventResize: function (ev, delta, revertFunc, jsEv, ui, view) {
+                    eventResize: function (ev, delta, revertFunc) {
+                        /*jslint nomen: true */
                         aTS = {
                             fullDay: false,
                             id: ev._id,
@@ -151,17 +138,17 @@ app.directive('reservationCalendar', function ($window, $resource) {
 
                     ts = {
                         allDay: false,
-                        fullDay: tSlot.fullDay,
-                        title: tSlot.description,
-                        start: moment(1000 * tSlot.startTime).format(),
                         backgroundColor:
                             (tSlot.timeSlotStatus === calHelpers.TimeSlotStatus.EXCLUDED) ?
                                     Metronic.getBrandColor('green') :
-                                    Metronic.getBrandColor('yellow')
+                                    Metronic.getBrandColor('yellow'),
+                        title: tSlot.description,
+                        start: moment(1000 * tSlot.startTime).format(),
+                        tSlot: tSlot
                     };
 
                     if (tSlot.fullDay) {
-                        ts.end = moment(1000 * tSlot.startTime).add(1, 'days').subtract(1, 'seconds').format();
+                        ts.end = moment(1000 * tSlot.startTime).add(1, 'days').format();
                     } else {
                         ts.end = moment(1000 * tSlot.endTime).format();
                     }

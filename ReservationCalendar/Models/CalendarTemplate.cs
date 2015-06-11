@@ -122,22 +122,11 @@ namespace ReservationCalendar.Models
                             case TimeSlotOverlap.None:
                                 break;
                             case TimeSlotOverlap.LateOverlap:
-                                mSlot.fullDay = false;
                                 mSlot.endTime = slot.startTime;
                                 break;
                             case TimeSlotOverlap.EarlyOverlap:
-                                if (mSlot.fullDay) {
-                                    mSlot.fullDay = false;
-                                    mSlot.endTime = TimeHelper.DateTimeToUTCTimeStamp(TimeHelper.UTCTimeStampToLocalDateTime(mSlot.startTime).AddDays(1), false);
-                                }
-                                if (slot.fullDay)
-                                {
-                                    mSlot.startTime = TimeHelper.DateTimeToUTCTimeStamp(TimeHelper.UTCTimeStampToLocalDateTime(slot.startTime).AddDays(1), false);
-                                }
-                                else
-                                {
-                                    mSlot.startTime = slot.endTime ?? default(long);
-                                }
+                                mSlot.endTime = TimeHelper.DateTimeToUTCTimeStamp(TimeHelper.UTCTimeStampToLocalDateTime(mSlot.startTime).AddDays(1), false);
+                                mSlot.startTime = slot.endTime;
                                 break;
                             case TimeSlotOverlap.Override:
                                 timeSlotsToDelete.Add(mSlot);
@@ -147,14 +136,7 @@ namespace ReservationCalendar.Models
                                 dSlot.origTimeSlot = mSlot.origTimeSlot;
 
                                 mSlot.endTime = slot.startTime;
-                                if (slot.fullDay)
-                                {
-                                    dSlot.startTime = TimeHelper.DateTimeToUTCTimeStamp(TimeHelper.UTCTimeStampToLocalDateTime(slot.startTime).AddDays(1), false);
-                                }
-                                else
-                                {
-                                    dSlot.startTime = TimeHelper.DateTimeToUTCTimeStamp(TimeHelper.UTCTimeStampToLocalDateTime(slot.endTime ?? default(long)), false);
-                                }
+                                dSlot.startTime = TimeHelper.DateTimeToUTCTimeStamp(TimeHelper.UTCTimeStampToLocalDateTime(slot.endTime), false);
                                 timeSlots.Add(dSlot);
                                 break;
                             default:

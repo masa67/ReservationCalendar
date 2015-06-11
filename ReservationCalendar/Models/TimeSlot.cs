@@ -11,9 +11,8 @@ namespace ReservationCalendar.Models
         public CalendarDbType dbType { get; set; }
         public int dbId { get; set; }
         public TimeSlot origTimeSlot { get; set; }
-        public Boolean fullDay { get; set; }
         public long startTime { get; set; }
-        public long? endTime { get; set; }
+        public long endTime { get; set; }
         public TimeSlotStatus timeSlotStatus { get; set; }
         public string description { get; set; }
 
@@ -21,13 +20,8 @@ namespace ReservationCalendar.Models
         {
             dbType = CalendarDbType.Absolute;
             dbId = aSlot.ID;
-            fullDay = aSlot.FullDay;
             startTime = aSlot.StartTime;
-
-            if (fullDay)
-            {
-                endTime = aSlot.EndTime;
-            }
+            endTime = aSlot.EndTime;
             timeSlotStatus = aSlot.TimeSlotStatus;
             description = aSlot.Description;
         }
@@ -36,22 +30,13 @@ namespace ReservationCalendar.Models
         {
             dbType = CalendarDbType.Relative;
             dbId = rSlot.ID;
-            fullDay = rSlot.FullDay;
 
-            if (fullDay)
-            {
-                startTime = timeBase;
-                // endTime not used for full-day slots
-            }
-            else
-            {
-                startTime = TimeHelper.DateTimeToUTCTimeStamp(
-                    TimeHelper.UTCTimeStampToLocalDateTime(timeBase).AddHours(rSlot.StartTimeHrs).AddMinutes(rSlot.StartTimeMin), false
-                );
-                endTime = TimeHelper.DateTimeToUTCTimeStamp(
-                    TimeHelper.UTCTimeStampToLocalDateTime(timeBase).AddHours(rSlot.EndTimeHrs).AddMinutes(rSlot.EndTimeMin), false
-                );
-            }
+            startTime = TimeHelper.DateTimeToUTCTimeStamp(
+                TimeHelper.UTCTimeStampToLocalDateTime(timeBase).AddHours(rSlot.StartTimeHrs).AddMinutes(rSlot.StartTimeMin), false
+            );
+            endTime = TimeHelper.DateTimeToUTCTimeStamp(
+                TimeHelper.UTCTimeStampToLocalDateTime(timeBase).AddHours(rSlot.EndTimeHrs).AddMinutes(rSlot.EndTimeMin), false
+            );
 
             timeSlotStatus = rSlot.TimeSlotStatus;
             description = rSlot.Description;
@@ -63,13 +48,8 @@ namespace ReservationCalendar.Models
             dbId = tSlot.dbId;
 
             origTimeSlot = tSlot;
-            fullDay = tSlot.fullDay;
             startTime = tSlot.startTime;
-
-            if (tSlot.endTime != null)
-            {
-                endTime = tSlot.endTime;
-            }
+            endTime = tSlot.endTime;
 
             timeSlotStatus = tSlot.timeSlotStatus;
             description = tSlot.description;
@@ -77,66 +57,6 @@ namespace ReservationCalendar.Models
 
         public TimeSlotOverlap checkOverlap(TimeSlot ts)
         {
-            if (fullDay || ts.fullDay)
-            {
-                DateTime aStartDate = TimeHelper.UTCTimeStampToLocalDateTime(startTime).Date, 
-                         bStartDate = TimeHelper.UTCTimeStampToLocalDateTime(ts.startTime).Date;
-
-                if (fullDay)
-                {
-                    if (ts.fullDay)
-                    {
-                        if (aStartDate.Equals(bStartDate))
-                        {
-                            return TimeSlotOverlap.Override;
-                        }
-                        else
-                        {
-                            return TimeSlotOverlap.None;
-                        }
-                    }
-
-                    if (aStartDate < bStartDate)
-                    {
-                        return TimeSlotOverlap.None;
-                    }
-                    else
-                    {
-                        DateTime bEndDate = TimeHelper.UTCTimeStampToLocalDateTime(ts.endTime ?? default(long)).Date;
-
-                        if (aStartDate.Equals(bStartDate))
-                        {
-                            if (aStartDate.Equals(bEndDate))
-                            {
-                                return TimeSlotOverlap.Override;
-                            }
-                            else
-                            {
-                                return TimeSlotOverlap.EarlyOverlap;
-                            }
-                        }
-                        else
-                        {
-                            if (aStartDate > bEndDate)
-                            {
-                                return TimeSlotOverlap.None;
-                            }
-                            else
-                            {
-                                if (aStartDate.Equals(bEndDate))
-                                {
-                                    return TimeSlotOverlap.LateOverlap;
-                                } 
-                                else
-                                {
-                                    return TimeSlotOverlap.SplitOverlap;
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
             
             if (startTime >= ts.endTime || endTime <= ts.startTime)
             {

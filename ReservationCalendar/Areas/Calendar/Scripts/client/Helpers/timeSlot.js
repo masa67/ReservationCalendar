@@ -74,5 +74,34 @@ var timeSlotHelpers = (function () {
         return calHelpers.TimeSlotOverlap.EARLY_OVERLAP;
     };
 
+    retObj.checkAdjacent = function (aTS, bTS) {
+        if (aTS.fullDay || bTS.fullDay) {
+            return false;
+        }
+
+
+        return (aTS.startTime === bTS.endTime) && (aTS.endTime === bTS.startTime);
+    };
+
+    retObj.isOverlapping = function (aTS, tsArr) {
+        var i;
+
+        for (i = 0; i < tsArr.length; i += 1) {
+            if ((!aTS.id || aTS.id !== tsArr[i].id) &&
+                    retObj.checkOverlap(aTS, tsArr[i]) !== calHelpers.TimeSlotOverlap.NONE) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    retObj.hasAdjacent = function (aTS, tsArr) {
+        var i;
+
+        for (i = 0; i < tsArr.length; i += 1) {
+
+        }
+    };
+
     return retObj;
 }());

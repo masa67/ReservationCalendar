@@ -121,6 +121,7 @@ namespace ReservationCalendar
                       "~/Areas/Calendar/Scripts/client/app.js",
                       "~/Areas/Calendar/Scripts/client/Helpers/cal.js",
                       "~/Areas/Calendar/Scripts/client/Helpers/calTempl.js",
+                      "~/Areas/Calendar/Scripts/client/Helpers/fullCalendar.js",
                       "~/Areas/Calendar/Scripts/client/Helpers/timeSlot.js",
                       "~/Areas/Calendar/Scripts/client/Controllers/calendarCtrl.js"));
         }
