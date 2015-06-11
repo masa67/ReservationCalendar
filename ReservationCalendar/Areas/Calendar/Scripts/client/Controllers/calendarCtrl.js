@@ -24,13 +24,15 @@ app.directive('reservationCalendar', function ($window, $resource) {
 
                 for (i = 0; i < calEv.length; i += 1) {
                     ev = calEv[i];
-                    if (!aTS.id || ev.id !== aTS.id) {
+                    if (!aTS.id || ev._id !== aTS.id) {
                         bTS = {
                             fullDay: !ev.start.hasTime(),
                             startTime: ev.start.unix(),
                             endTime: ev.end && ev.end.unix()
                         };
                         if (timeSlotHelpers.checkOverlap(aTS, bTS) !== calHelpers.TimeSlotOverlap.NONE) {
+                            console.log(aTS.id);
+                            console.log(ev);
                             return true;
                         }
                     }
@@ -64,13 +66,28 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     defaultView: fcState.view,
                     editable: true,
                     eventDrop: function (ev, delta, revertFunc, jsEv, ui, view) {
-                        alert('event dropped');
+                        aTS = {
+                            fullDay: false,
+                            id: ev._id,
+                            startTime: ev.start.unix(),
+                            endTime: ev.end.unix()
+                        };
+
+                        if (isOverlapping(aTS)) {
+                            revertFunc();
+                        }
                     },
                     eventResize: function (ev, delta, revertFunc, jsEv, ui, view) {
-                        console.log(ev);
-                        console.log(delta);
-                        console.log(view);
-                        alert('event resized');
+                        aTS = {
+                            fullDay: false,
+                            id: ev._id,
+                            startTime: ev.start.unix(),
+                            endTime: ev.end.unix()
+                        };
+
+                        if (isOverlapping(aTS)) {
+                            revertFunc();
+                        }
                     },
                     events: calEvents,
                     firstDay: 1,
@@ -99,6 +116,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
                         calBody.fullCalendar('unselect');
                     },
                     slotMinutes: 15,
+                    timezone: 'local',
                     viewRender: function (view) {
                         fcState.view = view.name;
                     },
