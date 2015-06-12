@@ -73,7 +73,9 @@ var calTemplHelpers = (function () {
                         retObj.timeSlots.splice(retObj.timeSlots.indexOf(timeSlotsToDelete[k]), 1);
                     }
 
-                    retObj.timeSlots.push(duplicateObject(slot));
+                    dSlot = duplicateObject(slot);
+                    dSlot.origTSlot = slot;
+                    retObj.timeSlots.push(dSlot);
                 }
             }
 

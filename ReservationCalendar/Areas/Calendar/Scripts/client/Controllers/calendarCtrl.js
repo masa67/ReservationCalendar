@@ -18,6 +18,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     view: 'agendaWeek'
                 },
                 h = {},
+                origTS,
                 RBook = $resource('/ReservationBookAbs/Details/0?data=true'),
                 tSlotsToEdit;
 
@@ -57,14 +58,15 @@ app.directive('reservationCalendar', function ($window, $resource) {
                         aTS = {
                             id: ev._id,
                             startTime: ev.start.unix(),
-                            endTime: ev.end.unix()
+                            endTime: ev.end.unix(),
+                            origTSlot: ev.origTSlot
                         };
 
                         if (isOverlapping(aTS)) {
                             revertFunc();
                         } else {
-                            ev.tSlot.startTime = aTS.startTime;
-                            ev.tSlot.endTime = aTS.endTime;
+                            ev.origTSlot.startTime = aTS.startTime;
+                            ev.origTSlot.endTime = aTS.endTime;
                             if (timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit)) {
                                 recalcCalContent();
                             }
@@ -75,14 +77,15 @@ app.directive('reservationCalendar', function ($window, $resource) {
                         aTS = {
                             id: ev._id,
                             startTime: ev.start.unix(),
-                            endTime: ev.end.unix()
+                            endTime: ev.end.unix(),
+                            origTSlot: ev.origTSlot
                         };
 
                         if (isOverlapping(aTS)) {
                             revertFunc();
                         } else {
-                            ev.tSlot.startTime = aTS.startTime;
-                            ev.tSlot.endTime = aTS.endTime;
+                            ev.origTSlot.startTime = aTS.startTime;
+                            ev.origTSlot.endTime = aTS.endTime;
                             if (timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit)) {
                                 recalcCalContent();
                             }
@@ -100,7 +103,13 @@ app.directive('reservationCalendar', function ($window, $resource) {
                         };
 
                         if (!isOverlapping(aTS)) {
-                            tSlotsToEdit.push(aTS);
+                            origTS = {
+                                startTime: start.unix(),
+                                endTime: end.unix()
+                            };
+                            tSlotsToEdit.push(origTS);
+                            aTS.origTSlot = origTS;
+
                             if (timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit)) {
                                 recalcCalContent();
                             } else {
@@ -110,7 +119,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
                                         end: end,
                                         start: start,
                                         title: '',
-                                        tSlot: aTS
+                                        origTSlot: aTS.origTSlot
                                     },
                                     true // make the event "stick"
                                     );
@@ -166,7 +175,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
                         end: moment(1000 * tSlot.endTime).format(),
                         start: moment(1000 * tSlot.startTime).format(),
                         title: tSlot.description,
-                        tSlot: tSlot
+                        origTSlot: tSlot.origTSlot // || tSlot for listAllTimeSlots
                     };
 
                     calEvents.push(ts);

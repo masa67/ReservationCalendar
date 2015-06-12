@@ -76,15 +76,15 @@ var timeSlotHelpers = (function () {
 
         if (pre && post) {
             pre.endTime = post.endTime;
-            delArr.push(aTS);
+            delArr.push(aTS.origTSlot);
             delArr.push(post);
         } else {
             if (pre) {
                 pre.endTime = aTS.endTime;
-                delArr.push(aTS);
+                delArr.push(aTS.origTSlot);
             } else {
                 if (post) {
-                    aTS.endTime = post.endTime;
+                    aTS.origTSlot.endTime = post.endTime;
                     delArr.push(post);
                 }
             }
