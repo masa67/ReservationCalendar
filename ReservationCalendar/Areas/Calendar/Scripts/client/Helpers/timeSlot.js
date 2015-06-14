@@ -97,5 +97,49 @@ var timeSlotHelpers = (function () {
         return delArr.length;
     };
 
+    retObj.combineOverlapping = function (aTS, tsArr) {
+        var bTS, i, delArr = [], pre, post;
+
+        for (i = 0; i < tsArr.length; i += 1) {
+            bTS = tsArr[i];
+
+            switch (retObj.checkOverlap(aTS, bTS)) {
+            case calHelpers.TimeSlotOverlap.LATE_OVERLAP:
+                pre = bTS;
+                break;
+            case calHelpers.TimeSlotOverlap.EARLY_OVERLAP:
+                post = bTS;
+                break;
+            case calHelpers.TimeSlotOverlap.OVERRIDE:
+                delArr.push(bTS);
+                break;
+            case calHelpers.TimeSlotOverlap.SPLIT_OVERLAP:
+                delArr.push(aTS.origTSlot);
+            }
+        }
+
+        if (pre && post) {
+            pre.endTime = post.endTime;
+            delArr.push(aTS.origTSlot);
+            delArr.push(post);
+        } else {
+            if (pre) {
+                pre.endTime = aTS.endTime;
+                delArr.push(aTS.origTSlot);
+            } else {
+                if (post) {
+                    aTS.origTSlot.endTime = post.endTime;
+                    delArr.push(post);
+                }
+            }
+        }
+
+        for (i = 0; i < delArr.length; i += 1) {
+            retObj.delete(delArr[i], tsArr);
+        }
+
+        return delArr.length;
+    };
+
     return retObj;
 }());

@@ -108,3 +108,4 @@ C:\Workarea\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalenda
 C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Newtonsoft.Json.xml
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\Newtonsoft.Json.xml
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.csprojResolveAssemblyReference.cache
+G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Linq.Dynamic.dll

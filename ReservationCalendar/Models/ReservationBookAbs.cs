@@ -17,14 +17,17 @@ namespace ReservationCalendar.Models
         {
         }
 
-        public ReservationBookAbs(ReservationBook rBook)
+        public ReservationBookAbs(ReservationBook rBook, TimePeriod timePeriod, Boolean inclCBAlloc, Boolean inclComb)
         {
             reservationBook = rBook;
+            
             calendarLayers = new List<CalendarTemplate>();
 
-            TimePeriod timePeriod = new TimePeriod{ unitsAsDays=true, startTime=rBook.StartTime, endTime=rBook.EndTime };
-
-            foreach (CalendarBookAllocation cal in reservationBook.CalendarBookAllocations)
+            if (timePeriod == null)
+            {
+                timePeriod = new TimePeriod { unitsAsDays = true, startTime = rBook.StartTime, endTime = rBook.EndTime };
+            }
+            foreach (CalendarBookAllocation cal in rBook.CalendarBookAllocations)
             {
                 CalendarTemplate calTempl;
 
@@ -44,7 +47,15 @@ namespace ReservationCalendar.Models
                 calendarLayers.Add(calTempl);
             }
 
-            combinedCalendar = new CalendarTemplate(calendarLayers);
+            if (!inclCBAlloc)
+            {
+                reservationBook.CalendarBookAllocations = null;
+            }
+
+            if (inclComb)
+            {
+                combinedCalendar = new CalendarTemplate(calendarLayers);
+            }
         }
     }
 }
