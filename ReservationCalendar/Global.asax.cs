@@ -19,6 +19,7 @@ namespace ReservationCalendar
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
+            ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
             // Database.SetInitializer<ReservationCalendarContext>(new DropCreateDatabaseAlways<ReservationCalendarContext>());
         }
     }

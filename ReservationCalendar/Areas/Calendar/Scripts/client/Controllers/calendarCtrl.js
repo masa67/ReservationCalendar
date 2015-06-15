@@ -117,7 +117,8 @@ app.directive('reservationCalendar', [ '$window', '$resource', 'rBook', function
                         if (!isOverlapping(aTS)) {
                             origTS = {
                                 startTime: start.unix(),
-                                endTime: end.unix()
+                                endTime: end.unix(),
+                                timeSlotStatus: calHelpers.TimeSlotStatus.FREE
                             };
                             tSlotsToEdit.push(origTS);
                             aTS.origTSlot = origTS;
