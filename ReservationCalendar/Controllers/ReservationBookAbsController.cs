@@ -45,12 +45,14 @@ namespace ReservationCalendar.Controllers
             // IQueryable<ReservationBook> rBookQuery =
             //        from rbook in db.ReservationBooks
             //        select rbook;
+           
             ReservationBookAbs rBookAbs = null;
             Boolean retJSON;
 
             var rBookQuery =
-                db.ReservationBooks.
-                Where("ID = @0", id + 1);
+               db.ReservationBooks.
+               Where(r => r.ID == (id + 1));
+               // Where("ID = @0", id + 1); - works as well
 
             long startTime = TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 11), false);
             long endTime = TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 15), false);
@@ -89,6 +91,6 @@ namespace ReservationCalendar.Controllers
             } else {
                 return View(rBookAbs);
             }
-        }
+        }       
     }
 }

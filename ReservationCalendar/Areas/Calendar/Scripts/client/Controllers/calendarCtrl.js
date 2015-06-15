@@ -1,6 +1,6 @@
 ﻿
 /*global alert, angular, app, calHelpers, calTemplHelpers, fullCalendarHelpers, jQuery, Metronic, moment, timeSlotHelpers */
-app.directive('reservationCalendar', function ($window, $resource) {
+app.directive('reservationCalendar', [ '$window', '$resource', 'rBook', function ($window, $resource, rBook) {
     'use strict';
 
     return {
@@ -19,13 +19,57 @@ app.directive('reservationCalendar', function ($window, $resource) {
                 },
                 h = {},
                 origTS,
-                RBook = $resource('/ReservationBookAbs/Details/0?data=true'),
+                RBook = rBook.getRBook(0),
                 tSlotsToEdit;
 
             fullCalendarHelpers.init(calBody);
 
+            function combineAdjWRefresh(aTS) {
+                if (timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit)) {
+                    var calTpl = scope.rBook.calendarLayers[calTplNdx],
+                        absCalTpl;
+
+                    if (calTpl.calendarDbType !== calHelpers.CalendarDbType.ABSOLUTE) {
+                        throw new Error('Handling other than absolute calendars unimplemented');
+                    }
+
+                    absCalTpl = {
+                        ID: calTpl.dbCalendarTemplateID,
+                        Description: calTpl.description,
+                        absTimeSlots: calTpl.absTimeSlots
+                    };
+
+                    rBook.saveCalTempl(0, absCalTpl).then(
+                        function () {
+                            recalcCalContent();
+                        },
+                        function () {
+                            alert('nok');
+                        }
+                    );
+                }
+            }
+
             function isOverlapping(aTS) {
                 return timeSlotHelpers.isOverlapping(aTS, fullCalendarHelpers.eventsToTS());
+            }
+
+            function eventMod(ev, delta, revertFunc) {
+                /*jslint nomen: true */
+                aTS = {
+                    id: ev._id,
+                    startTime: ev.start.unix(),
+                    endTime: ev.end.unix(),
+                    origTSlot: ev.origTSlot
+                };
+
+                if (isOverlapping(aTS)) {
+                    revertFunc();
+                } else {
+                    ev.origTSlot.startTime = aTS.startTime;
+                    ev.origTSlot.endTime = aTS.endTime;
+                    combineAdjWRefresh(aTS);
+                }
             }
 
             function fcRedraw(width) {
@@ -54,42 +98,10 @@ app.directive('reservationCalendar', function ($window, $resource) {
                     defaultView: fcState.view,
                     editable: true,
                     eventDrop: function (ev, delta, revertFunc) {
-                        /*jslint nomen: true */
-                        aTS = {
-                            id: ev._id,
-                            startTime: ev.start.unix(),
-                            endTime: ev.end.unix(),
-                            origTSlot: ev.origTSlot
-                        };
-
-                        if (isOverlapping(aTS)) {
-                            revertFunc();
-                        } else {
-                            ev.origTSlot.startTime = aTS.startTime;
-                            ev.origTSlot.endTime = aTS.endTime;
-                            if (timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit)) {
-                                recalcCalContent();
-                            }
-                        }
+                        eventMod(ev, delta, revertFunc);
                     },
                     eventResize: function (ev, delta, revertFunc) {
-                        /*jslint nomen: true */
-                        aTS = {
-                            id: ev._id,
-                            startTime: ev.start.unix(),
-                            endTime: ev.end.unix(),
-                            origTSlot: ev.origTSlot
-                        };
-
-                        if (isOverlapping(aTS)) {
-                            revertFunc();
-                        } else {
-                            ev.origTSlot.startTime = aTS.startTime;
-                            ev.origTSlot.endTime = aTS.endTime;
-                            if (timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit)) {
-                                recalcCalContent();
-                            }
-                        }
+                        eventMod(ev, delta, revertFunc);
                     },
                     events: calEvents,
                     firstDay: 1,
@@ -231,7 +243,7 @@ app.directive('reservationCalendar', function ($window, $resource) {
             watchWidthChanges();
         }
     };
-})
+}])
     .directive('reservationCalendarControls', function () {
         'use strict';
 

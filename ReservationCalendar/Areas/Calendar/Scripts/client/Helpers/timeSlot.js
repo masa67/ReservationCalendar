@@ -115,6 +115,7 @@ var timeSlotHelpers = (function () {
                 break;
             case calHelpers.TimeSlotOverlap.SPLIT_OVERLAP:
                 delArr.push(aTS.origTSlot);
+                break;
             }
         }
 
