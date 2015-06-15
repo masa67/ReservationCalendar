@@ -17,7 +17,7 @@ namespace ReservationCalendar.Controllers
 
         // POST: AbsCalendarTemplate/Edit
         [HttpPost]
-        public ActionResult Edit(AbsCalendarTemplate absCalendarTemplate)
+        public ActionResult Edit(AbsCalendarTemplateDTO absCalendarTemplate)
         {
             return null;
         }

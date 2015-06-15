@@ -14,12 +14,11 @@
                         { id: id }
                     );
                 },
-                saveCalTempl: function (id, data) {
+                saveCalTempl: function (data) {
                     var d = $q.defer();
 
                     $resource(
-                        '/AbsCalendarTemplate/Edit/:id',
-                        { id: id }
+                        '/AbsCalendarTemplate/Edit'
                     ).save(data, function (ret) {
                         d.resolve(ret);
                     }, function (err) {

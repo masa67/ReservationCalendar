@@ -6,6 +6,15 @@ using System.Web.Script.Serialization;
 
 namespace ReservationCalendar.Models
 {
+    public class AbsTimeSlotDTO
+    {
+        public int? ID { get; set; }
+        public long startTime { get; set; }
+        public long endTime { get; set; }
+        public int? TimeSlotStatus { get; set; }
+        public string Description { get; set; }
+    }
+
     public class AbsTimeSlot
     {
         public int ID { get; set; }

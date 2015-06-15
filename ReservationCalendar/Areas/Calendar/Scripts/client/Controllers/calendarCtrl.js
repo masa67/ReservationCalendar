@@ -36,10 +36,10 @@ app.directive('reservationCalendar', [ '$window', '$resource', 'rBook', function
                     absCalTpl = {
                         ID: calTpl.dbCalendarTemplateID,
                         Description: calTpl.description,
-                        absTimeSlots: calTpl.absTimeSlots
+                        absTimeSlots: calTpl.timeSlots
                     };
 
-                    rBook.saveCalTempl(0, absCalTpl).then(
+                    rBook.saveCalTempl(absCalTpl).then(
                         function () {
                             recalcCalContent();
                         },
