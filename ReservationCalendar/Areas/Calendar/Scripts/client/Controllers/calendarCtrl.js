@@ -34,6 +34,7 @@ app.directive('reservationCalendar', [ '$window', '$resource', 'rBook', function
                     }
 
                     absCalTplEditReq = {
+                        id: 1,
                         absCalendarTemplate:
                             {
                                 ID: calTpl.dbCalendarTemplateID,

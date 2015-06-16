@@ -8,7 +8,6 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.Mvc;
 
 namespace ReservationCalendar.API
 {
@@ -17,8 +16,9 @@ namespace ReservationCalendar.API
         private ReservationCalendarContext db = new ReservationCalendarContext();
 
         // POST: api/AbsCalendarTemplateApi/Edit
+        [HttpPost]
         [ResponseType(typeof(OperationStatus))]
-        public OperationStatus Edit(int id /* AbsCalendarTemplateEditReq absCalendarTemplate */)
+        public OperationStatus Edit(int id, [FromBody] AbsCalendarTemplateEditReq absCalendarTemplate)
         {
             OperationStatus ret = null;
 

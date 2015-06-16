@@ -22,8 +22,8 @@
                     var d = $q.defer();
 
                     $resource(
-                        '/api/AbsCalendarTemplateApi/Edit'
-                    ).get(undefined /*data*/, function (ret) {
+                        '/api/AbsCalendarTemplateApi/Edit/1'
+                    ).save(data, function (ret) {
                         d.resolve(ret);
                     }, function (err) {
                         d.reject(err);

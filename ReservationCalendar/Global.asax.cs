@@ -21,7 +21,7 @@ namespace ReservationCalendar
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
+            // ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
             // Database.SetInitializer<ReservationCalendarContext>(new DropCreateDatabaseAlways<ReservationCalendarContext>());
         }
     }

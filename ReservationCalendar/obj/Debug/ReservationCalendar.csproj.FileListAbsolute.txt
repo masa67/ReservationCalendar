@@ -107,7 +107,6 @@ G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCal
 C:\Workarea\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.csprojResolveAssemblyReference.cache
 C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Newtonsoft.Json.xml
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\Newtonsoft.Json.xml
-G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.csprojResolveAssemblyReference.cache
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Linq.Dynamic.dll
 C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Linq.Dynamic.dll
 C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Net.Http.Formatting.dll
@@ -116,3 +115,9 @@ C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.
 C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Net.Http.Formatting.xml
 C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.xml
 C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.xml
+G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Net.Http.Formatting.dll
+G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.dll
+G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.dll
+G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Net.Http.Formatting.xml
+G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.xml
+G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.xml
