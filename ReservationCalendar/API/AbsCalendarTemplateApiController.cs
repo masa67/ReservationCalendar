@@ -11,6 +11,11 @@ using System.Web.Http.Description;
 
 namespace ReservationCalendar.API
 {
+    public class Data {
+        public int a { get; set; }
+        public int b { get; set; }
+    }
+
     public class AbsCalendarTemplateApiController : ApiController
     {
         private ReservationCalendarContext db = new ReservationCalendarContext();

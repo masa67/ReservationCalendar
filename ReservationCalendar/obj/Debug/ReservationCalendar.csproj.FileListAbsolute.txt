@@ -121,3 +121,4 @@ G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCal
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Net.Http.Formatting.xml
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.xml
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.xml
+G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.csprojResolveAssemblyReference.cache
