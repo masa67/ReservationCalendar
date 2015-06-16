@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -17,7 +18,6 @@ namespace ReservationCalendar.Controllers
     public class ReservationBookAbsController : Controller
     {
         private ReservationCalendarContext db = new ReservationCalendarContext();
-
 
         public ReservationBookAbsController()
         {
@@ -40,38 +40,27 @@ namespace ReservationCalendar.Controllers
         }
 
         // GET: ReservationBookAbs/Details/1
-        public ActionResult Details(int? id, string data)
+        public ActionResult Details(int? id)
         {
             // IQueryable<ReservationBook> rBookQuery =
             //        from rbook in db.ReservationBooks
             //        select rbook;
            
             ReservationBookAbs rBookAbs = null;
-            Boolean retJSON;
 
             var rBookQuery =
                db.ReservationBooks.
                Where(r => r.ID == (id + 1));
                // Where("ID = @0", id + 1); - works as well
 
-            long startTime = TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 11), false);
-            long endTime = TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 15), false);
-            TimePeriod timePeriod = new TimePeriod { unitsAsDays = true, startTime = startTime, endTime = endTime };
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);            
             }
 
-            retJSON = !string.IsNullOrEmpty(data) && data.Equals("true");
-
             foreach (ReservationBook rBook in rBookQuery)
             {
-                if (retJSON) {
-                    rBookAbs = new ReservationBookAbs(rBook, timePeriod, false, false);
-                } else {
-                    rBookAbs = new ReservationBookAbs(rBook, timePeriod, true, true);
-                }
+                rBookAbs = new ReservationBookAbs(rBook, null, true, true);
             }
 
             if (rBookAbs == null)
@@ -79,18 +68,7 @@ namespace ReservationCalendar.Controllers
                 return HttpNotFound();
             }
 
-            if (retJSON)
-            {
-                return Content(JsonConvert.SerializeObject(
-                    rBookAbs,
-                    Formatting.Indented,
-                    new JsonSerializerSettings {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        NullValueHandling = NullValueHandling.Ignore
-                    }));
-            } else {
-                return View(rBookAbs);
-            }
+            return View(rBookAbs);
         }       
     }
 }

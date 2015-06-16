@@ -110,3 +110,9 @@ G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCal
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.csprojResolveAssemblyReference.cache
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Linq.Dynamic.dll
 C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Linq.Dynamic.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Net.Http.Formatting.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Net.Http.Formatting.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.xml

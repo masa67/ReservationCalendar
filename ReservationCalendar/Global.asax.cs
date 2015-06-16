@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -19,6 +20,7 @@ namespace ReservationCalendar
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
+            GlobalConfiguration.Configure(WebApiConfig.Register);
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
             // Database.SetInitializer<ReservationCalendarContext>(new DropCreateDatabaseAlways<ReservationCalendarContext>());
         }

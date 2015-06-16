@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -17,6 +18,9 @@ namespace ReservationCalendar.Models
         public int EndTimeMin { get; set; }
         public TimeSlotStatus TimeSlotStatus { get; set; }
         public string Description { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
 
         public virtual RelCalendarTemplate RelCalendarTemplate { get; set; }
     }

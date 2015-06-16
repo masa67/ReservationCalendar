@@ -19,7 +19,7 @@ app.directive('reservationCalendar', [ '$window', '$resource', 'rBook', function
                 },
                 h = {},
                 origTS,
-                RBook = rBook.getRBook(0),
+                RBook = rBook.getRBook(1, moment('2015-05-11').unix(), moment('2015-05-15').unix()),
                 tSlotsToEdit;
 
             fullCalendarHelpers.init(calBody);
@@ -27,19 +27,24 @@ app.directive('reservationCalendar', [ '$window', '$resource', 'rBook', function
             function combineAdjWRefresh(aTS) {
                 if (timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit)) {
                     var calTpl = scope.rBook.calendarLayers[calTplNdx],
-                        absCalTpl;
+                        absCalTplEditReq;
 
                     if (calTpl.calendarDbType !== calHelpers.CalendarDbType.ABSOLUTE) {
                         throw new Error('Handling other than absolute calendars unimplemented');
                     }
 
-                    absCalTpl = {
-                        ID: calTpl.dbCalendarTemplateID,
-                        Description: calTpl.description,
-                        absTimeSlots: calTpl.timeSlots
+                    absCalTplEditReq = {
+                        absCalendarTemplate:
+                            {
+                                ID: calTpl.dbCalendarTemplateID,
+                                Description: calTpl.description,
+                                absTimeSlots: calTpl.timeSlots
+                            },
+                        startTime: 0,
+                        endTime: 0
                     };
 
-                    rBook.saveCalTempl(absCalTpl).then(
+                    rBook.saveCalTempl(absCalTplEditReq).then(
                         function () {
                             recalcCalContent();
                         },
@@ -118,7 +123,8 @@ app.directive('reservationCalendar', [ '$window', '$resource', 'rBook', function
                             origTS = {
                                 startTime: start.unix(),
                                 endTime: end.unix(),
-                                timeSlotStatus: calHelpers.TimeSlotStatus.FREE
+                                timeSlotStatus: calHelpers.TimeSlotStatus.FREE,
+                                absCalendarTemplateID: scope.rBook.calendarLayers[calTplNdx].dbCalendarTemplateID
                             };
                             tSlotsToEdit.push(origTS);
                             aTS.origTSlot = origTS;

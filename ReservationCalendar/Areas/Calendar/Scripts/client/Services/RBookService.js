@@ -8,18 +8,22 @@
         .factory('rBook', ['$resource', '$q', function ($resource, $q) {
 
             return {
-                getRBook: function (id) {
+                getRBook: function (id, startTime, endTime) {
                     return $resource(
-                        '/ReservationBookAbs/Details/:id?data=true',
-                        { id: id }
+                        '/api/ReservationBookAbsApi/GetReservationBookAbs/:id?startTime=:startTime&endTime=:endTime',
+                        {
+                            id: id,
+                            startTime: startTime,
+                            endTime: endTime
+                        }
                     );
                 },
                 saveCalTempl: function (data) {
                     var d = $q.defer();
 
                     $resource(
-                        '/AbsCalendarTemplate/Edit'
-                    ).save(data, function (ret) {
+                        '/api/AbsCalendarTemplateApi/Edit'
+                    ).get(undefined /*data*/, function (ret) {
                         d.resolve(ret);
                     }, function (err) {
                         d.reject(err);
