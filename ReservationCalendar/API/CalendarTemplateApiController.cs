@@ -78,6 +78,7 @@ namespace ReservationCalendar.API
                         AbsTimeSlot aTS = new AbsTimeSlot(timeSlot);
 
                         deleteTSFromStoredList(aTS);
+                        db.AbsTimeSlots.Attach(aTS);
                         db.AbsTimeSlots.Remove(aTS);
                     }
 

@@ -142,17 +142,20 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                 }
 
                 for (i = 0; i < delArr.length; i += 1) {
-                    delTimeSlots.push({
-                        dbId: delArr[i].dbId,
-                        rowVersion: delArr[i].rowVersion
-                    });
+                    if (delArr[i].dbId) {
+                        delTimeSlots.push({
+                            dbId: delArr[i].dbId,
+                            rowVersion: delArr[i].rowVersion
+                        });
+                    }
+                    timeSlotHelpers.delete(delArr[i], tSlotsToEdit);
                 }
 
                 calTplEditReq = {
                     calendarTemplate:
                         {
                             dbCalendarTemplateID: calTpl.dbCalendarTemplateID,
-                            timeSlots: calTpl.timeSlots
+                            timeSlots: tSlotsToEdit
                         },
                     startTime: periodStart,
                     endTime: periodEnd,
@@ -162,6 +165,7 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                 rBook.saveCalTempl(calTplEditReq).then(
                     function (data) {
                         scope.rBook.calendarLayers[calTplNdx].timeSlots = data.Data;
+                        tSlotsToEdit = data.Data;
                         recalcCalContent();
                     },
                     function () {
