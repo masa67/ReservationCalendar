@@ -170,8 +170,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\AbsCalendarTemplateApiController.cs" />
-    <Compile Include="API\AbsCalendarTemplateEditReq.cs" />
+    <Compile Include="API\CalendarTemplateApiController.cs" />
+    <Compile Include="API\CalendarTemplateEditReq.cs" />
     <Compile Include="API\AbsCalendarTemplatesController.cs" />
     <Compile Include="API\ReservationBookAbsApiController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />

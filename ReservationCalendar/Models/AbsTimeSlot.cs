@@ -20,5 +20,18 @@ namespace ReservationCalendar.Models
         public byte[] RowVersion { get; set; }
 
         public virtual AbsCalendarTemplate AbsCalendarTemplate { get; set; }
+
+        public AbsTimeSlot() { }
+
+        public AbsTimeSlot(TimeSlot tSlot)
+        {
+            ID = tSlot.dbId;
+            AbsCalendarTemplateID = tSlot.calDbId;
+            StartTime = tSlot.startTime;
+            EndTime = tSlot.endTime;
+            TimeSlotStatus = tSlot.timeSlotStatus;
+            Description = tSlot.description;
+            RowVersion = tSlot.rowVersion;
+        }
     }
 }

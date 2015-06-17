@@ -8,27 +8,34 @@ namespace ReservationCalendar.Models
 {
     public class TimeSlot
     {
-        public CalendarDbType dbType { get; set; }
+        public CalendarDbType calDbType { get; set; }
+        public int calDbId { get; set; }
         public int dbId { get; set; }
         public TimeSlot origTimeSlot { get; set; }
         public long startTime { get; set; }
         public long endTime { get; set; }
         public TimeSlotStatus timeSlotStatus { get; set; }
         public string description { get; set; }
+        public byte[] rowVersion { get; set; }
+
+        public TimeSlot() { }
 
         public TimeSlot(AbsTimeSlot aSlot)
         {
-            dbType = CalendarDbType.Absolute;
+            calDbType = CalendarDbType.Absolute;
+            calDbId = aSlot.AbsCalendarTemplateID;
             dbId = aSlot.ID;
             startTime = aSlot.StartTime;
             endTime = aSlot.EndTime;
             timeSlotStatus = aSlot.TimeSlotStatus;
             description = aSlot.Description;
+            rowVersion = aSlot.RowVersion;
         }
 
         public TimeSlot(RelTimeSlot rSlot, long timeBase)
         {
-            dbType = CalendarDbType.Relative;
+            calDbType = CalendarDbType.Relative;
+            calDbId = rSlot.RelCalendarTemplateID;
             dbId = rSlot.ID;
 
             startTime = TimeHelper.DateTimeToUTCTimeStamp(
@@ -44,7 +51,8 @@ namespace ReservationCalendar.Models
 
         public TimeSlot(TimeSlot tSlot)
         {
-            dbType = tSlot.dbType;
+            calDbType = tSlot.calDbType;
+            calDbId = tSlot.calDbId;
             dbId = tSlot.dbId;
 
             origTimeSlot = tSlot;
@@ -53,6 +61,7 @@ namespace ReservationCalendar.Models
 
             timeSlotStatus = tSlot.timeSlotStatus;
             description = tSlot.description;
+            rowVersion = tSlot.rowVersion;
         }
 
         public TimeSlotOverlap checkOverlap(TimeSlot ts)

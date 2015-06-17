@@ -22,7 +22,7 @@
                     var d = $q.defer();
 
                     $resource(
-                        '/api/AbsCalendarTemplateApi/Edit/1'
+                        '/api/CalendarTemplateApi/Edit/1'
                     ).save(data, function (ret) {
                         d.resolve(ret);
                     }, function (err) {

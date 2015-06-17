@@ -25,6 +25,8 @@ namespace ReservationCalendar.Models
 
         # region DB constructors 
 
+        public CalendarTemplate() { }
+
         public CalendarTemplate(AbsCalendarTemplate aCal, TimePeriod timePeriod)
         {
             calendarSourceType = CalendarSourceType.Database;
