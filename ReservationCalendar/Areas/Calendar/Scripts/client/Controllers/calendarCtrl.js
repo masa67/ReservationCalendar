@@ -14,55 +14,22 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                 calEvents = [],
                 calTplNdx = 2, // maps to editArea 'freeSlots'
                 combCal = {},
+                delArr = [],
                 fcState = {
                     view: 'agendaWeek'
                 },
                 h = {},
                 origTS,
-                RBook = rBook.getRBook(1, moment('2015-05-11').unix(), moment('2015-05-15').unix()),
+                periodEnd = moment('2015-05-15').unix(),
+                periodStart = moment('2015-05-11').unix(),
+                RBook = rBook.getRBook(1, periodStart, periodEnd),
                 tSlotsToEdit;
 
             fullCalendarHelpers.init(calBody);
 
             function combineAdjWRefresh(aTS) {
-                var calTpl, calTplEditReq, delTimeSlots = [], i;
-
-                if (timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit)) {
-                    calTpl = scope.rBook.calendarLayers[calTplNdx];
-
-                    if (calTpl.calendarDbType !== calHelpers.CalendarDbType.ABSOLUTE) {
-                        throw new Error('Handling other than absolute calendars unimplemented');
-                    }
-
-                    /*
-                    for (i = 0; i < delArr.length; i += 1) {
-                        delTimeSlots.push({
-                            dbId: delArr[i].dbId,
-                            rowVersion: delArr[i].rowVersion
-                        });
-                    }
-                    */
-
-                    calTplEditReq = {
-                        calendarTemplate:
-                            {
-                                dbCalendarTemplateID: calTpl.dbCalendarTemplateID,
-                                timeSlots: calTpl.timeSlots
-                            },
-                        startTime: 0,
-                        endTime: 0,
-                        delTimeSlots: delTimeSlots
-                    };
-
-                    rBook.saveCalTempl(calTplEditReq).then(
-                        function () {
-                            recalcCalContent();
-                        },
-                        function () {
-                            alert('nok');
-                        }
-                    );
-                }
+                delArr = timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit);
+                saveCalLayerDB();
             }
 
             function isOverlapping(aTS) {
@@ -140,20 +107,7 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                             tSlotsToEdit.push(origTS);
                             aTS.origTSlot = origTS;
 
-                            if (timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit)) {
-                                recalcCalContent();
-                            } else {
-                                calBody.fullCalendar('renderEvent',
-                                    {
-                                        allDay: false,
-                                        end: end,
-                                        start: start,
-                                        title: '',
-                                        origTSlot: aTS.origTSlot
-                                    },
-                                    true // make the event "stick"
-                                    );
-                            }
+                            combineAdjWRefresh(aTS);
                         }
                         calBody.fullCalendar('unselect');
                     },
@@ -178,6 +132,42 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
             function recalcCalContent() {
                 combCal = calTemplHelpers.createCombinedCalTempl(scope.rBook.calendarLayers);
                 updateCalEvents();
+            }
+
+            function saveCalLayerDB() {
+                var calTpl = scope.rBook.calendarLayers[calTplNdx], calTplEditReq, delTimeSlots = [], i;
+
+                if (calTpl.calendarDbType !== calHelpers.CalendarDbType.ABSOLUTE) {
+                    throw new Error('Handling other than absolute calendars unimplemented');
+                }
+
+                for (i = 0; i < delArr.length; i += 1) {
+                    delTimeSlots.push({
+                        dbId: delArr[i].dbId,
+                        rowVersion: delArr[i].rowVersion
+                    });
+                }
+
+                calTplEditReq = {
+                    calendarTemplate:
+                        {
+                            dbCalendarTemplateID: calTpl.dbCalendarTemplateID,
+                            timeSlots: calTpl.timeSlots
+                        },
+                    startTime: periodStart,
+                    endTime: periodEnd,
+                    delTimeSlots: delTimeSlots
+                };
+
+                rBook.saveCalTempl(calTplEditReq).then(
+                    function (data) {
+                        scope.rBook.calendarLayers[calTplNdx].timeSlots = data.Data;
+                        recalcCalContent();
+                    },
+                    function () {
+                        alert('nok');
+                    }
+                );
             }
 
             function updateCalEvents() {

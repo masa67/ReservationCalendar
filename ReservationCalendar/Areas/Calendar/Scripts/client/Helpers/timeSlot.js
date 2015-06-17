@@ -61,7 +61,7 @@ var timeSlotHelpers = (function () {
     };
 
     retObj.combineAdjacent = function (aTS, tsArr) {
-        var bTS, i, j, delArr = [], pre, post;
+        var bTS, i, delArr = [], pre, post;
 
         for (i = 0; i < tsArr.length && (!pre || !post); i += 1) {
             bTS = tsArr[i];
@@ -90,25 +90,10 @@ var timeSlotHelpers = (function () {
             }
         }
 
-        for (i = 0; i < delArr.length; i += 1) {
-            retObj.delete(delArr[i], tsArr);
-        }
-
-        return delArr.length;
-
-        /*
-        for (i = 0, j = 0; i < delArr.length; i += 1) {
-            if (delArr[i].dbId) {
-                delArr[j] = delArr[i];
-                j += 1;
-            }
-        }
-        delArr.length = j;
-
         return delArr;
-        */
     };
 
+    /*
     retObj.combineOverlapping = function (aTS, tsArr) {
         var bTS, i, j, delArr = [], pre, post;
 
@@ -147,24 +132,9 @@ var timeSlotHelpers = (function () {
             }
         }
 
-        for (i = 0; i < delArr.length; i += 1) {
-            retObj.delete(delArr[i], tsArr);
-        }
-
-        return delArr.length;
-
-        /*
-        for (i = 0, j = 0; i < delArr.length; i += 1) {
-            if (delArr[i].dbId) {
-                delArr[j] = delArr[i];
-                j += 1;
-            }
-        }
-        delArr.length = j;
-
         return delArr;
-        */
     };
+    */
 
     return retObj;
 }());

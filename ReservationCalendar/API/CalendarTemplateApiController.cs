@@ -17,6 +17,31 @@ namespace ReservationCalendar.API
     public class CalendarTemplateApiController : ApiController
     {
         private ReservationCalendarContext db = new ReservationCalendarContext();
+        private List<AbsTimeSlot> storedTimeSlots;
+
+        private void deleteTSFromStoredList(AbsTimeSlot ts)
+        {
+            foreach (AbsTimeSlot bTS in storedTimeSlots)
+            {
+                if (ts.ID == bTS.ID)
+                {
+                    storedTimeSlots.Remove(bTS);
+                    return;
+                }
+            }
+
+            throw new System.ApplicationException("DB concurrency conflict detected");
+        }
+
+        private async Task<List<AbsTimeSlot>> queryTS(CalendarTemplateEditReq req)
+        {
+            List<AbsTimeSlot> ret = await db.AbsTimeSlots.AsNoTracking().Where(
+                t => t.AbsCalendarTemplateID == req.calendarTemplate.dbCalendarTemplateID &&
+                    ((t.StartTime >= req.startTime && t.StartTime <= req.endTime) ||
+                     (t.EndTime >= req.startTime && t.EndTime <= req.endTime))).ToListAsync();
+
+            return ret;
+        }
 
         // POST: api/CalendarTemplateApi/Edit
         [HttpPost]
@@ -29,34 +54,50 @@ namespace ReservationCalendar.API
             {
                 try
                 {
+                    storedTimeSlots = await queryTS(req);
+
                     foreach (TimeSlot timeSlot in req.calendarTemplate.timeSlots)
                     {
-                        AbsTimeSlot absTimeSlot = new AbsTimeSlot(timeSlot);
+                        AbsTimeSlot aTS = new AbsTimeSlot(timeSlot);
 
-                        if (absTimeSlot.ID == 0)
+                        if (aTS.ID == 0)
                         {
-                            db.AbsTimeSlots.Add(absTimeSlot);
+                            db.AbsTimeSlots.Add(aTS);
                             
                         }
                         else
                         {
-                            db.AbsTimeSlots.Attach(absTimeSlot);
-                            db.Entry(absTimeSlot).State = EntityState.Modified;
+                            deleteTSFromStoredList(aTS);
+                            db.AbsTimeSlots.Attach(aTS);
+                            db.Entry(aTS).State = EntityState.Modified;
                         }
                     }
 
                     foreach (TimeSlot timeSlot in req.delTimeSlots)
                     {
-                        AbsTimeSlot absTimeSlot = new AbsTimeSlot(timeSlot);
+                        AbsTimeSlot aTS = new AbsTimeSlot(timeSlot);
 
-                        db.AbsTimeSlots.Remove(absTimeSlot);
+                        deleteTSFromStoredList(aTS);
+                        db.AbsTimeSlots.Remove(aTS);
+                    }
+
+                    if (storedTimeSlots.Count != 0)
+                    {
+                        throw new System.ApplicationException("DB concurrency conflict detected");
                     }
 
                     await db.SaveChangesAsync();
 
-                    ret = new OperationStatus { Status = true };
+                    storedTimeSlots = await queryTS(req);
+                    List<TimeSlot> timeSlots = new List<TimeSlot>();
+                    foreach (AbsTimeSlot aTS in storedTimeSlots)
+                    {
+                        timeSlots.Add(new TimeSlot(aTS));
+                    }
+
+                    ret = new OperationStatus { Status = true, Data = timeSlots };
                 }
-                catch (DataException dex)
+                catch (Exception ex)
                 {
                     ret = new OperationStatus { Status = false, Message = "DB save failed" };
                 }
