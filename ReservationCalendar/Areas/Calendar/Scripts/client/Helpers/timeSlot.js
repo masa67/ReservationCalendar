@@ -76,17 +76,17 @@ var timeSlotHelpers = (function () {
             minTime = pre.startTime;
             maxTime = post.endTime;
             pre.endTime = post.endTime;
-            delArr.push(aTS.origTSlot);
+            delArr.push(aTS.tsOrig);
             delArr.push(post);
         } else {
             if (pre) {
                 minTime = pre.startTime;
                 pre.endTime = aTS.endTime;
-                delArr.push(aTS.origTSlot);
+                delArr.push(aTS.tsOrig);
             } else {
                 if (post) {
                     maxTime = post.endTime;
-                    aTS.origTSlot.endTime = post.endTime;
+                    aTS.tsOrig.endTime = post.endTime;
                     delArr.push(post);
                 }
             }
@@ -117,22 +117,22 @@ var timeSlotHelpers = (function () {
                 delArr.push(bTS);
                 break;
             case calHelpers.TimeSlotOverlap.SPLIT_OVERLAP:
-                delArr.push(aTS.origTSlot);
+                delArr.push(aTS.tsOrig);
                 break;
             }
         }
 
         if (pre && post) {
             pre.endTime = post.endTime;
-            delArr.push(aTS.origTSlot);
+            delArr.push(aTS.tsOrig);
             delArr.push(post);
         } else {
             if (pre) {
                 pre.endTime = aTS.endTime;
-                delArr.push(aTS.origTSlot);
+                delArr.push(aTS.tsOrig);
             } else {
                 if (post) {
-                    aTS.origTSlot.endTime = post.endTime;
+                    aTS.tsOrig.endTime = post.endTime;
                     delArr.push(post);
                 }
             }

@@ -49,24 +49,24 @@ var calTemplHelpers = (function () {
                             }
 
                             switch (tsCmp) {
-                                case calHelpers.TimeSlotOverlap.NONE:
-                                    break;
-                                case calHelpers.TimeSlotOverlap.LATE_OVERLAP:
-                                    mSlot.endTime = slot.startTime;
-                                    break;
-                                case calHelpers.TimeSlotOverlap.EARLY_OVERLAP:
-                                    mSlot.startTime = slot.endTime;
-                                    break;
-                                case calHelpers.TimeSlotOverlap.OVERRIDE:
-                                    timeSlotsToDelete.push(mSlot);
-                                    break;
-                                case calHelpers.TimeSlotOverlap.SPLIT_OVERLAP:
-                                    dSlot = duplicateObject(mSlot);
+                            case calHelpers.TimeSlotOverlap.NONE:
+                                break;
+                            case calHelpers.TimeSlotOverlap.LATE_OVERLAP:
+                                mSlot.endTime = slot.startTime;
+                                break;
+                            case calHelpers.TimeSlotOverlap.EARLY_OVERLAP:
+                                mSlot.startTime = slot.endTime;
+                                break;
+                            case calHelpers.TimeSlotOverlap.OVERRIDE:
+                                timeSlotsToDelete.push(mSlot);
+                                break;
+                            case calHelpers.TimeSlotOverlap.SPLIT_OVERLAP:
+                                dSlot = duplicateObject(mSlot);
 
-                                    mSlot.endTime = slot.startTime;
-                                    dSlot.startTime = slot.endTime;
-                                    retObj.timeSlots.push(dSlot);
-                                    break;
+                                mSlot.endTime = slot.startTime;
+                                dSlot.startTime = slot.endTime;
+                                retObj.timeSlots.push(dSlot);
+                                break;
                             }
                         }
 
@@ -75,7 +75,7 @@ var calTemplHelpers = (function () {
                         }
 
                         dSlot = duplicateObject(slot);
-                        dSlot.origTSlot = slot;
+                        dSlot.tsOrig = slot;
                         retObj.timeSlots.push(dSlot);
                     }
                 }
