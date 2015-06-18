@@ -14,21 +14,27 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                 calEvents = [],
                 calTplNdx = 2, // maps to editArea 'freeSlots'
                 combCal = {},
-                delArr = [],
                 fcState = {
                     view: 'agendaWeek'
                 },
                 h = {},
+                maxEditTime = 0,
+                minEditTime = 0,
                 origTS,
                 periodEnd = moment('2015-05-15').unix(),
                 periodStart = moment('2015-05-11').unix(),
                 RBook = rBook.getRBook(1, periodStart, periodEnd),
+                tSlotsDeleted = [],
                 tSlotsToEdit;
 
             fullCalendarHelpers.init(calBody);
 
             function combineAdjWRefresh(aTS) {
-                delArr = timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit);
+                var combRes = timeSlotHelpers.combineAdjacent(aTS, tSlotsToEdit);
+
+                updateEditTimes(combRes.minTime, combRes.maxTime);
+                tSlotsDeleted = combRes.delArr;
+
                 saveCalLayerDB();
             }
 
@@ -48,6 +54,10 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                 if (isOverlapping(aTS)) {
                     revertFunc();
                 } else {
+                    updateEditTimes(
+                        Math.min(ev.origTSlot.startTime, aTS.startTime),
+                        Math.max(ev.origTSlot.endTime, aTS.endTime)
+                    );
                     ev.origTSlot.startTime = aTS.startTime;
                     ev.origTSlot.endTime = aTS.endTime;
                     combineAdjWRefresh(aTS);
@@ -104,6 +114,7 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                                 endTime: end.unix(),
                                 timeSlotStatus: calHelpers.TimeSlotStatus.FREE
                             };
+                            updateEditTimes(origTS.startTime, origTS.endTime);
                             tSlotsToEdit.push(origTS);
                             aTS.origTSlot = origTS;
 
@@ -141,31 +152,40 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                     throw new Error('Handling other than absolute calendars unimplemented');
                 }
 
-                for (i = 0; i < delArr.length; i += 1) {
-                    if (delArr[i].dbId) {
+                timeSlotHelpers.addMissingTSlot
+                for (i = 0; i < tSlotsDeleted.length; i += 1) {
+                    if (tSlotsDeleted[i].dbId) {
                         delTimeSlots.push({
-                            dbId: delArr[i].dbId,
-                            rowVersion: delArr[i].rowVersion
+                            dbId: tSlotsDeleted[i].dbId,
+                            rowVersion: tSlotsDeleted[i].rowVersion
                         });
                     }
-                    timeSlotHelpers.delete(delArr[i], tSlotsToEdit);
+                    timeSlotHelpers.delete(tSlotsDeleted[i], tSlotsToEdit);
                 }
 
                 calTplEditReq = {
                     calendarTemplate:
                         {
                             dbCalendarTemplateID: calTpl.dbCalendarTemplateID,
-                            timeSlots: tSlotsToEdit
+                            timeSlots: timeSlotHelpers.between(tSlotsToEdit, minEditTime, maxEditTime)
                         },
-                    startTime: periodStart,
-                    endTime: periodEnd,
+                    startTime: minEditTime,
+                    endTime: maxEditTime,
                     delTimeSlots: delTimeSlots
                 };
 
                 rBook.saveCalTempl(calTplEditReq).then(
                     function (data) {
-                        scope.rBook.calendarLayers[calTplNdx].timeSlots = data.Data;
-                        tSlotsToEdit = data.Data;
+                        scope.rBook.calendarLayers[calTplNdx].timeSlots = timeSlotHelpers.replace(
+                            scope.rBook.calendarLayers[calTplNdx].timeSlots,
+                            data.Data,
+                            minEditTime,
+                            maxEditTime
+                        );
+                        tSlotsToEdit = scope.rBook.calendarLayers[calTplNdx].timeSlots;
+                        maxEditTime = 0;
+                        minEditTime = 0;
+                        tSlotsDeleted.length = 0;
                         recalcCalContent();
                     },
                     function () {
@@ -206,6 +226,15 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                 }
 
                 fcRedraw(); // fcUpdateEvents();
+            }
+
+            function updateEditTimes(minTime, maxTime) {
+                if (minTime && (!minEditTime || (minTime < minEditTime))) {
+                    minEditTime = minTime;
+                }
+                if (maxTime && (!maxEditTime || (maxTime > maxEditTime))) {
+                    maxEditTime = maxTime;
+                }
             }
 
             function watchWidthChanges() {

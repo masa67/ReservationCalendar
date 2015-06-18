@@ -5,8 +5,16 @@ var timeSlotHelpers = (function () {
 
     var retObj = {};
 
-    retObj.timestampToLocalDate = function (ts) {
-        return moment(1000 * ts).hours(0).minutes(0).seconds(0);
+    retObj.between = function (arr, startTime, endTime) {
+        var i, retArr = [];
+
+        for (i = 0; i < arr.length; i += 1) {
+            if (!((arr[i].endTime <= startTime) || (arr[i].startTime >= endTime))) {
+                retArr.push(arr[i]);
+            }
+        }
+
+        return retArr;
     };
 
     retObj.checkOverlap = function (aTS, bTS) {
@@ -48,20 +56,8 @@ var timeSlotHelpers = (function () {
         }
     };
 
-    retObj.isOverlapping = function (aTS, tsArr) {
-        var i;
-
-        for (i = 0; i < tsArr.length; i += 1) {
-            if ((!aTS.id || aTS.id !== tsArr[i].id) &&
-                    retObj.checkOverlap(aTS, tsArr[i]) !== calHelpers.TimeSlotOverlap.NONE) {
-                return true;
-            }
-        }
-        return false;
-    };
-
     retObj.combineAdjacent = function (aTS, tsArr) {
-        var bTS, i, delArr = [], pre, post;
+        var bTS, i, delArr = [], maxTime, minTime, pre, post;
 
         for (i = 0; i < tsArr.length && (!pre || !post); i += 1) {
             bTS = tsArr[i];
@@ -74,23 +70,33 @@ var timeSlotHelpers = (function () {
             }
         }
 
+        minTime = aTS.startTime;
+        maxTime = aTS.endTime;
         if (pre && post) {
+            minTime = pre.startTime;
+            maxTime = post.endTime;
             pre.endTime = post.endTime;
             delArr.push(aTS.origTSlot);
             delArr.push(post);
         } else {
             if (pre) {
+                minTime = pre.startTime;
                 pre.endTime = aTS.endTime;
                 delArr.push(aTS.origTSlot);
             } else {
                 if (post) {
+                    maxTime = post.endTime;
                     aTS.origTSlot.endTime = post.endTime;
                     delArr.push(post);
                 }
             }
         }
 
-        return delArr;
+        return {
+            minTime: minTime,
+            maxTime: maxTime,
+            delArr: delArr
+        };
     };
 
     /*
@@ -135,6 +141,36 @@ var timeSlotHelpers = (function () {
         return delArr;
     };
     */
+
+    retObj.isOverlapping = function (aTS, tsArr) {
+        var i;
+
+        for (i = 0; i < tsArr.length; i += 1) {
+            if ((!aTS.id || aTS.id !== tsArr[i].id) &&
+                    retObj.checkOverlap(aTS, tsArr[i]) !== calHelpers.TimeSlotOverlap.NONE) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    retObj.replace = function (toArr, frArr, startTime, endTime) {
+        var i, j;
+
+        for (i = 0, j = 0; i < toArr.length; i += 1) {
+            if ((toArr[i].endTime <= startTime) || (toArr[i].startTime >= endTime)) {
+                toArr[j] = toArr[i];
+                j += 1;
+            }
+        }
+        toArr.length = j;
+
+        return toArr.concat(frArr);
+    };
+
+    retObj.timestampToLocalDate = function (ts) {
+        return moment(1000 * ts).hours(0).minutes(0).seconds(0);
+    };
 
     return retObj;
 }());
