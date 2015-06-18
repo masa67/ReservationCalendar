@@ -13,10 +13,12 @@
         <hr />
         <div>
             <div>Edit</div>
-            <form>
-                <input type="radio" ng-model="model.editArea" value="meetings">meetings<br/>
-                <input type="radio" ng-model="model.editArea" value="freeSlots">free slots<br/>
-            </form>
+            <div ng-repeat="layer in rBook.calendarLayers">
+                <input type="radio"
+                       ng-model="model.layerInEdit"
+                       ng-value="$index"
+                       ng-change="changeEditLayer()">{{layer.description}}<br/>
+            </div>
         </div>
     </form>
 </div>

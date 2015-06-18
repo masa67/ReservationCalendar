@@ -12,7 +12,6 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                 // child = elem.find('.calendar'),
                 calBody = angular.element(elem.find('.calendar-body')),
                 calEvents = [],
-                calTplNdx = 2, // maps to editArea 'freeSlots'
                 combCal = {},
                 fcState = {
                     view: 'agendaWeek'
@@ -112,8 +111,8 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
 
                         if (!isOverlapping(aTS)) {
                             origTS = {
-                                calDbType: scope.rBook.calendarLayers[calTplNdx].calendarDbType,
-                                calDbId: scope.rBook.calendarLayers[calTplNdx].dbCalendarTemplateID,
+                                calDbType: scope.rBook.calendarLayers[scope.model.layerInEdit].calendarDbType,
+                                calDbId: scope.rBook.calendarLayers[scope.model.layerInEdit].dbCalendarTemplateID,
                                 startTime: start.unix(),
                                 endTime: end.unix(),
                                 timeSlotStatus: calHelpers.TimeSlotStatus.FREE
@@ -161,7 +160,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                         recalcCalContent();
 
                         // FFS: misplaced
-                        tSlotsToEdit = scope.rBook.calendarLayers[calTplNdx].timeSlots;
+                        tSlotsToEdit = scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots;
 
                         calBody.fullCalendar('removeEvents');
                         callback(calEvents);
@@ -178,7 +177,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
             };
 
             saveCalLayerDB = function () {
-                var calTpl = scope.rBook.calendarLayers[calTplNdx], calTplEditReq, delTimeSlots = [], i;
+                var calTpl = scope.rBook.calendarLayers[scope.model.layerInEdit], calTplEditReq, delTimeSlots = [], i;
 
                 if (calTpl.calendarDbType !== calHelpers.CalendarDbType.ABSOLUTE) {
                     throw new Error('Handling other than absolute calendars unimplemented');
@@ -207,13 +206,13 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
 
                 rBook.saveCalTempl(calTplEditReq).then(
                     function (data) {
-                        scope.rBook.calendarLayers[calTplNdx].timeSlots = timeSlotHelpers.replace(
-                            scope.rBook.calendarLayers[calTplNdx].timeSlots,
+                        scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots = timeSlotHelpers.replace(
+                            scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots,
                             data.Data,
                             minEditTime,
                             maxEditTime
                         );
-                        tSlotsToEdit = scope.rBook.calendarLayers[calTplNdx].timeSlots;
+                        tSlotsToEdit = scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots;
                         maxEditTime = 0;
                         minEditTime = 0;
                         tSlotsDeleted.length = 0;
@@ -246,9 +245,10 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                     ts = {
                         allDay: false,
                         backgroundColor:
-                            (tSlot.timeSlotStatus === calHelpers.TimeSlotStatus.EXCLUDED) ?
-                                    Metronic.getBrandColor('green') :
-                                    Metronic.getBrandColor('yellow'),
+                            Metronic.getBrandColor(
+                                [ 'red', 'green', 'blue', 'yellow' ][tSlot.calDbId]
+                            ),
+                        editable: scope.model.layerInEdit === i,
                         end: moment(1000 * tSlot.endTime).format(),
                         start: moment(1000 * tSlot.startTime).format(),
                         title: tSlot.description,
@@ -287,9 +287,9 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
 
             scope.model = scope.model || {};
             scope.model.calendarLayerSelected = [];
-            scope.model.editArea = "freeSlots";
 
             scope.model.calMode = 'combined';
+            scope.model.layerInEdit = 1;
 
             scope.changeCalLayers = function () {
                 updateCalEvents();
@@ -297,6 +297,13 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
             };
 
             scope.changeCalMode = function () {
+                updateCalEvents();
+                fcRefreshEvents();
+            };
+
+            scope.changeEditLayer = function () {
+                tSlotsToEdit = scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots;
+
                 updateCalEvents();
                 fcRefreshEvents();
             };
