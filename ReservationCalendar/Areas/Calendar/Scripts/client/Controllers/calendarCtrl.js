@@ -226,8 +226,19 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                 );
             };
 
+            function tSlotLayer(tSlot) {
+                var i;
+
+                for (i = 0; i < scope.rBook.calendarLayers.length; i += 1) {
+                    if (tSlot.calDbId === scope.rBook.calendarLayers[i].dbCalendarTemplateID) {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+
             updateCalEvents = function () {
-                var i, tSlots, tSlot, ts;
+                var i, tSlots, tSlot, ts, tsLayer;
 
                 if (scope.model.calMode === 'combined') {
                     tSlots = combCal.timeSlots;
@@ -242,13 +253,15 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                 for (i = 0; i < tSlots.length; i += 1) {
                     tSlot = tSlots[i];
 
+                    tsLayer = tSlotLayer(tSlot);
+
                     ts = {
                         allDay: false,
                         backgroundColor:
                             Metronic.getBrandColor(
-                                [ 'red', 'green', 'blue', 'yellow' ][tSlot.calDbId]
+                                [ 'green', 'blue', 'yellow' ][tsLayer]
                             ),
-                        editable: scope.model.layerInEdit === i,
+                        editable: tsLayer === scope.model.layerInEdit,
                         end: moment(1000 * tSlot.endTime).format(),
                         start: moment(1000 * tSlot.startTime).format(),
                         title: tSlot.description,
