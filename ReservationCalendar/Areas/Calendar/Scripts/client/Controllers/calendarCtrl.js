@@ -1,6 +1,6 @@
 ﻿
 /*global alert, angular, app, calHelpers, calTemplHelpers, fullCalendarHelpers, jQuery, Metronic, moment, timeSlotHelpers */
-app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rBook) {
+app.directive('reservationCalendar', [ 'rBook', function (rBook) {
     'use strict';
 
     return {
@@ -9,7 +9,7 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
         link: function (scope, elem) {
 
             var aTS,
-                child = elem.find('.calendar'),
+                // child = elem.find('.calendar'),
                 calBody = angular.element(elem.find('.calendar-body')),
                 calEvents = [],
                 calTplNdx = 2, // maps to editArea 'freeSlots'
@@ -17,15 +17,19 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                 fcState = {
                     view: 'agendaWeek'
                 },
+                getCalEvents, // function
                 h = {},
                 maxEditTime = 0,
                 minEditTime = 0,
                 origTS,
-                periodEnd = moment('2015-05-15').unix(),
-                periodStart = moment('2015-05-11').unix(),
-                RBook = rBook.getRBook(1, periodStart, periodEnd),
+                recalcCalContent, // function
+                saveCalLayerDB, // function
                 tSlotsDeleted = [],
-                tSlotsToEdit;
+                tSlotsToEdit,
+                updateCalEvents, // function
+                updateEditTimes, // function
+                useLazyFetching = true;
+                // watchWidthChanges; // function
 
             fullCalendarHelpers.init(calBody);
 
@@ -42,6 +46,7 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                 return timeSlotHelpers.isOverlapping(aTS, fullCalendarHelpers.eventsToTS());
             }
 
+            /*jslint unparam: true */
             function eventMod(ev, delta, revertFunc) {
                 /*jslint nomen: true */
                 aTS = {
@@ -65,23 +70,21 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
             }
 
             function fcRedraw(width) {
-                if (width) {
-                    if (Metronic.isRTL()) {
-                        h = {
-                            right: 'title',
-                            center: '',
-                            left: 'agendaDay, agendaWeek, month, today, prev, next'
-                        };
-                        scope.isMobile = (width <= 730) ? true : false;
-                    } else {
-                        h = {
-                            left: 'title',
-                            center: '',
-                            right: 'prev, next, today,month,agendaWeek,agendaDay'
-                        };
-                        scope.isMobile = (width <= 730) ? true : false;
-                    }
+                if (Metronic.isRTL()) {
+                    h = {
+                        right: 'title',
+                        center: '',
+                        left: 'agendaDay, agendaWeek, month, today, prev, next'
+                    };
+                } else {
+                    h = {
+                        left: 'title',
+                        center: '',
+                        right: 'prev, next, today,month,agendaWeek,agendaDay'
+                    };
                 }
+
+                scope.isMobile = (width && width <= 730) ? true : false;
 
                 calBody.fullCalendar('destroy'); // destroy the calendar
                 calBody.fullCalendar({ //re-initialize the calendar
@@ -95,9 +98,10 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                     eventResize: function (ev, delta, revertFunc) {
                         eventMod(ev, delta, revertFunc);
                     },
-                    events: calEvents,
+                    events: getCalEvents,
                     firstDay: 1,
                     header: h,
+                    lazyFetching: useLazyFetching,
                     selectable: true,
                     selectHelper: true,
                     select: function (start, end) {
@@ -131,28 +135,55 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                 });
             }
 
-            /*
-            function fcUpdateEvents() {
-                calBody.fullCalendar({
-                    events: calEvents
-                });
-                calBody.fullCalendar('rerenderEvents');
+            function fcRefreshEvents() {
+                calBody.fullCalendar('removeEvents');
+                calBody.fullCalendar('addEventSource', calEvents);
             }
-            */
 
-            function recalcCalContent() {
+            getCalEvents = function (start, end, timezone, callback) {
+                rBook.getRBook(1, start.unix(), end.unix()).then(
+                    function (ret) {
+                        var i, sel;
+
+                        if (!scope.rBook || !useLazyFetching) {
+                            scope.rBook = ret;
+                        } else {
+                            calTemplHelpers.merge(scope.rBook, ret);
+                        }
+
+                        calTemplHelpers.sortCalByWeight(scope.rBook.calendarLayers);
+                        sel = scope.model.calendarLayerSelected;
+                        sel.length = 0;
+                        for (i = 0; i < scope.rBook.calendarLayers.length; i += 1) {
+                            sel.push(true);
+                        }
+
+                        recalcCalContent();
+
+                        // FFS: misplaced
+                        tSlotsToEdit = scope.rBook.calendarLayers[calTplNdx].timeSlots;
+
+                        calBody.fullCalendar('removeEvents');
+                        callback(calEvents);
+                    },
+                    function (err) {
+                        throw new Error('Reading cal events fails');
+                    }
+                );
+            };
+
+            recalcCalContent = function () {
                 combCal = calTemplHelpers.createCombinedCalTempl(scope.rBook.calendarLayers);
                 updateCalEvents();
-            }
+            };
 
-            function saveCalLayerDB() {
+            saveCalLayerDB = function () {
                 var calTpl = scope.rBook.calendarLayers[calTplNdx], calTplEditReq, delTimeSlots = [], i;
 
                 if (calTpl.calendarDbType !== calHelpers.CalendarDbType.ABSOLUTE) {
                     throw new Error('Handling other than absolute calendars unimplemented');
                 }
 
-                timeSlotHelpers.addMissingTSlot
                 for (i = 0; i < tSlotsDeleted.length; i += 1) {
                     if (tSlotsDeleted[i].dbId) {
                         delTimeSlots.push({
@@ -187,14 +218,16 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                         minEditTime = 0;
                         tSlotsDeleted.length = 0;
                         recalcCalContent();
+
+                        fcRefreshEvents();
                     },
                     function () {
                         alert('nok');
                     }
                 );
-            }
+            };
 
-            function updateCalEvents() {
+            updateCalEvents = function () {
                 var i, tSlots, tSlot, ts;
 
                 if (scope.model.calMode === 'combined') {
@@ -225,19 +258,20 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                     calEvents.push(ts);
                 }
 
-                fcRedraw(); // fcUpdateEvents();
-            }
+                //fcRedraw(); // fcUpdateEvents();
+            };
 
-            function updateEditTimes(minTime, maxTime) {
+            updateEditTimes = function (minTime, maxTime) {
                 if (minTime && (!minEditTime || (minTime < minEditTime))) {
                     minEditTime = minTime;
                 }
                 if (maxTime && (!maxEditTime || (maxTime > maxEditTime))) {
                     maxEditTime = maxTime;
                 }
-            }
+            };
 
-            function watchWidthChanges() {
+            /*
+            watchWidthChanges = function () {
                 scope.$watch(
                     function () {
                         return child[0].offsetWidth;
@@ -248,27 +282,12 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
                 angular.element($window).bind('resize', function () {
                     scope.$apply();
                 });
-            }
+            };
+            */
 
             scope.model = scope.model || {};
             scope.model.calendarLayerSelected = [];
             scope.model.editArea = "freeSlots";
-
-            scope.rBook = RBook.get(function () {
-                var i, sel;
-
-                calTemplHelpers.sortCalByWeight(scope.rBook.calendarLayers);
-                sel = scope.model.calendarLayerSelected;
-                sel.length = 0;
-                for (i = 0; i < scope.rBook.calendarLayers.length; i += 1) {
-                    sel.push(true);
-                }
-
-                recalcCalContent();
-
-                // FFS: misplaced
-                tSlotsToEdit = scope.rBook.calendarLayers[calTplNdx].timeSlots;
-            });
 
             scope.model.calMode = 'combined';
 
@@ -281,7 +300,9 @@ app.directive('reservationCalendar', [ '$window', 'rBook', function ($window, rB
             };
 
             scope.isMobile = false;
-            watchWidthChanges();
+
+            // watchWidthChanges();
+            fcRedraw();
         }
     };
 }])

@@ -9,14 +9,25 @@
 
             return {
                 getRBook: function (id, startTime, endTime) {
-                    return $resource(
-                        '/api/ReservationBookAbsApi/GetReservationBookAbs/:id?startTime=:startTime&endTime=:endTime',
+                    var d = $q.defer();
+
+                    $resource(
+                        '/api/ReservationBookAbsApi/GetReservationBookAbs/:id?startTime=:startTime&endTime=:endTime'
+                    ).get(
                         {
                             id: id,
                             startTime: startTime,
                             endTime: endTime
+                        },
+                        function (ret) {
+                            d.resolve(ret);
+                        },
+                        function (err) {
+                            d.reject(err);
                         }
                     );
+
+                    return d.promise;
                 },
                 saveCalTempl: function (data) {
                     var d = $q.defer();

@@ -92,6 +92,13 @@ var calTemplHelpers = (function () {
 
             return retObj;
         },
+        merge: function (toRB, frRB) {
+            var i;
+
+            for (i = 0; i < toRB.calendarLayers.length; i += 1) {
+                timeSlotHelpers.merge(toRB.calendarLayers[i].timeSlots, frRB.calendarLayers[i].timeSlots);
+            }
+        },
         sortCalByWeight: function (cals) {
             cals.sort(cmpCalByWeight);
         }

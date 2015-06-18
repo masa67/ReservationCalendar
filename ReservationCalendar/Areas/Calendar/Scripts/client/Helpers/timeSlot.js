@@ -154,6 +154,24 @@ var timeSlotHelpers = (function () {
         return false;
     };
 
+    retObj.merge = function (tsArr1, tsArr2) {
+        var i, j, last, match;
+
+        last = tsArr1.length;
+        for (i = 0; i < tsArr2.length; i += 1) {
+            match = false;
+            for (j = 0; j < last; j += 1) {
+                if (tsArr1[j].dbId === tsArr2[i].dbId) {
+                    match = true;
+                    break;
+                }
+            }
+            if (!match) {
+                tsArr1.push(tsArr2[i]);
+            }
+        }
+    };
+
     retObj.replace = function (toArr, frArr, startTime, endTime) {
         var i, j;
 
