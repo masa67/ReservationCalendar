@@ -233,10 +233,10 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                 if (scope.model.calMode === 'combined') {
                     tSlots = combCal.timeSlots;
                 } else {
-                    tSlots = calTemplHelpers.listAllTimeSlots(
+                    tSlots = calTemplHelpers.createCombinedCalTempl(
                         scope.rBook.calendarLayers,
                         scope.model.calendarLayerSelected
-                    );
+                    ).timeSlots;
                 }
 
                 calEvents = [];
@@ -293,10 +293,12 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
 
             scope.changeCalLayers = function () {
                 updateCalEvents();
+                fcRefreshEvents();
             };
 
             scope.changeCalMode = function () {
                 updateCalEvents();
+                fcRefreshEvents();
             };
 
             scope.isMobile = false;
