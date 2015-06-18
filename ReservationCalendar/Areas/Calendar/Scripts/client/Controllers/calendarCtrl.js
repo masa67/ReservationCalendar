@@ -26,7 +26,6 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                 combineAdjWRefresh,
                 getCalEvents,
                 isOverlapping,
-                recalcCalContent,
                 saveCalLayerDB,
                 updateCalEvents,
                 updateEditTimes;
@@ -142,11 +141,6 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                 });
             }
 
-            function fcRefreshEvents() {
-                calBody.fullCalendar('removeEvents');
-                calBody.fullCalendar('addEventSource', calEvents);
-            }
-
             getCalEvents = function (start, end, timezone, callback) {
                 rBook.getRBook(1, start.unix(), end.unix()).then(
                     function (ret) {
@@ -165,7 +159,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                             sel.push(true);
                         }
 
-                        recalcCalContent();
+                        updateCalEvents(false);
 
                         // FFS: misplaced
                         tsToEdit = scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots;
@@ -177,11 +171,6 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                         throw new Error('Reading cal events fails');
                     }
                 );
-            };
-
-            recalcCalContent = function () {
-                combCal = calTemplHelpers.createCombinedCalTempl(scope.rBook.calendarLayers);
-                updateCalEvents();
             };
 
             saveCalLayerDB = function () {
@@ -224,9 +213,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                         maxEditTime = 0;
                         minEditTime = 0;
                         tsDeleted.length = 0;
-                        recalcCalContent();
-
-                        fcRefreshEvents();
+                        updateCalEvents(true);
                     },
                     function () {
                         alert('nok');
@@ -245,17 +232,14 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                 return -1;
             }
 
-            updateCalEvents = function () {
+            updateCalEvents = function (doRefresh) {
                 var i, tSlots, tSlot, ts, tsLayer;
 
-                if (scope.model.calMode === 'combined') {
-                    tSlots = combCal.timeSlots;
-                } else {
-                    tSlots = calTemplHelpers.createCombinedCalTempl(
-                        scope.rBook.calendarLayers,
-                        scope.model.calendarLayerSelected
-                    ).timeSlots;
-                }
+                combCal = calTemplHelpers.createCombinedCalTempl(
+                    scope.rBook.calendarLayers,
+                    (scope.model.calMode === 'combined') ? undefined : scope.model.calendarLayerSelected
+                );
+                tSlots = combCal.timeSlots;
 
                 calEvents = [];
                 for (i = 0; i < tSlots.length; i += 1) {
@@ -277,6 +261,11 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                     };
 
                     calEvents.push(ts);
+                }
+
+                if (doRefresh) {
+                    calBody.fullCalendar('removeEvents');
+                    calBody.fullCalendar('addEventSource', calEvents);
                 }
             };
 
@@ -311,20 +300,16 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
             scope.model.layerInEdit = 1;
 
             scope.changeCalLayers = function () {
-                updateCalEvents();
-                fcRefreshEvents();
+                updateCalEvents(true);
             };
 
             scope.changeCalMode = function () {
-                updateCalEvents();
-                fcRefreshEvents();
+                updateCalEvents(true);
             };
 
             scope.changeEditLayer = function () {
                 tsToEdit = scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots;
-
-                updateCalEvents();
-                fcRefreshEvents();
+                updateCalEvents(true);
             };
 
             scope.isMobile = false;
