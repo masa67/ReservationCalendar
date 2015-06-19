@@ -68,6 +68,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
             };
 
             isOverlapping = function (ts) {
+                ts.dbId = scope.rBook.calendarLayers[scope.model.layerInEdit].dbCalendarTemplateID;
                 return timeSlotHelpers.isOverlapping(ts, fullCalendarHelpers.eventsToTS());
             };
 

@@ -26,7 +26,7 @@ var calTemplHelpers = (function () {
                     timeSlotConflicts: []
                 };
 
-            this.sortCalByWeight(cals);
+            // this.sortCalByWeight(cals);
 
             for (i = 0; i < cals.length; i += 1) {
                 if (!sel || sel[cals.length - i - 1]) {

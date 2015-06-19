@@ -18,7 +18,8 @@ var fullCalendarHelpers = (function () {
                 retArr.push({
                     id: ev._id,
                     startTime: ev.start.unix(),
-                    endTime: ev.end && ev.end.unix()
+                    endTime: ev.end && ev.end.unix(),
+                    tsOrig: ev.tsOrig
                 });
             }
 
