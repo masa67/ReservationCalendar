@@ -147,7 +147,7 @@ var timeSlotHelpers = (function () {
 
         for (i = 0; i < tsArr.length; i += 1) {
             if ((!aTS.id || aTS.id !== tsArr[i].id) &&
-                    aTS.dbId === tsArr[i].dbId &&
+                    aTS.tsOrig.calDbId === tsArr[i].tsOrig.calDbId &&
                     retObj.checkOverlap(aTS, tsArr[i]) !== calHelpers.TimeSlotOverlap.NONE) {
                 return true;
             }

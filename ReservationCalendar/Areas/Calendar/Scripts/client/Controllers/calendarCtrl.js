@@ -41,17 +41,18 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                     endTime: end.unix()
                 };
 
+                tsOrig = {
+                    calDbType: scope.rBook.calendarLayers[scope.model.layerInEdit].calendarDbType,
+                    calDbId: scope.rBook.calendarLayers[scope.model.layerInEdit].dbCalendarTemplateID,
+                    startTime: start.unix(),
+                    endTime: end.unix(),
+                    timeSlotStatus: calHelpers.TimeSlotStatus.FREE
+                };
+                ts.tsOrig = tsOrig;
+
                 if (!isOverlapping(ts)) {
-                    tsOrig = {
-                        calDbType: scope.rBook.calendarLayers[scope.model.layerInEdit].calendarDbType,
-                        calDbId: scope.rBook.calendarLayers[scope.model.layerInEdit].dbCalendarTemplateID,
-                        startTime: start.unix(),
-                        endTime: end.unix(),
-                        timeSlotStatus: calHelpers.TimeSlotStatus.FREE
-                    };
                     updateEditTimes(tsOrig.startTime, tsOrig.endTime);
                     tsToEdit.push(tsOrig);
-                    ts.tsOrig = tsOrig;
 
                     combineAdjWRefresh(ts);
                 }
@@ -133,6 +134,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                     selectable: true,
                     selectHelper: true,
                     select: addNewTS,
+                    slotEventOverlap: true,
                     slotMinutes: 15,
                     timezone: 'local',
                     viewRender: function (view) {
@@ -238,7 +240,8 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
 
                 combCal = calTemplHelpers.createCombinedCalTempl(
                     scope.rBook.calendarLayers,
-                    (scope.model.calMode === 'combined') ? undefined : scope.model.calendarLayerSelected
+                    (scope.model.calMode === 'combined') ? undefined : scope.model.calendarLayerSelected,
+                    true
                 );
                 tSlots = combCal.timeSlots;
 

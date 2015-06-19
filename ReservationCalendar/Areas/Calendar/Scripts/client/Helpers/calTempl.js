@@ -18,7 +18,7 @@ var calTemplHelpers = (function () {
     }
 
     return {
-        createCombinedCalTempl: function (cals, sel) {
+        createCombinedCalTempl: function (cals, sel, overlap) {
             var cal, dSlot, i, j, k, mSlot, slot, timeSlotsToDelete, tsCmp,
                 retObj = {
                     calendarSourceType: calHelpers.CalendarSourceType.LAYERED,
@@ -33,45 +33,47 @@ var calTemplHelpers = (function () {
                     cal = cals[cals.length - i - 1];
                     for (j = 0; j < cal.timeSlots.length; j += 1) {
                         slot = cal.timeSlots[j];
-                        timeSlotsToDelete = [];
 
-                        for (k = 0; k < retObj.timeSlots.length; k += 1) {
-                            mSlot = retObj.timeSlots[k];
+                        if (!overlap) {
+                            timeSlotsToDelete = [];
+                            for (k = 0; k < retObj.timeSlots.length; k += 1) {
+                                mSlot = retObj.timeSlots[k];
 
-                            tsCmp = timeSlotHelpers.checkOverlap(slot, mSlot);
+                                tsCmp = timeSlotHelpers.checkOverlap(slot, mSlot);
 
-                            if (tsCmp !== calHelpers.TimeSlotOverlap.NONE) {
-                                retObj.timeSlotConflicts.push({
-                                    aSlot: slot,
-                                    bSlot: mSlot,
-                                    timeSlotOverlap: tsCmp
-                                });
+                                if (tsCmp !== calHelpers.TimeSlotOverlap.NONE) {
+                                    retObj.timeSlotConflicts.push({
+                                        aSlot: slot,
+                                        bSlot: mSlot,
+                                        timeSlotOverlap: tsCmp
+                                    });
+                                }
+
+                                switch (tsCmp) {
+                                case calHelpers.TimeSlotOverlap.NONE:
+                                    break;
+                                case calHelpers.TimeSlotOverlap.LATE_OVERLAP:
+                                    mSlot.endTime = slot.startTime;
+                                    break;
+                                case calHelpers.TimeSlotOverlap.EARLY_OVERLAP:
+                                    mSlot.startTime = slot.endTime;
+                                    break;
+                                case calHelpers.TimeSlotOverlap.OVERRIDE:
+                                    timeSlotsToDelete.push(mSlot);
+                                    break;
+                                case calHelpers.TimeSlotOverlap.SPLIT_OVERLAP:
+                                    dSlot = duplicateObject(mSlot);
+
+                                    mSlot.endTime = slot.startTime;
+                                    dSlot.startTime = slot.endTime;
+                                    retObj.timeSlots.push(dSlot);
+                                    break;
+                                }
                             }
 
-                            switch (tsCmp) {
-                            case calHelpers.TimeSlotOverlap.NONE:
-                                break;
-                            case calHelpers.TimeSlotOverlap.LATE_OVERLAP:
-                                mSlot.endTime = slot.startTime;
-                                break;
-                            case calHelpers.TimeSlotOverlap.EARLY_OVERLAP:
-                                mSlot.startTime = slot.endTime;
-                                break;
-                            case calHelpers.TimeSlotOverlap.OVERRIDE:
-                                timeSlotsToDelete.push(mSlot);
-                                break;
-                            case calHelpers.TimeSlotOverlap.SPLIT_OVERLAP:
-                                dSlot = duplicateObject(mSlot);
-
-                                mSlot.endTime = slot.startTime;
-                                dSlot.startTime = slot.endTime;
-                                retObj.timeSlots.push(dSlot);
-                                break;
+                            for (k = 0; k < timeSlotsToDelete.length; k += 1) {
+                                retObj.timeSlots.splice(retObj.timeSlots.indexOf(timeSlotsToDelete[k]), 1);
                             }
-                        }
-
-                        for (k = 0; k < timeSlotsToDelete.length; k += 1) {
-                            retObj.timeSlots.splice(retObj.timeSlots.indexOf(timeSlotsToDelete[k]), 1);
                         }
 
                         dSlot = duplicateObject(slot);
