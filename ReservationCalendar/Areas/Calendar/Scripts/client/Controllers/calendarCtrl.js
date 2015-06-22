@@ -264,6 +264,10 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                         tsOrig: tSlot.tsOrig // || tSlot for listAllTimeSlots
                     };
 
+                    if (tsLayer !== scope.model.layerInEdit) {
+                        ts.rendering = 'background';
+                    }
+
                     calEvents.push(ts);
                 }
 
