@@ -10,6 +10,7 @@ namespace ReservationCalendar.Models
     {
         public int ID { get; set; }
         public string Description { get; set; }
+        public Boolean UseMerging { get; set; }
 
         public virtual ICollection<AbsTimeSlot> absTimeSlots { get; set; }
     }

@@ -20,6 +20,7 @@ namespace ReservationCalendar.Models
         public int? dbCalendarTemplateID { get; set; }
         public string description { get; set; }
         public int? weight { get; set; }
+        public Boolean useMerging { get; set; }
         public ICollection<TimeSlot> timeSlots { get; set; }
         public ICollection<TimeSlotConflict> timeSlotConflicts { get; set; }
 
@@ -33,6 +34,7 @@ namespace ReservationCalendar.Models
             calendarDbType = CalendarDbType.Absolute;
             dbCalendarTemplateID = aCal.ID;
             description = aCal.Description;
+            useMerging = aCal.UseMerging;
             timeSlots = new List<TimeSlot>();
 
             if (timePeriod.unitsAsDays)
@@ -59,6 +61,7 @@ namespace ReservationCalendar.Models
             calendarDbType = CalendarDbType.Relative;
             dbCalendarTemplateID = rCal.ID;
             description = rCal.Description;
+            useMerging = rCal.UseMerging;
             timeSlots = new List<TimeSlot>();
 
             if (timePeriod.unitsAsDays)

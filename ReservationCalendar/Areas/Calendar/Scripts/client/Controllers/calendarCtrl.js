@@ -55,17 +55,23 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                     tsToEdit.push(tsOrig);
 
                     combineAdjWRefresh(ts);
+
+                    saveCalLayerDB();
                 }
                 calBody.fullCalendar('unselect');
             }
 
+            function clickCalEvent(ev, jsEv, view) {
+                alert('Event clicked!');
+            }
+
             combineAdjWRefresh = function (ts) {
-                var combRes = timeSlotHelpers.combineAdjacent(ts, tsToEdit);
+                if (scope.rBook.calendarLayers[tSlotLayer(ts.tsOrig)].useMerging) {
+                    var combRes = timeSlotHelpers.combineAdjacent(ts, tsToEdit);
 
-                updateEditTimes(combRes.minTime, combRes.maxTime);
-                tsDeleted = combRes.delArr;
-
-                saveCalLayerDB();
+                    updateEditTimes(combRes.minTime, combRes.maxTime);
+                    tsDeleted = combRes.delArr;
+                }
             };
 
             isOverlapping = function (ts) {
@@ -95,6 +101,8 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                     ev.tsOrig.startTime = ts.startTime;
                     ev.tsOrig.endTime = ts.endTime;
                     combineAdjWRefresh(ts);
+
+                    saveCalLayerDB();
                 }
             }
 
@@ -121,6 +129,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                     defaultDate: moment('2015-05-15'),
                     defaultView: fcState.view,
                     editable: true,
+                    eventClick: clickCalEvent,
                     eventDrop: function (ev, delta, revertFunc) {
                         eventMod(ev, delta, revertFunc);
                     },
@@ -208,7 +217,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                     function (data) {
                         scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots = timeSlotHelpers.replace(
                             scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots,
-                            data.Data,
+                            data,
                             minEditTime,
                             maxEditTime
                         );
@@ -219,7 +228,6 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                         updateCalEvents(true);
                     },
                     function () {
-                        alert('nok');
                     }
                 );
             };

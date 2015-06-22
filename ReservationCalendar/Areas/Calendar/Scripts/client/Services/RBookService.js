@@ -22,8 +22,9 @@
                         function (ret) {
                             d.resolve(ret);
                         },
-                        function (err) {
-                            d.reject(err);
+                        function () {
+                            throw new Error('GetRreservationBookAbs failed.');
+                            // d.reject(err);
                         }
                     );
 
@@ -35,9 +36,16 @@
                     $resource(
                         '/api/CalendarTemplateApi/Edit/1'
                     ).save(data, function (ret) {
-                        d.resolve(ret);
-                    }, function (err) {
-                        d.reject(err);
+                        if (ret.Status) {
+                            d.resolve(ret.Data);
+                        } else {
+                            throw new Error('CalendarTemplateApi/Edit failed: ' +
+                                ret.Message);
+                            // d.reject();
+                        }
+                    }, function () {
+                        throw new Error('CalendarTemplateApi/Edit failed.');
+                        // d.reject(err);
                     });
 
                     return d.promise;

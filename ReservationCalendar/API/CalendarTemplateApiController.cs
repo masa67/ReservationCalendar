@@ -37,8 +37,8 @@ namespace ReservationCalendar.API
         {
             List<AbsTimeSlot> ret = await db.AbsTimeSlots.AsNoTracking().Where(
                 t => t.AbsCalendarTemplateID == req.calendarTemplate.dbCalendarTemplateID &&
-                    ((t.StartTime >= req.startTime && t.StartTime <= req.endTime) ||
-                     (t.EndTime >= req.startTime && t.EndTime <= req.endTime))).ToListAsync();
+                    ((t.StartTime >= req.startTime && t.StartTime < req.endTime) ||
+                     (t.EndTime > req.startTime && t.EndTime <= req.endTime))).ToListAsync();
 
             return ret;
         }

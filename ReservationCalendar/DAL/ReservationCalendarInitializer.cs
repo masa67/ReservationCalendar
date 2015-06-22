@@ -47,7 +47,8 @@ namespace ReservationCalendar.DAL
                 new RelCalendarTemplate{Description="standard weekly",
                                         RelCalendarType=RelCalendarType.Weekly,
                                         ValidStart=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 1), false),
-                                        ValidEnd=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 31), false)}
+                                        ValidEnd=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 31), false),
+                                        UseMerging=false}
             };
 
             relCalendarTemplates.ForEach(c => context.RelCalendarTemplates.Add(c));
@@ -67,9 +68,9 @@ namespace ReservationCalendar.DAL
 
             var absCalendarTemplates = new List<AbsCalendarTemplate>
             {
-                new AbsCalendarTemplate{Description="public holidays"},
-                new AbsCalendarTemplate{Description="meetings"},
-                new AbsCalendarTemplate{Description="free slots"}
+                new AbsCalendarTemplate{Description="public holidays", UseMerging=false},
+                new AbsCalendarTemplate{Description="meetings", UseMerging=false},
+                new AbsCalendarTemplate{Description="free slots", UseMerging=true}
             };
 
             absCalendarTemplates.ForEach(c => context.AbsCalendarTemplates.Add(c));
