@@ -10,6 +10,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
 
             var // child = elem.find('.calendar'),
                 calBody = angular.element(elem.find('.calendar-body')),
+                calEv = angular.element(elem.find('.calendar-event')),
                 calEvents = [],
                 combCal = {},
                 fcState = {
@@ -27,6 +28,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                 getCalEvents,
                 isOverlapping,
                 saveCalLayerDB,
+                tSlotLayer,
                 updateCalEvents,
                 updateEditTimes;
                 // watchWidthChanges; // function
@@ -62,7 +64,9 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
             }
 
             function clickCalEvent(ev, jsEv, view) {
-                alert('Event clicked!');
+                calEv.dialog({
+                    modal: true
+                });
             }
 
             combineAdjWRefresh = function (ts) {
@@ -232,7 +236,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                 );
             };
 
-            function tSlotLayer(tSlot) {
+            tSlotLayer = function (tSlot) {
                 var i;
 
                 for (i = 0; i < scope.rBook.calendarLayers.length; i += 1) {
@@ -241,7 +245,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                     }
                 }
                 return -1;
-            }
+            };
 
             updateCalEvents = function (doRefresh) {
                 var i, tSlots, tSlot, ts, tsLayer;
@@ -315,6 +319,9 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
             scope.model.calMode = 'combined';
             scope.model.layerInEdit = 1;
 
+            scope.eventHtml = '';
+            scope.isMobile = false;
+
             scope.changeCalLayers = function () {
                 updateCalEvents(true);
             };
@@ -327,8 +334,6 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                 tsToEdit = scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots;
                 updateCalEvents(true);
             };
-
-            scope.isMobile = false;
 
             // watchWidthChanges();
             fcRedraw();
