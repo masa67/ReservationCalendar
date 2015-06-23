@@ -5,7 +5,7 @@
 
     angular
         .module('ReservationCalendar', [])
-        .directive('reservationCalendar', ['rBook', function (rBook) {
+        .directive('reservationCalendar', ['rBook', 'globalDialogs', function (rBook, globalDialogs) {
             return {
                 restrict: 'E',
                 templateUrl: '/Areas/Calendar/Templates/reservationCalendar.html',
@@ -80,7 +80,9 @@
                         }
                         saving = true;
 
-                        $('#meeting-details').modal('show');
+                        globalDialogs.dialogs.meetingDetailsDialog.show({
+                            tsOrig: ev.tsOrig
+                        });
 
                         saving = false;
                     }
