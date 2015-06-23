@@ -118,14 +118,15 @@ namespace ReservationCalendar
                 // END PAGE LEVEL SCRIPTS
 
             bundles.Add(new ScriptBundle("~/bundles/calendarApp").Include(
-                      "~/Areas/Calendar/Scripts/client/app.js",
                       "~/Areas/Calendar/Scripts/client/Helpers/cal.js",
                       "~/Areas/Calendar/Scripts/client/Helpers/calTempl.js",
                       "~/Areas/Calendar/Scripts/client/Helpers/fullCalendar.js",
                       "~/Areas/Calendar/Scripts/client/Helpers/timeSlot.js",
-                      "~/Areas/Calendar/Scripts/client/Services/RBookService.js",
-                      "~/Areas/Calendar/Scripts/client/Directives/calendarCtrl.js",
-                      "~/Areas/Calendar/Scripts/client/Directives/meetingDetails.js"));
+                      "~/Areas/Calendar/Scripts/client/Factories/globalDialogs.js",
+                      "~/Areas/Calendar/Scripts/client/Factories/rBookService.js",
+                      "~/Areas/Calendar/Scripts/client/Directives/meetingDetails.js",
+                      "~/Areas/Calendar/Scripts/client/Directives/reservationCalendar.js",
+                      "~/Areas/Calendar/Scripts/client/app.js"));
         }
     }
 }
