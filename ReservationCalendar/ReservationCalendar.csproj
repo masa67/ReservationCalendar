@@ -209,7 +209,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserBookAllocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Class1.cs" />
+    <Compile Include="Services\OperationStatus.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

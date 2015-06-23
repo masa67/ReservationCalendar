@@ -48,6 +48,7 @@ namespace ReservationCalendar.API
         [ResponseType(typeof(OperationStatus))]
         public async Task<OperationStatus> Edit(int id, [FromBody] CalendarTemplateEditReq req)
         {
+            ICollection<TimeSlot> timeSlots = req.calendarTemplate.timeSlots;
             OperationStatus ret = null;
 
             if (ModelState.IsValid)
@@ -55,6 +56,16 @@ namespace ReservationCalendar.API
                 try
                 {
                     storedTimeSlots = await queryTS(req);
+
+                    for (int i = 0; i < timeSlots.Count; i++)
+                    {
+                        for (int j = i + 1; j < timeSlots.Count; j++)
+                        {
+                            if (timeSlots.ElementAt(i).checkOverlap(timeSlots.ElementAt(j)) != TimeSlotOverlap.None) {
+                                throw new System.ApplicationException("Overlapping events in request");
+                            }
+                        }
+                    }
 
                     foreach (TimeSlot timeSlot in req.calendarTemplate.timeSlots)
                     {
@@ -90,7 +101,7 @@ namespace ReservationCalendar.API
                     await db.SaveChangesAsync();
 
                     storedTimeSlots = await queryTS(req);
-                    List<TimeSlot> timeSlots = new List<TimeSlot>();
+                    timeSlots = new List<TimeSlot>();
                     foreach (AbsTimeSlot aTS in storedTimeSlots)
                     {
                         timeSlots.Add(new TimeSlot(aTS));
@@ -101,6 +112,23 @@ namespace ReservationCalendar.API
                 catch (Exception ex)
                 {
                     ret = new OperationStatus { Status = false, Message = "DB save failed" };
+                }
+
+                try
+                {
+                    storedTimeSlots = await queryTS(req);
+                    timeSlots = new List<TimeSlot>();
+                    foreach (AbsTimeSlot aTS in storedTimeSlots)
+                    {
+                        timeSlots.Add(new TimeSlot(aTS));
+                    }
+
+                    ret.Data = timeSlots;
+                }
+                catch (Exception ex)
+                {
+                    ret.Status = false;
+                    ret.Message = "DB read failure";
                 }
             }   
             else

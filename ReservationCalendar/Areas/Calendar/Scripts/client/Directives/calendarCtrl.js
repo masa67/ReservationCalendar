@@ -19,6 +19,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                 h = {},
                 maxEditTime = 0,
                 minEditTime = 0,
+                saving = false,
                 tsDeleted = [],
                 tsToEdit,
                 useLazyFetching = true,
@@ -37,6 +38,12 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
 
             function addNewTS(start, end) {
                 var ts, tsOrig;
+
+                if (saving) {
+                    calBody.fullCalendar('unselect');
+                    return;
+                }
+                saving = true;
 
                 ts = {
                     startTime: start.unix(),
@@ -59,14 +66,23 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                     combineAdjWRefresh(ts);
 
                     saveCalLayerDB();
+                } else {
+                    saving = false;
                 }
                 calBody.fullCalendar('unselect');
             }
 
             function clickCalEvent(ev, jsEv, view) {
+                if (saving) {
+                    return;
+                }
+                saving = true;
+
                 calEv.dialog({
                     modal: true
                 });
+
+                saving = false;
             }
 
             combineAdjWRefresh = function (ts) {
@@ -87,6 +103,12 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
             function eventMod(ev, delta, revertFunc) {
                 var ts;
 
+                if (saving) {
+                    revertFunc();
+                    return;
+                }
+                saving = true;
+
                 /*jslint nomen: true */
                 ts = {
                     id: ev._id,
@@ -97,6 +119,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
 
                 if (isOverlapping(ts)) {
                     revertFunc();
+                    saving = false;
                 } else {
                     updateEditTimes(
                         Math.min(ev.tsOrig.startTime, ts.startTime),
@@ -230,6 +253,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                         minEditTime = 0;
                         tsDeleted.length = 0;
                         updateCalEvents(true);
+                        saving = false;
                     },
                     function () {
                     }

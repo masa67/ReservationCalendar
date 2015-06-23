@@ -36,7 +36,7 @@
                     $resource(
                         '/api/CalendarTemplateApi/Edit/1'
                     ).save(data, function (ret) {
-                        if (ret.Status) {
+                        if (ret.Data) {
                             d.resolve(ret.Data);
                         } else {
                             throw new Error('CalendarTemplateApi/Edit failed: ' +
