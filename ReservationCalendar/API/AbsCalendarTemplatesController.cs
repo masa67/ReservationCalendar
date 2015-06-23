@@ -15,44 +15,44 @@ using ReservationCalendar.Models;
 namespace ReservationCalendar.API
 {
     /*
-    public class AbsCalendarTemplatesController : ApiController
+    public class AbsCalendarLayersController : ApiController
     {
         private ReservationCalendarContext db = new ReservationCalendarContext();
 
-        // GET: api/AbsCalendarTemplates
-        public IQueryable<AbsCalendarTemplate> GetAbsCalendarTemplates()
+        // GET: api/AbsCalendarLayers
+        public IQueryable<AbsCalendarLayer> GetAbsCalendarLayers()
         {
-            return db.AbsCalendarTemplates;
+            return db.AbsCalendarLayers;
         }
 
-        // GET: api/AbsCalendarTemplates/5
-        [ResponseType(typeof(AbsCalendarTemplate))]
-        public async Task<IHttpActionResult> GetAbsCalendarTemplate(int id)
+        // GET: api/AbsCalendarLayers/5
+        [ResponseType(typeof(AbsCalendarLayer))]
+        public async Task<IHttpActionResult> GetAbsCalendarLayer(int id)
         {
-            AbsCalendarTemplate absCalendarTemplate = await db.AbsCalendarTemplates.FindAsync(id);
-            if (absCalendarTemplate == null)
+            AbsCalendarLayer absCalendarLayer = await db.AbsCalendarLayers.FindAsync(id);
+            if (absCalendarLayer == null)
             {
                 return NotFound();
             }
 
-            return Ok(absCalendarTemplate);
+            return Ok(absCalendarLayer);
         }
 
-        // PUT: api/AbsCalendarTemplates/5
+        // PUT: api/AbsCalendarLayers/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutAbsCalendarTemplate(int id, AbsCalendarTemplate absCalendarTemplate)
+        public async Task<IHttpActionResult> PutAbsCalendarLayer(int id, AbsCalendarLayer absCalendarLayer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != absCalendarTemplate.ID)
+            if (id != absCalendarLayer.ID)
             {
                 return BadRequest();
             }
 
-            db.Entry(absCalendarTemplate).State = EntityState.Modified;
+            db.Entry(absCalendarLayer).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace ReservationCalendar.API
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AbsCalendarTemplateExists(id))
+                if (!AbsCalendarLayerExists(id))
                 {
                     return NotFound();
                 }
@@ -73,35 +73,35 @@ namespace ReservationCalendar.API
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/AbsCalendarTemplates
-        [ResponseType(typeof(AbsCalendarTemplate))]
-        public async Task<IHttpActionResult> PostAbsCalendarTemplate(AbsCalendarTemplate absCalendarTemplate)
+        // POST: api/AbsCalendarLayers
+        [ResponseType(typeof(AbsCalendarLayer))]
+        public async Task<IHttpActionResult> PostAbsCalendarLayer(AbsCalendarLayer absCalendarLayer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.AbsCalendarTemplates.Add(absCalendarTemplate);
+            db.AbsCalendarLayers.Add(absCalendarLayer);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = absCalendarTemplate.ID }, absCalendarTemplate);
+            return CreatedAtRoute("DefaultApi", new { id = absCalendarLayer.ID }, absCalendarLayer);
         }
 
-        // DELETE: api/AbsCalendarTemplates/5
-        [ResponseType(typeof(AbsCalendarTemplate))]
-        public async Task<IHttpActionResult> DeleteAbsCalendarTemplate(int id)
+        // DELETE: api/AbsCalendarLayers/5
+        [ResponseType(typeof(AbsCalendarLayer))]
+        public async Task<IHttpActionResult> DeleteAbsCalendarLayer(int id)
         {
-            AbsCalendarTemplate absCalendarTemplate = await db.AbsCalendarTemplates.FindAsync(id);
-            if (absCalendarTemplate == null)
+            AbsCalendarLayer absCalendarLayer = await db.AbsCalendarLayers.FindAsync(id);
+            if (absCalendarLayer == null)
             {
                 return NotFound();
             }
 
-            db.AbsCalendarTemplates.Remove(absCalendarTemplate);
+            db.AbsCalendarLayers.Remove(absCalendarLayer);
             await db.SaveChangesAsync();
 
-            return Ok(absCalendarTemplate);
+            return Ok(absCalendarLayer);
         }
 
         protected override void Dispose(bool disposing)
@@ -113,9 +113,9 @@ namespace ReservationCalendar.API
             base.Dispose(disposing);
         }
 
-        private bool AbsCalendarTemplateExists(int id)
+        private bool AbsCalendarLayerExists(int id)
         {
-            return db.AbsCalendarTemplates.Count(e => e.ID == id) > 0;
+            return db.AbsCalendarLayers.Count(e => e.ID == id) > 0;
         }
     }
      */

@@ -14,7 +14,7 @@ using System.Web.Http.Description;
 
 namespace ReservationCalendar.API
 {
-    public class CalendarTemplateApiController : ApiController
+    public class CalendarLayerApiController : ApiController
     {
         private ReservationCalendarContext db = new ReservationCalendarContext();
         private List<AbsTimeSlot> storedTimeSlots;
@@ -33,22 +33,22 @@ namespace ReservationCalendar.API
             throw new System.ApplicationException("DB concurrency conflict detected");
         }
 
-        private async Task<List<AbsTimeSlot>> queryTS(CalendarTemplateEditReq req)
+        private async Task<List<AbsTimeSlot>> queryTS(CalendarLayerEditReq req)
         {
             List<AbsTimeSlot> ret = await db.AbsTimeSlots.AsNoTracking().Where(
-                t => t.AbsCalendarTemplateID == req.calendarTemplate.dbCalendarTemplateID &&
+                t => t.AbsCalendarLayerID == req.calendarLayer.dbCalendarLayerID &&
                     ((t.StartTime >= req.startTime && t.StartTime < req.endTime) ||
                      (t.EndTime > req.startTime && t.EndTime <= req.endTime))).ToListAsync();
 
             return ret;
         }
 
-        // POST: api/CalendarTemplateApi/Edit
+        // POST: api/CalendarLayerApi/Edit
         [HttpPost]
         [ResponseType(typeof(OperationStatus))]
-        public async Task<OperationStatus> Edit(int id, [FromBody] CalendarTemplateEditReq req)
+        public async Task<OperationStatus> Edit(int id, [FromBody] CalendarLayerEditReq req)
         {
-            ICollection<TimeSlot> timeSlots = req.calendarTemplate.timeSlots;
+            ICollection<TimeSlot> timeSlots = req.calendarLayer.timeSlots;
             OperationStatus ret = null;
 
             if (ModelState.IsValid)
@@ -67,7 +67,7 @@ namespace ReservationCalendar.API
                         }
                     }
 
-                    foreach (TimeSlot timeSlot in req.calendarTemplate.timeSlots)
+                    foreach (TimeSlot timeSlot in req.calendarLayer.timeSlots)
                     {
                         AbsTimeSlot aTS = new AbsTimeSlot(timeSlot);
 

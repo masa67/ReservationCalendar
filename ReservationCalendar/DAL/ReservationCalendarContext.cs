@@ -14,10 +14,10 @@ namespace ReservationCalendar.DAL
         {
         }
 
-        public DbSet<AbsCalendarTemplate> AbsCalendarTemplates { get; set; }
+        public DbSet<AbsCalendarLayer> AbsCalendarLayers { get; set; }
         public DbSet<AbsTimeSlot> AbsTimeSlots { get; set; }
         public DbSet<CalendarBookAllocation> CalendarBookAllocations { get; set; }
-        public DbSet<RelCalendarTemplate> RelCalendarTemplates { get; set; }
+        public DbSet<RelCalendarLayer> RelCalendarLayers { get; set; }
         public DbSet<RelTimeSlot> RelTimeSlots { get; set; }
         public DbSet<ReservationBook> ReservationBooks { get; set; }
         public DbSet<User> Users { get; set; }

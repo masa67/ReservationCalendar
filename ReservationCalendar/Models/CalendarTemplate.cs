@@ -13,11 +13,11 @@ namespace ReservationCalendar.Models
         public TimeSlotOverlap timeSlotOverlap { get; set; }
     }
 
-    public class CalendarTemplate
+    public class CalendarLayer
     {
         public CalendarSourceType calendarSourceType { get; set; }
         public CalendarDbType? calendarDbType { get; set; }
-        public int? dbCalendarTemplateID { get; set; }
+        public int? dbCalendarLayerID { get; set; }
         public string description { get; set; }
         public int? weight { get; set; }
         public Boolean useMerging { get; set; }
@@ -26,13 +26,13 @@ namespace ReservationCalendar.Models
 
         # region DB constructors 
 
-        public CalendarTemplate() { }
+        public CalendarLayer() { }
 
-        public CalendarTemplate(AbsCalendarTemplate aCal, TimePeriod timePeriod)
+        public CalendarLayer(AbsCalendarLayer aCal, TimePeriod timePeriod)
         {
             calendarSourceType = CalendarSourceType.Database;
             calendarDbType = CalendarDbType.Absolute;
-            dbCalendarTemplateID = aCal.ID;
+            dbCalendarLayerID = aCal.ID;
             description = aCal.Description;
             useMerging = aCal.UseMerging;
             timeSlots = new List<TimeSlot>();
@@ -55,11 +55,11 @@ namespace ReservationCalendar.Models
             }
         }
 
-        public CalendarTemplate(RelCalendarTemplate rCal, TimePeriod timePeriod)
+        public CalendarLayer(RelCalendarLayer rCal, TimePeriod timePeriod)
         {
             calendarSourceType = CalendarSourceType.Database;
             calendarDbType = CalendarDbType.Relative;
-            dbCalendarTemplateID = rCal.ID;
+            dbCalendarLayerID = rCal.ID;
             description = rCal.Description;
             useMerging = rCal.UseMerging;
             timeSlots = new List<TimeSlot>();
@@ -99,15 +99,15 @@ namespace ReservationCalendar.Models
 
         #region Layered constructors
 
-        public CalendarTemplate(ICollection<CalendarTemplate> cals)
+        public CalendarLayer(ICollection<CalendarLayer> cals)
         {
             calendarSourceType = CalendarSourceType.Layered;
             timeSlots = new List<TimeSlot>();
             timeSlotConflicts = new List<TimeSlotConflict>();
 
-            List<CalendarTemplate> orderdCals = cals.OrderBy(x => -x.weight).ToList();
+            List<CalendarLayer> orderdCals = cals.OrderBy(x => -x.weight).ToList();
 
-            foreach (CalendarTemplate cal in orderdCals)
+            foreach (CalendarLayer cal in orderdCals)
             {
                 foreach (TimeSlot slot in cal.timeSlots)
                 {

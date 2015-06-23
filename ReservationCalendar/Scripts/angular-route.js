@@ -596,7 +596,7 @@ function $RouteProvider() {
                 }
                 templateUrl = $sce.getTrustedResourceUrl(templateUrl);
                 if (angular.isDefined(templateUrl)) {
-                  nextRoute.loadedTemplateUrl = templateUrl;
+                  nextRoute.loadedLayerUrl = templateUrl;
                   template = $templateRequest(templateUrl);
                 }
               }

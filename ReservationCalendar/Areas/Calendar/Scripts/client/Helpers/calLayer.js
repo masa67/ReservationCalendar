@@ -1,6 +1,6 @@
 
 /*global calHelpers, moment, timeSlotHelpers */
-var calTemplHelpers = (function () {
+var calLayerHelpers = (function () {
     'use strict';
 
     function duplicateObject(o) {
@@ -18,7 +18,7 @@ var calTemplHelpers = (function () {
     }
 
     return {
-        createCombinedCalTempl: function (cals, sel, overlap) {
+        createCombinedCalLayer: function (cals, sel, overlap) {
             var cal, dSlot, i, j, k, mSlot, slot, timeSlotsToDelete, tsCmp,
                 retObj = {
                     calendarSourceType: calHelpers.CalendarSourceType.LAYERED,

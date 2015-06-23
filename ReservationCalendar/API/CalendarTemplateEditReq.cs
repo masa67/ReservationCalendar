@@ -6,14 +6,14 @@ using System.Web;
 
 namespace ReservationCalendar.API
 {
-    public class CalendarTemplateEditReq
+    public class CalendarLayerEditReq
     {
-        public CalendarTemplate calendarTemplate { get; set; }
+        public CalendarLayer calendarLayer { get; set; }
         public long startTime { get; set; }
         public long endTime { get; set; }
 
         public ICollection<TimeSlot> delTimeSlots { get; set; }
 
-        CalendarTemplateEditReq() { }
+        CalendarLayerEditReq() { }
     }
 }

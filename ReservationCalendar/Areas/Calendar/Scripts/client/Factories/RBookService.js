@@ -30,21 +30,21 @@
 
                     return d.promise;
                 },
-                saveCalTempl: function (data) {
+                saveCalLayer: function (data) {
                     var d = $q.defer();
 
                     $resource(
-                        '/api/CalendarTemplateApi/Edit/1'
+                        '/api/CalendarLayerApi/Edit/1'
                     ).save(data, function (ret) {
                         if (ret.Data) {
                             d.resolve(ret.Data);
                         } else {
-                            throw new Error('CalendarTemplateApi/Edit failed: ' +
+                            throw new Error('CalendarLayerApi/Edit failed: ' +
                                 ret.Message);
                             // d.reject();
                         }
                     }, function () {
-                        throw new Error('CalendarTemplateApi/Edit failed.');
+                        throw new Error('CalendarLayerApi/Edit failed.');
                         // d.reject(err);
                     });
 

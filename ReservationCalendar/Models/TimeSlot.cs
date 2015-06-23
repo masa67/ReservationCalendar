@@ -23,7 +23,7 @@ namespace ReservationCalendar.Models
         public TimeSlot(AbsTimeSlot aSlot)
         {
             calDbType = CalendarDbType.Absolute;
-            calDbId = aSlot.AbsCalendarTemplateID;
+            calDbId = aSlot.AbsCalendarLayerID;
             dbId = aSlot.ID;
             startTime = aSlot.StartTime;
             endTime = aSlot.EndTime;
@@ -35,7 +35,7 @@ namespace ReservationCalendar.Models
         public TimeSlot(RelTimeSlot rSlot, long timeBase)
         {
             calDbType = CalendarDbType.Relative;
-            calDbId = rSlot.RelCalendarTemplateID;
+            calDbId = rSlot.RelCalendarLayerID;
             dbId = rSlot.ID;
 
             startTime = TimeHelper.DateTimeToUTCTimeStamp(

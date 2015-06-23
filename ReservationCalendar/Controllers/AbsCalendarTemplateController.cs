@@ -3,9 +3,9 @@ using System.Web.Mvc;
 
 namespace ReservationCalendar.Controllers
 {
-    public class AbsCalendarTemplateController : Controller
+    public class AbsCalendarLayerController : Controller
     {
-        // GET: AbsCalendarTemplate
+        // GET: AbsCalendarLayer
         public ActionResult Index()
         {
             return View();

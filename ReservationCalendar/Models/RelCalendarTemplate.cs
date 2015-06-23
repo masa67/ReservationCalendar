@@ -10,7 +10,7 @@ namespace ReservationCalendar.Models
         Weekly
     }
 
-    public class RelCalendarTemplate
+    public class RelCalendarLayer
     {
         public int ID { get; set; }
         public string Description { get; set; }

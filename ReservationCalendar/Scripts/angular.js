@@ -20515,10 +20515,10 @@ var ngBindTemplateDirective = ['$interpolate', '$compile', function($interpolate
     compile: function ngBindTemplateCompile(templateElement) {
       $compile.$$addBindingClass(templateElement);
       return function ngBindTemplateLink(scope, element, attr) {
-        var interpolateFn = $interpolate(element.attr(attr.$attr.ngBindTemplate));
+        var interpolateFn = $interpolate(element.attr(attr.$attr.ngBindLayer));
         $compile.$$addBindingInfo(element, interpolateFn.expressions);
         element = element[0];
-        attr.$observe('ngBindTemplate', function(value) {
+        attr.$observe('ngBindLayer', function(value) {
           element.textContent = value === undefined ? '' : value;
         });
       };
@@ -22142,7 +22142,7 @@ var ngIfDirective = ['$animate', function($animate) {
  * @priority 400
  *
  * @param {string} ngInclude|src angular expression evaluating to URL. If the source is a string constant,
- *                 make sure you wrap it in **single** quotes, e.g. `src="'myPartialTemplate.html'"`.
+ *                 make sure you wrap it in **single** quotes, e.g. `src="'myPartialLayer.html'"`.
  * @param {string=} onload Expression to evaluate when a new partial is loaded.
  *
  * @param {string=} autoscroll Whether `ngInclude` should call {@link ng.$anchorScroll
@@ -25695,9 +25695,9 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
           renderScheduled = false,
           // we can't just jqLite('<option>') since jqLite is not smart enough
           // to create it in <select> and IE barfs otherwise.
-          optionTemplate = jqLite(document.createElement('option')),
-          optGroupTemplate =jqLite(document.createElement('optgroup')),
-          unknownOption = optionTemplate.clone();
+          optionLayer = jqLite(document.createElement('option')),
+          optGroupLayer =jqLite(document.createElement('optgroup')),
+          unknownOption = optionLayer.clone();
 
       // find "null" option
       for (var i = 0, children = element.children(), ii = children.length; i < ii; i++) {
@@ -26041,7 +26041,7 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
             if (optionGroupsCache.length <= groupIndex) {
               // we need to grow the optionGroups
               existingParent = {
-                element: optGroupTemplate.clone().attr('label', optionGroupName),
+                element: optGroupLayer.clone().attr('label', optionGroupName),
                 label: optionGroup.label
               };
               existingOptions = [existingParent];
@@ -26093,7 +26093,7 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
                   // jQuery(v1.4.2) Bug: We should be able to chain the method calls, but
                   // in this version of jQuery on some browser the .text() returns a string
                   // rather then the element.
-                  (element = optionTemplate.clone())
+                  (element = optionLayer.clone())
                       .val(option.id)
                       .prop('selected', option.selected)
                       .attr('selected', option.selected)

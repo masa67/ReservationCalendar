@@ -10,8 +10,8 @@ namespace ReservationCalendar.Models
     public class ReservationBookAbs
     {
         public ReservationBook reservationBook { get; set; }
-        public ICollection<CalendarTemplate> calendarLayers { get; set; }
-        public CalendarTemplate combinedCalendar { get; set; }
+        public ICollection<CalendarLayer> calendarLayers { get; set; }
+        public CalendarLayer combinedCalendar { get; set; }
 
         public ReservationBookAbs()
         {
@@ -21,7 +21,7 @@ namespace ReservationCalendar.Models
         {
             reservationBook = rBook;
             
-            calendarLayers = new List<CalendarTemplate>();
+            calendarLayers = new List<CalendarLayer>();
 
             if (timePeriod == null)
             {
@@ -29,15 +29,15 @@ namespace ReservationCalendar.Models
             }
             foreach (CalendarBookAllocation cal in rBook.CalendarBookAllocations)
             {
-                CalendarTemplate calTempl;
+                CalendarLayer calTempl;
 
                 switch (cal.CalendarDbType)
                 {
                     case CalendarDbType.Absolute:
-                        calTempl = new CalendarTemplate(cal.AbsCalendarTemplate, timePeriod);
+                        calTempl = new CalendarLayer(cal.AbsCalendarLayer, timePeriod);
                         break;
                     case CalendarDbType.Relative:
-                        calTempl = new CalendarTemplate(cal.RelCalendarTemplate, timePeriod);
+                        calTempl = new CalendarLayer(cal.RelCalendarLayer, timePeriod);
                         break;
                     default:
                         throw new ArgumentException("Invalid CalendarType", "rBook");
@@ -54,7 +54,7 @@ namespace ReservationCalendar.Models
 
             if (inclComb)
             {
-                combinedCalendar = new CalendarTemplate(calendarLayers);
+                combinedCalendar = new CalendarLayer(calendarLayers);
             }
         }
     }

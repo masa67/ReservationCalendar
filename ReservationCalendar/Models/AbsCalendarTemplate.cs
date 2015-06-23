@@ -6,7 +6,7 @@ using System.Web.Script.Serialization;
 
 namespace ReservationCalendar.Models
 {
-    public class AbsCalendarTemplate
+    public class AbsCalendarLayer
     {
         public int ID { get; set; }
         public string Description { get; set; }

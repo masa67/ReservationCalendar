@@ -42,50 +42,50 @@ namespace ReservationCalendar.DAL
             userBookAllocations.ForEach(a => context.UserBookAllocations.Add(a));
             context.SaveChanges();
 
-            var relCalendarTemplates = new List<RelCalendarTemplate>
+            var relCalendarLayers = new List<RelCalendarLayer>
             {
-                new RelCalendarTemplate{Description="standard weekly",
+                new RelCalendarLayer{Description="standard weekly",
                                         RelCalendarType=RelCalendarType.Weekly,
                                         ValidStart=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 1), false),
                                         ValidEnd=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 31), false),
                                         UseMerging=false}
             };
 
-            relCalendarTemplates.ForEach(c => context.RelCalendarTemplates.Add(c));
+            relCalendarLayers.ForEach(c => context.RelCalendarLayers.Add(c));
             context.SaveChanges();
 
             var relTimeSlots = new List<RelTimeSlot>
             {
-                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=DayOfWeek.Monday, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
-                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=DayOfWeek.Tuesday, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
-                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=DayOfWeek.Wednesday, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
-                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=DayOfWeek.Thursday, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
-                new RelTimeSlot{RelCalendarTemplateID=1, Weekday=DayOfWeek.Friday, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free}
+                new RelTimeSlot{RelCalendarLayerID=1, Weekday=DayOfWeek.Monday, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
+                new RelTimeSlot{RelCalendarLayerID=1, Weekday=DayOfWeek.Tuesday, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
+                new RelTimeSlot{RelCalendarLayerID=1, Weekday=DayOfWeek.Wednesday, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
+                new RelTimeSlot{RelCalendarLayerID=1, Weekday=DayOfWeek.Thursday, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free},
+                new RelTimeSlot{RelCalendarLayerID=1, Weekday=DayOfWeek.Friday, StartTimeHrs=8, StartTimeMin=0, EndTimeHrs=16, EndTimeMin=0, TimeSlotStatus=TimeSlotStatus.Free}
             };
 
             relTimeSlots.ForEach(s => context.RelTimeSlots.Add(s));
             context.SaveChanges();
 
-            var absCalendarTemplates = new List<AbsCalendarTemplate>
+            var absCalendarLayers = new List<AbsCalendarLayer>
             {
-                new AbsCalendarTemplate{Description="public holidays", UseMerging=false},
-                new AbsCalendarTemplate{Description="meetings", UseMerging=false},
-                new AbsCalendarTemplate{Description="free slots", UseMerging=true}
+                new AbsCalendarLayer{Description="public holidays", UseMerging=false},
+                new AbsCalendarLayer{Description="meetings", UseMerging=false},
+                new AbsCalendarLayer{Description="free slots", UseMerging=true}
             };
 
-            absCalendarTemplates.ForEach(c => context.AbsCalendarTemplates.Add(c));
+            absCalendarLayers.ForEach(c => context.AbsCalendarLayers.Add(c));
             context.SaveChanges();
 
             var absTimeSlots = new List<AbsTimeSlot>
             {
                 new AbsTimeSlot{
-                    AbsCalendarTemplateID=1,
+                    AbsCalendarLayerID=1,
                     StartTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 1), false),
                     EndTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 2), false),
                     TimeSlotStatus=TimeSlotStatus.Excluded,
                     Description="1st of May"},
                 new AbsTimeSlot{
-                    AbsCalendarTemplateID=1,
+                    AbsCalendarLayerID=1,
                     StartTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 14), false),
                     EndTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 5, 15), false),
                     TimeSlotStatus=TimeSlotStatus.Excluded,
@@ -97,10 +97,10 @@ namespace ReservationCalendar.DAL
 
             var calendarBookAllocations = new List<CalendarBookAllocation>
             {
-                new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Absolute, AbsCalendarTemplateID=1, Weight=0},
-                new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Absolute, AbsCalendarTemplateID=2, Weight=5},
-                new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Absolute, AbsCalendarTemplateID=3, Weight=10},
-                // new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Relative, RelCalendarTemplateID=1, Weight=15}
+                new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Absolute, AbsCalendarLayerID=1, Weight=0},
+                new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Absolute, AbsCalendarLayerID=2, Weight=5},
+                new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Absolute, AbsCalendarLayerID=3, Weight=10},
+                // new CalendarBookAllocation{ReservationBookID=1, CalendarDbType=CalendarDbType.Relative, RelCalendarLayerID=1, Weight=15}
             };
 
             calendarBookAllocations.ForEach(a => context.CalendarBookAllocations.Add(a));

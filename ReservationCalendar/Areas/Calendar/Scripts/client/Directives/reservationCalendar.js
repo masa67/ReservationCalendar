@@ -1,5 +1,5 @@
 ﻿
-/*global alert, angular, calHelpers, calTemplHelpers, fullCalendarHelpers, jQuery, Metronic, moment, timeSlotHelpers */
+/*global alert, angular, calHelpers, calLayerHelpers, fullCalendarHelpers, jQuery, Metronic, moment, timeSlotHelpers */
 (function () {
     'use strict';
 
@@ -54,7 +54,7 @@
 
                         tsOrig = {
                             calDbType: scope.rBook.calendarLayers[scope.model.layerInEdit].calendarDbType,
-                            calDbId: scope.rBook.calendarLayers[scope.model.layerInEdit].dbCalendarTemplateID,
+                            calDbId: scope.rBook.calendarLayers[scope.model.layerInEdit].dbCalendarLayerID,
                             startTime: start.unix(),
                             endTime: end.unix(),
                             timeSlotStatus: calHelpers.TimeSlotStatus.FREE
@@ -97,7 +97,7 @@
                     };
 
                     isOverlapping = function (ts) {
-                        ts.dbId = scope.rBook.calendarLayers[scope.model.layerInEdit].dbCalendarTemplateID;
+                        ts.dbId = scope.rBook.calendarLayers[scope.model.layerInEdit].dbCalendarLayerID;
                         return timeSlotHelpers.isOverlapping(ts, fullCalendarHelpers.eventsToTS());
                     };
 
@@ -190,10 +190,10 @@
                                 if (!scope.rBook || !useLazyFetching) {
                                     scope.rBook = ret;
                                 } else {
-                                    calTemplHelpers.merge(scope.rBook, ret);
+                                    calLayerHelpers.merge(scope.rBook, ret);
                                 }
 
-                                calTemplHelpers.sortCalByWeight(scope.rBook.calendarLayers);
+                                calLayerHelpers.sortCalByWeight(scope.rBook.calendarLayers);
                                 sel = scope.model.calendarLayerSelected;
                                 sel.length = 0;
                                 for (i = 0; i < scope.rBook.calendarLayers.length; i += 1) {
@@ -232,8 +232,8 @@
                         }
 
                         calTplEditReq = {
-                            calendarTemplate: {
-                                dbCalendarTemplateID: calTpl.dbCalendarTemplateID,
+                            calendarLayer: {
+                                dbCalendarLayerID: calTpl.dbCalendarLayerID,
                                 timeSlots: timeSlotHelpers.between(tsToEdit, minEditTime, maxEditTime)
                             },
                             startTime: minEditTime,
@@ -241,7 +241,7 @@
                             delTimeSlots: delTimeSlots
                         };
 
-                        rBook.saveCalTempl(calTplEditReq).then(
+                        rBook.saveCalLayer(calTplEditReq).then(
                             function (data) {
                                 scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots = timeSlotHelpers.replace(
                                     scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots,
@@ -265,7 +265,7 @@
                         var i;
 
                         for (i = 0; i < scope.rBook.calendarLayers.length; i += 1) {
-                            if (tSlot.calDbId === scope.rBook.calendarLayers[i].dbCalendarTemplateID) {
+                            if (tSlot.calDbId === scope.rBook.calendarLayers[i].dbCalendarLayerID) {
                                 return i;
                             }
                         }
@@ -275,7 +275,7 @@
                     updateCalEvents = function (doRefresh) {
                         var i, tSlots, tSlot, ts, tsLayer;
 
-                        combCal = calTemplHelpers.createCombinedCalTempl(
+                        combCal = calLayerHelpers.createCombinedCalLayer(
                             scope.rBook.calendarLayers,
                             (scope.model.calMode === 'combined') ? undefined : scope.model.calendarLayerSelected,
                             true
