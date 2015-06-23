@@ -6,6 +6,7 @@
     angular
         .module('RBookService', [])
         .factory('rBook', ['$resource', '$q', function ($resource, $q) {
+            var calLayerChangeCallback;
 
             return {
                 getRBook: function (id, startTime, endTime) {
@@ -30,6 +31,9 @@
 
                     return d.promise;
                 },
+                notifyOnCalLayerChange: function (f) {
+                    calLayerChangeCallback = f;
+                },
                 saveCalLayer: function (data) {
                     var d = $q.defer();
 
@@ -38,6 +42,10 @@
                     ).save(data, function (ret) {
                         if (ret.Data) {
                             d.resolve(ret.Data);
+
+                            if (calLayerChangeCallback) {
+                                calLayerChangeCallback(ret.Data);
+                            }
                         } else {
                             throw new Error('CalendarLayerApi/Edit failed: ' +
                                 ret.Message);

@@ -170,9 +170,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\CalendarTemplateApiController.cs" />
-    <Compile Include="API\CalendarTemplateEditReq.cs" />
+    <Compile Include="API\CalendarLayerApiController.cs" />
+    <Compile Include="API\CalendarLayerEditReq.cs" />
     <Compile Include="API\AbsCalendarTemplatesController.cs" />
+    <Compile Include="API\CalendarLayerEditResp.cs" />
     <Compile Include="API\ReservationBookAbsApiController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -194,12 +195,12 @@
     </Compile>
     <Compile Include="Helpers\TimeHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\AbsCalendarTemplate.cs" />
+    <Compile Include="Models\AbsCalendarLayer.cs" />
     <Compile Include="Models\CalendarBookAllocation.cs" />
-    <Compile Include="Models\CalendarTemplate.cs" />
+    <Compile Include="Models\CalendarLayer.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\RelCalendarTemplate.cs" />
+    <Compile Include="Models\RelCalendarLayer.cs" />
     <Compile Include="Models\RelTimeSlot.cs" />
     <Compile Include="Models\ReservationBook.cs" />
     <Compile Include="Models\AbsTimeSlot.cs" />

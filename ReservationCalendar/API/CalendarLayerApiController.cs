@@ -38,7 +38,8 @@ namespace ReservationCalendar.API
             List<AbsTimeSlot> ret = await db.AbsTimeSlots.AsNoTracking().Where(
                 t => t.AbsCalendarLayerID == req.calendarLayer.dbCalendarLayerID &&
                     ((t.StartTime >= req.startTime && t.StartTime < req.endTime) ||
-                     (t.EndTime > req.startTime && t.EndTime <= req.endTime))).ToListAsync();
+                     (t.EndTime > req.startTime && t.EndTime <= req.endTime) ||
+                     (t.StartTime < req.startTime && t.EndTime > req.endTime))).ToListAsync();
 
             return ret;
         }
@@ -123,7 +124,7 @@ namespace ReservationCalendar.API
                         timeSlots.Add(new TimeSlot(aTS));
                     }
 
-                    ret.Data = timeSlots;
+                    ret.Data = new CalendarLayerEditResp() { timeSlots = timeSlots, startTime = req.startTime, endTime = req.endTime };
                 }
                 catch (Exception ex)
                 {
