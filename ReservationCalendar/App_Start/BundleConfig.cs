@@ -54,7 +54,7 @@ namespace ReservationCalendar
                 // BEGIN GLOBAL MANDATORY STYLES
                 .Include("~/Metronic/global/plugins/font-awesome/css/font-awesome.css")
                 .Include("~/Metronic/global/plugins/simple-line-icons/simple-line-icons.css")
-                .Include("~/Metronic/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.css")
+                // .Include("~/Metronic/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.css")
                 .Include("~/Metronic/global/plugins/bootstrap/css/bootstrap.css")
                 .Include("~/Metronic/global/plugins/uniform/css/uniform.default.css")
                 .Include("~/Metronic/global/plugins/bootstrap-switch/css/bootstrap-switch.css")
@@ -80,7 +80,7 @@ namespace ReservationCalendar
                 // BEGIN CORE PLUGINS
                 .Include("~/Metronic/global/plugins/jquery.min.js")
                 .Include("~/Metronic/global/plugins/jquery-migrate.min.js")
-                .Include("~/Metronic/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js")
+                // .Include("~/Metronic/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js")
                 .Include("~/Metronic/global/plugins/bootstrap/js/bootstrap.min.js")
                 .Include("~/Metronic/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js")
                 .Include("~/Metronic/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js")

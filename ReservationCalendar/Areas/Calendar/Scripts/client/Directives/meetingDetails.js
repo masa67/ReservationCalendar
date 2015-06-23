@@ -7,6 +7,7 @@ app.directive('meetingDetails', [ function () {
         restrict: 'E',
         templateUrl: '/Areas/Calendar/Templates/meetingDetails.html',
         link: function (scope, elem) {
+            scope.id = 10;
         }
     };
 }]);

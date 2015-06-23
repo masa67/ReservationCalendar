@@ -10,7 +10,6 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
 
             var // child = elem.find('.calendar'),
                 calBody = angular.element(elem.find('.calendar-body')),
-                calEv = angular.element(elem.find('.calendar-event')),
                 calEvents = [],
                 combCal = {},
                 fcState = {
@@ -78,9 +77,7 @@ app.directive('reservationCalendar', [ 'rBook', function (rBook) {
                 }
                 saving = true;
 
-                calEv.dialog({
-                    modal: true
-                });
+                $('#meeting-details').modal('show');
 
                 saving = false;
             }
