@@ -70,7 +70,7 @@ namespace ReservationCalendar.DAL
             {
                 new AbsCalendarLayer{Description="public holidays", UseMerging=false},
                 new AbsCalendarLayer{Description="meetings", UseMerging=false},
-                new AbsCalendarLayer{Description="free slots", UseMerging=true}
+                new AbsCalendarLayer{Description="availability", UseMerging=true}
             };
 
             absCalendarLayers.ForEach(c => context.AbsCalendarLayers.Add(c));

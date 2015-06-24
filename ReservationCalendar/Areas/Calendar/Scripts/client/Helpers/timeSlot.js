@@ -57,7 +57,7 @@ var timeSlotHelpers = (function () {
     };
 
     retObj.combineAdjacent = function (aTS, tsArr) {
-        var bTS, i, delArr = [], maxTime, minTime, pre, post;
+        var bTS, i, delATS = false, delSlot, pre, post, updATS, updSlot;
 
         for (i = 0; i < tsArr.length && (!pre || !post); i += 1) {
             bTS = tsArr[i];
@@ -70,32 +70,29 @@ var timeSlotHelpers = (function () {
             }
         }
 
-        minTime = aTS.startTime;
-        maxTime = aTS.endTime;
         if (pre && post) {
-            minTime = pre.startTime;
-            maxTime = post.endTime;
             pre.endTime = post.endTime;
-            delArr.push(aTS.tsOrig);
-            delArr.push(post);
+            delATS = true;
+            updSlot = pre;
+            delSlot = post;
         } else {
             if (pre) {
-                minTime = pre.startTime;
                 pre.endTime = aTS.endTime;
-                delArr.push(aTS.tsOrig);
+                delATS = true;
+                updSlot = pre;
             } else {
                 if (post) {
-                    maxTime = post.endTime;
                     aTS.tsOrig.endTime = post.endTime;
-                    delArr.push(post);
+                    delSlot = post;
                 }
             }
         }
 
         return {
-            minTime: minTime,
-            maxTime: maxTime,
-            delArr: delArr
+            delATS: delATS,
+            updATS: updATS,
+            delSlot: delSlot,
+            updSlot: updSlot
         };
     };
 

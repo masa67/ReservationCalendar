@@ -15,15 +15,15 @@
                         calBody = angular.element(elem.find('.calendar-body')),
                         calEvents = [],
                         combCal = {},
+                        combRes,
                         fcState = {
                             view: 'agendaWeek'
                         },
                         h = {},
-                        maxEditTime = 0,
-                        minEditTime = 0,
                         saving = false,
-                        tsDeleted = [],
-                        tsToEdit,
+                        tsToDel = [],
+                        tsToUpd = [],
+                        calLToEdit,
                         useLazyFetching = true,
 
                     // functions that are used before definition (get rid of Lint warning):
@@ -33,8 +33,7 @@
                         saveCalLayerDB,
                         tSlotLayer,
                         updateCalEvents,
-                        updateCalLayerOnChange,
-                        updateEditTimes;
+                        updateCalLayerOnChange;
                     // watchWidthChanges; // function
 
                     fullCalendarHelpers.init(calBody);
@@ -63,10 +62,11 @@
                         ts.tsOrig = tsOrig;
 
                         if (!isOverlapping(ts)) {
-                            updateEditTimes(tsOrig.startTime, tsOrig.endTime);
-                            tsToEdit.push(tsOrig);
-
                             combineAdj(ts);
+
+                            if (!combRes || !combRes.delATS) {
+                                tsToUpd.push(tsOrig);
+                            }
 
                             saveCalLayerDB();
                         } else {
@@ -84,22 +84,24 @@
 
                         globalDialogs.dialogs.meetingDetailsDialog.show({
                             tsOrig: ev.tsOrig,
-                            tsToEdit: tsToEdit
+                            calLToEdit: calLToEdit
                         });
                     }
 
                     combineAdj = function (ts) {
                         if (scope.rBook.calendarLayers[tSlotLayer(ts.tsOrig)].useMerging) {
-                            var combRes = timeSlotHelpers.combineAdjacent(ts, tsToEdit);
+                            combRes = timeSlotHelpers.combineAdjacent(ts, calLToEdit);
 
-                            updateEditTimes(combRes.minTime, combRes.maxTime);
-                            tsDeleted = combRes.delArr;
+                            if (combRes.delSlot) {
+                                tsToDel.push(combRes.delSlot);
+                            }
+
+                            if (combRes.updSlot) {
+                                tsToUpd.push(combRes.updSlot);
+                            }
+                        } else {
+                            combRes = undefined;
                         }
-                    };
-
-                    isOverlapping = function (ts) {
-                        ts.dbId = scope.rBook.calendarLayers[scope.model.layerInEdit].dbCalendarLayerID;
-                        return timeSlotHelpers.isOverlapping(ts, fullCalendarHelpers.eventsToTS());
                     };
 
                     /*jslint unparam: true */
@@ -124,13 +126,22 @@
                             revertFunc();
                             saving = false;
                         } else {
-                            updateEditTimes(
-                                Math.min(ev.tsOrig.startTime, ts.startTime),
-                                Math.max(ev.tsOrig.endTime, ts.endTime)
-                            );
                             ev.tsOrig.startTime = ts.startTime;
                             ev.tsOrig.endTime = ts.endTime;
+
                             combineAdj(ts);
+
+                            if (combRes) {
+                                if (combRes.delATS) {
+                                    tsToDel.push(ts.tsOrig);
+                                } else {
+                                    if (combRes.updATS) {
+                                        tsToUpd.push(ts.tsOrig);
+                                    }
+                                }
+                            } else {
+                                tsToUpd.push(ts.tsOrig);
+                            }
 
                             saveCalLayerDB();
                         }
@@ -204,7 +215,7 @@
                                 updateCalEvents(false);
 
                                 // FFS: misplaced
-                                tsToEdit = scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots;
+                                calLToEdit = scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots;
 
                                 calBody.fullCalendar('removeEvents');
                                 callback(calEvents);
@@ -215,6 +226,55 @@
                         );
                     };
 
+                    function handleCalLEditResp(resp) {
+                        var found, i, id, j, uTS;
+
+                        if (resp.updTimeSlots) {
+                            for (i = 0; i < resp.updTimeSlots.length; i += 1) {
+                                uTS = resp.updTimeSlots[i];
+                                found = false;
+                                for (j = 0; j < calLToEdit.length; j += 1) {
+                                    if (calLToEdit[j].dbId === uTS.dbId) {
+                                        calLToEdit[j].rowVersion = uTS.rowVersion;
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) {
+                                    tsToUpd[i].dbId = uTS.dbId;
+                                    tsToUpd[i].rowVersion = uTS.rowVersion;
+                                    calLToEdit.push(tsToUpd[i]);
+                                }
+                            }
+                        }
+
+                        if (resp.delTimeSlots) {
+                            for (i = 0; i < resp.delTimeSlots.length; i += 1) {
+                                id = resp.delTimeSlots[i];
+                                found = false;
+                                for (j = 0; j < calLToEdit.length; j += 1) {
+                                    if (calLToEdit[j].dbId === id) {
+                                        timeSlotHelpers.delete(calLToEdit[j], calLToEdit);
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) {
+                                    throw new Error('DB update mismatch');
+                                }
+                            }
+                        }
+
+                        tsToDel.length = 0;
+                        tsToUpd.length = 0;
+                        updateCalEvents(true);
+                    }
+
+                    isOverlapping = function (ts) {
+                        ts.dbId = scope.rBook.calendarLayers[scope.model.layerInEdit].dbCalendarLayerID;
+                        return timeSlotHelpers.isOverlapping(ts, fullCalendarHelpers.eventsToTS());
+                    };
+
                     saveCalLayerDB = function () {
                         var calLayer = scope.rBook.calendarLayers[scope.model.layerInEdit], calLayerEditReq, delTimeSlots = [], i;
 
@@ -222,39 +282,21 @@
                             throw new Error('Handling other than absolute calendars unimplemented');
                         }
 
-                        for (i = 0; i < tsDeleted.length; i += 1) {
-                            if (tsDeleted[i].dbId) {
-                                delTimeSlots.push({
-                                    dbId: tsDeleted[i].dbId,
-                                    rowVersion: tsDeleted[i].rowVersion
-                                });
-                            }
-                            timeSlotHelpers.delete(tsDeleted[i], tsToEdit);
+                        for (i = 0; i < tsToDel.length; i += 1) {
+                            delTimeSlots.push({
+                                dbId: tsToDel[i].dbId,
+                                rowVersion: tsToDel[i].rowVersion
+                            });
                         }
 
                         calLayerEditReq = {
-                            calendarLayer: {
-                                dbCalendarLayerID: calLayer.dbCalendarLayerID,
-                                timeSlots: timeSlotHelpers.between(tsToEdit, minEditTime, maxEditTime)
-                            },
-                            startTime: minEditTime,
-                            endTime: maxEditTime,
-                            delTimeSlots: delTimeSlots
+                            delTimeSlots: tsToDel,
+                            updTimeSlots: tsToUpd
                         };
 
                         rBook.saveCalLayer(calLayerEditReq).then(
                             function (data) {
-                                scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots = timeSlotHelpers.replace(
-                                    scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots,
-                                    data.timeSlots,
-                                    data.startTime,
-                                    data.endTime
-                                );
-                                tsToEdit = scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots;
-                                maxEditTime = 0;
-                                minEditTime = 0;
-                                tsDeleted.length = 0;
-                                updateCalEvents(true);
+                                handleCalLEditResp(data);
                                 saving = false;
                             }
                         );
@@ -313,27 +355,8 @@
                     };
 
                     updateCalLayerOnChange = function (data) {
-                        scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots = timeSlotHelpers.replace(
-                            scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots,
-                            data.timeSlots,
-                            data.startTime,
-                            data.endTime
-                        );
-                        tsToEdit = scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots;
-                        maxEditTime = 0;
-                        minEditTime = 0;
-                        tsDeleted.length = 0;
-                        updateCalEvents(true);
+                        handleCalLEditResp(data);
                         rBook.notifyOnCalLayerChange(undefined);
-                    };
-
-                    updateEditTimes = function (minTime, maxTime) {
-                        if (minTime && (!minEditTime || (minTime < minEditTime))) {
-                            minEditTime = minTime;
-                        }
-                        if (maxTime && (!maxEditTime || (maxTime > maxEditTime))) {
-                            maxEditTime = maxTime;
-                        }
                     };
 
                     /*
@@ -369,7 +392,7 @@
                     };
 
                     scope.changeEditLayer = function () {
-                        tsToEdit = scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots;
+                        calLToEdit = scope.rBook.calendarLayers[scope.model.layerInEdit].timeSlots;
                         updateCalEvents(true);
                     };
 

@@ -9,25 +9,16 @@
 
             var retObj;
 
-            function tsDelete(ts, tsToEdit) {
+            function tsDelete(ts, calLToEdit) {
                 var calLayerEditReq, delTimeSlots = [], maxEditTime, minEditTime;
 
                 delTimeSlots.push({
                     dbId: ts.dbId,
                     rowVersion: ts.rowVersion
                 });
-                timeSlotHelpers.delete(ts, tsToEdit);
-
-                minEditTime = ts.startTime;
-                maxEditTime = ts.endTime;
 
                 calLayerEditReq = {
-                    calendarLayer: {
-                        dbCalendarLayerID: ts.calDbId,
-                        timeSlots: timeSlotHelpers.between(tsToEdit, minEditTime, maxEditTime)
-                    },
-                    startTime: minEditTime,
-                    endTime: maxEditTime,
+                    updTimeSlots: [],
                     delTimeSlots: delTimeSlots
                 };
 
@@ -42,10 +33,10 @@
                 restrict: 'E',
                 templateUrl: '/Areas/Calendar/Templates/meetingDetails.html',
                 link: function (scope, elem) {
-                    var modalEl = $('#meeting-details'), isVisible, tsToEdit, tsOrig;
+                    var modalEl = $('#meeting-details'), isVisible, calLToEdit, tsOrig;
 
                     elem.find('.btn-delete').bind('click', function () {
-                        tsDelete(tsOrig, tsToEdit);
+                        tsDelete(tsOrig, calLToEdit);
                     });
 
                     modalEl.on('hide.bs.modal', function () {
@@ -57,7 +48,7 @@
                         show: function (par) {
 
                             tsOrig = par.tsOrig;
-                            tsToEdit = par.tsToEdit;
+                            calLToEdit = par.calLToEdit;
 
                             modalEl.modal('show');
                             isVisible = true;

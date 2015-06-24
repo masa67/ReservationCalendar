@@ -33,13 +33,13 @@ namespace ReservationCalendar.API
             throw new System.ApplicationException("DB concurrency conflict detected");
         }
 
-        private async Task<List<AbsTimeSlot>> queryTS(CalendarLayerEditReq req)
+        private async Task<List<AbsTimeSlot>> queryTS(int calDbId, long startTime, long endTime)
         {
             List<AbsTimeSlot> ret = await db.AbsTimeSlots.AsNoTracking().Where(
-                t => t.AbsCalendarLayerID == req.calendarLayer.dbCalendarLayerID &&
-                    ((t.StartTime >= req.startTime && t.StartTime < req.endTime) ||
-                     (t.EndTime > req.startTime && t.EndTime <= req.endTime) ||
-                     (t.StartTime < req.startTime && t.EndTime > req.endTime))).ToListAsync();
+                t => t.AbsCalendarLayerID == calDbId &&
+                    ((t.StartTime >= startTime && t.StartTime < endTime) ||
+                     (t.EndTime > startTime && t.EndTime <= endTime) ||
+                     (t.StartTime < startTime && t.EndTime > endTime))).ToListAsync();
 
             return ret;
         }
@@ -49,87 +49,114 @@ namespace ReservationCalendar.API
         [ResponseType(typeof(OperationStatus))]
         public async Task<OperationStatus> Edit(int id, [FromBody] CalendarLayerEditReq req)
         {
-            ICollection<TimeSlot> timeSlots = req.calendarLayer.timeSlots;
+            ICollection<AbsTimeSlot> updTimeSlots = new List<AbsTimeSlot>();
+            CalendarLayerEditResp resp = null;
             OperationStatus ret = null;
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    storedTimeSlots = await queryTS(req);
-
-                    for (int i = 0; i < timeSlots.Count; i++)
+                    for (int i = 0; i < req.updTimeSlots.Count; i++)
                     {
-                        for (int j = i + 1; j < timeSlots.Count; j++)
+                        for (int j = i + 1; j < req.updTimeSlots.Count; j++)
                         {
-                            if (timeSlots.ElementAt(i).checkOverlap(timeSlots.ElementAt(j)) != TimeSlotOverlap.None) {
-                                throw new System.ApplicationException("Overlapping events in request");
+                            if (req.updTimeSlots.ElementAt(i).checkOverlap(req.updTimeSlots.ElementAt(j)) != TimeSlotOverlap.None)
+                            {
+                                throw new System.ApplicationException("Overlapping timeslots in request");
                             }
                         }
                     }
 
-                    foreach (TimeSlot timeSlot in req.calendarLayer.timeSlots)
+                    foreach (TimeSlot timeSlot in req.updTimeSlots)
                     {
                         AbsTimeSlot aTS = new AbsTimeSlot(timeSlot);
 
+                        storedTimeSlots = await queryTS(timeSlot.calDbId, timeSlot.startTime, timeSlot.endTime);
+
+                        if (storedTimeSlots.Count > 0)
+                        {
+                            foreach (AbsTimeSlot sTS in storedTimeSlots)
+                            {
+                                Boolean found = false;
+
+                                foreach (TimeSlot ts in req.updTimeSlots)
+                                {
+                                    if (ts.dbId == sTS.ID)
+                                    {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!found)
+                                {
+                                    foreach (TimeSlot ts in req.delTimeSlots)
+                                    {
+                                        if (ts.dbId == sTS.ID)
+                                        {
+                                            found = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (!found)
+                                {
+                                    throw new System.ApplicationException("Timeslot in request overlaps with timeslot in DB");
+                                }
+                            }
+                        }                       
+
                         if (aTS.ID == 0)
                         {
+
                             db.AbsTimeSlots.Add(aTS);
-                            
                         }
                         else
                         {
-                            deleteTSFromStoredList(aTS);
                             db.AbsTimeSlots.Attach(aTS);
                             db.Entry(aTS).State = EntityState.Modified;
                         }
+
+                        updTimeSlots.Add(aTS);
                     }
 
                     foreach (TimeSlot timeSlot in req.delTimeSlots)
                     {
                         AbsTimeSlot aTS = new AbsTimeSlot(timeSlot);
 
-                        deleteTSFromStoredList(aTS);
                         db.AbsTimeSlots.Attach(aTS);
                         db.AbsTimeSlots.Remove(aTS);
                     }
 
-                    if (storedTimeSlots.Count != 0)
-                    {
-                        throw new System.ApplicationException("DB concurrency conflict detected");
-                    }
-
                     await db.SaveChangesAsync();
 
-                    storedTimeSlots = await queryTS(req);
-                    timeSlots = new List<TimeSlot>();
-                    foreach (AbsTimeSlot aTS in storedTimeSlots)
+                    resp = new CalendarLayerEditResp();
+
+                    foreach (AbsTimeSlot updTimeSlot in updTimeSlots)
                     {
-                        timeSlots.Add(new TimeSlot(aTS));
+                        if (resp.updTimeSlots == null)
+                        {
+                            resp.updTimeSlots = new List<UpdTimeSlot>();
+                        }
+                        resp.updTimeSlots.Add(new UpdTimeSlot() { dbId = updTimeSlot.ID, rowVersion = updTimeSlot.RowVersion });
                     }
 
-                    ret = new OperationStatus { Status = true, Data = timeSlots };
+                    foreach (TimeSlot timeSlot in req.delTimeSlots)
+                    {
+                        if (resp.delTimeSlots == null)
+                        {
+                            resp.delTimeSlots = new List<int>();
+                        }
+                        resp.delTimeSlots.Add(timeSlot.dbId);
+                    }
+
+                    ret = new OperationStatus { Status = true, Data = resp };
                 }
                 catch (Exception ex)
                 {
                     ret = new OperationStatus { Status = false, Message = "DB save failed" };
-                }
-
-                try
-                {
-                    storedTimeSlots = await queryTS(req);
-                    timeSlots = new List<TimeSlot>();
-                    foreach (AbsTimeSlot aTS in storedTimeSlots)
-                    {
-                        timeSlots.Add(new TimeSlot(aTS));
-                    }
-
-                    ret.Data = new CalendarLayerEditResp() { timeSlots = timeSlots, startTime = req.startTime, endTime = req.endTime };
-                }
-                catch (Exception ex)
-                {
-                    ret.Status = false;
-                    ret.Message = "DB read failure";
                 }
             }   
             else
