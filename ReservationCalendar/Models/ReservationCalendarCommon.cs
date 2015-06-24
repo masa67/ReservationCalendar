@@ -18,6 +18,12 @@ namespace ReservationCalendar.Models
         Relative = 1
     }
 
+    public enum CalendarLayerType
+    {
+        Default = 0,
+        Meeting = 1
+    }
+
     public enum CalendarSourceType
     {
         Database = 0,

@@ -124,7 +124,7 @@ namespace ReservationCalendar
                       "~/Areas/Calendar/Scripts/client/Helpers/timeSlot.js",
                       "~/Areas/Calendar/Scripts/client/Factories/globalDialogs.js",
                       "~/Areas/Calendar/Scripts/client/Factories/rBookService.js",
-                      "~/Areas/Calendar/Scripts/client/Directives/meetingDetails.js",
+                      "~/Areas/Calendar/Scripts/client/Directives/calendarDialogs.js",
                       "~/Areas/Calendar/Scripts/client/Directives/reservationCalendar.js",
                       "~/Areas/Calendar/Scripts/client/app.js"));
         }

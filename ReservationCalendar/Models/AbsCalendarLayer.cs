@@ -9,6 +9,7 @@ namespace ReservationCalendar.Models
     public class AbsCalendarLayer
     {
         public int ID { get; set; }
+        public CalendarLayerType Type { get; set; }
         public string Description { get; set; }
         public Boolean UseMerging { get; set; }
 

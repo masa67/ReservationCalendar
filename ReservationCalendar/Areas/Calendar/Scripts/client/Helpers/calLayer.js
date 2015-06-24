@@ -21,7 +21,7 @@ var calLayerHelpers = (function () {
         createCombinedCalLayer: function (cals, sel, overlap) {
             var cal, dSlot, i, j, k, mSlot, slot, timeSlotsToDelete, tsCmp,
                 retObj = {
-                    calendarSourceType: calHelpers.CalendarSourceType.LAYERED,
+                    sourceType: calHelpers.CalendarSourceType.LAYERED,
                     timeSlots: [],
                     timeSlotConflicts: []
                 };

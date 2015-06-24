@@ -14,6 +14,11 @@ var calHelpers = (function () {
         RELATIVE: 1
     };
 
+    retObj.CalendarLayerType = {
+        DEFAULT: 0,
+        MEETING: 1
+    };
+
     retObj.CalendarSourceType = {
         DATABASE: 0,
         LAYERED: 1

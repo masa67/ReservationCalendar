@@ -47,11 +47,10 @@ namespace ReservationCalendar.Controllers
             //        select rbook;
            
             ReservationBookAbs rBookAbs = null;
-
+         
             var rBookQuery =
                db.ReservationBooks.
                Where(r => r.ID == (id + 1));
-               // Where("ID = @0", id + 1); - works as well
 
             if (id == null)
             {

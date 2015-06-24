@@ -16,6 +16,7 @@ namespace ReservationCalendar.Models
         public long endTime { get; set; }
         public TimeSlotStatus timeSlotStatus { get; set; }
         public string description { get; set; }
+        public int? meetingId { get; set; }
         public byte[] rowVersion { get; set; }
 
         public TimeSlot() { }
@@ -29,6 +30,7 @@ namespace ReservationCalendar.Models
             endTime = aSlot.EndTime;
             timeSlotStatus = aSlot.TimeSlotStatus;
             description = aSlot.Description;
+            meetingId = aSlot.MeetingID;
             rowVersion = aSlot.RowVersion;
         }
 
@@ -47,6 +49,7 @@ namespace ReservationCalendar.Models
 
             timeSlotStatus = rSlot.TimeSlotStatus;
             description = rSlot.Description;
+            rowVersion = rSlot.RowVersion;
         }
 
         public TimeSlot(TimeSlot tSlot)
@@ -61,6 +64,7 @@ namespace ReservationCalendar.Models
 
             timeSlotStatus = tSlot.timeSlotStatus;
             description = tSlot.description;
+            meetingId = tSlot.meetingId;
             rowVersion = tSlot.rowVersion;
         }
 

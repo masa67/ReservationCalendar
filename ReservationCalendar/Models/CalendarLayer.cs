@@ -15,9 +15,10 @@ namespace ReservationCalendar.Models
 
     public class CalendarLayer
     {
-        public CalendarSourceType calendarSourceType { get; set; }
-        public CalendarDbType? calendarDbType { get; set; }
-        public int? dbCalendarLayerID { get; set; }
+        public CalendarSourceType sourceType { get; set; }
+        public CalendarDbType? dbType { get; set; }
+        public CalendarLayerType? layerType { get; set; }
+        public int? dbId { get; set; }
         public string description { get; set; }
         public int? weight { get; set; }
         public Boolean useMerging { get; set; }
@@ -30,9 +31,10 @@ namespace ReservationCalendar.Models
 
         public CalendarLayer(AbsCalendarLayer aCal, TimePeriod timePeriod)
         {
-            calendarSourceType = CalendarSourceType.Database;
-            calendarDbType = CalendarDbType.Absolute;
-            dbCalendarLayerID = aCal.ID;
+            sourceType = CalendarSourceType.Database;
+            dbType = CalendarDbType.Absolute;
+            layerType = aCal.Type;
+            dbId = aCal.ID;
             description = aCal.Description;
             useMerging = aCal.UseMerging;
             timeSlots = new List<TimeSlot>();
@@ -57,9 +59,9 @@ namespace ReservationCalendar.Models
 
         public CalendarLayer(RelCalendarLayer rCal, TimePeriod timePeriod)
         {
-            calendarSourceType = CalendarSourceType.Database;
-            calendarDbType = CalendarDbType.Relative;
-            dbCalendarLayerID = rCal.ID;
+            sourceType = CalendarSourceType.Database;
+            dbType = CalendarDbType.Relative;
+            dbId = rCal.ID;
             description = rCal.Description;
             useMerging = rCal.UseMerging;
             timeSlots = new List<TimeSlot>();
@@ -101,7 +103,7 @@ namespace ReservationCalendar.Models
 
         public CalendarLayer(ICollection<CalendarLayer> cals)
         {
-            calendarSourceType = CalendarSourceType.Layered;
+            sourceType = CalendarSourceType.Layered;
             timeSlots = new List<TimeSlot>();
             timeSlotConflicts = new List<TimeSlotConflict>();
 

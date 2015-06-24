@@ -200,6 +200,7 @@
     <Compile Include="Models\CalendarLayer.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Meeting.cs" />
     <Compile Include="Models\RelCalendarLayer.cs" />
     <Compile Include="Models\RelTimeSlot.cs" />
     <Compile Include="Models\ReservationBook.cs" />
@@ -218,6 +219,7 @@
     <Content Include="Areas\Calendar\Scripts\client\app.js" />
     <Content Include="Areas\Calendar\Scripts\client\Controllers\reservationCalendar.js" />
     <Content Include="Areas\Calendar\Templates\meetingDetails.html" />
+    <Content Include="Areas\Calendar\Templates\timeslotDialog.html" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />

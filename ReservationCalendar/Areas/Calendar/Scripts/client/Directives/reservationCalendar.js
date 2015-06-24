@@ -53,8 +53,8 @@
                         };
 
                         tsOrig = {
-                            calDbType: scope.rBook.calendarLayers[scope.model.layerInEdit].calendarDbType,
-                            calDbId: scope.rBook.calendarLayers[scope.model.layerInEdit].dbCalendarLayerID,
+                            calDbType: scope.rBook.calendarLayers[scope.model.layerInEdit].dbType,
+                            calDbId: scope.rBook.calendarLayers[scope.model.layerInEdit].dbId,
                             startTime: start.unix(),
                             endTime: end.unix(),
                             timeSlotStatus: calHelpers.TimeSlotStatus.FREE
@@ -82,10 +82,19 @@
 
                         rBook.notifyOnCalLayerChange(updateCalLayerOnChange);
 
-                        globalDialogs.dialogs.meetingDetailsDialog.show({
-                            tsOrig: ev.tsOrig,
-                            calLToEdit: calLToEdit
-                        });
+                        if (scope.rBook.calendarLayers[scope.model.layerInEdit].layerType ===
+                                calHelpers.CalendarLayerType.MEETING) {
+                            globalDialogs.dialogs.meetingDetailsDialog.show({
+                                tsOrig: ev.tsOrig,
+                                calLToEdit: calLToEdit
+                            });
+                        } else {
+                            globalDialogs.dialogs.timeslotDialog.show({
+                                tsOrig: ev.tsOrig,
+                                calLToEdit: calLToEdit
+                            });
+
+                        }
                     }
 
                     combineAdj = function (ts) {
@@ -271,14 +280,14 @@
                     }
 
                     isOverlapping = function (ts) {
-                        ts.dbId = scope.rBook.calendarLayers[scope.model.layerInEdit].dbCalendarLayerID;
+                        ts.dbId = scope.rBook.calendarLayers[scope.model.layerInEdit].dbId;
                         return timeSlotHelpers.isOverlapping(ts, fullCalendarHelpers.eventsToTS());
                     };
 
                     saveCalLayerDB = function () {
                         var calLayer = scope.rBook.calendarLayers[scope.model.layerInEdit], calLayerEditReq, delTimeSlots = [], i;
 
-                        if (calLayer.calendarDbType !== calHelpers.CalendarDbType.ABSOLUTE) {
+                        if (calLayer.dbType !== calHelpers.CalendarDbType.ABSOLUTE) {
                             throw new Error('Handling other than absolute calendars unimplemented');
                         }
 
@@ -306,7 +315,7 @@
                         var i;
 
                         for (i = 0; i < scope.rBook.calendarLayers.length; i += 1) {
-                            if (tSlot.calDbId === scope.rBook.calendarLayers[i].dbCalendarLayerID) {
+                            if (tSlot.calDbId === scope.rBook.calendarLayers[i].dbId) {
                                 return i;
                             }
                         }

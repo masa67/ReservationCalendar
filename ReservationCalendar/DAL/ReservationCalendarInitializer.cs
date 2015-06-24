@@ -68,9 +68,9 @@ namespace ReservationCalendar.DAL
 
             var absCalendarLayers = new List<AbsCalendarLayer>
             {
-                new AbsCalendarLayer{Description="public holidays", UseMerging=false},
-                new AbsCalendarLayer{Description="meetings", UseMerging=false},
-                new AbsCalendarLayer{Description="availability", UseMerging=true}
+                new AbsCalendarLayer{Type=CalendarLayerType.Default, Description="public holidays", UseMerging=false},
+                new AbsCalendarLayer{Type=CalendarLayerType.Meeting, Description="meetings", UseMerging=false},
+                new AbsCalendarLayer{Type=CalendarLayerType.Default, Description="availability", UseMerging=true}
             };
 
             absCalendarLayers.ForEach(c => context.AbsCalendarLayers.Add(c));

@@ -15,11 +15,13 @@ namespace ReservationCalendar.Models
         public long EndTime { get; set; }
         public TimeSlotStatus TimeSlotStatus { get; set; }
         public string Description { get; set; }
+        public int? MeetingID { get; set; }
 
         [Timestamp]
         public byte[] RowVersion { get; set; }
 
         public virtual AbsCalendarLayer AbsCalendarLayer { get; set; }
+        public virtual Meeting Meeting { get; set; }
 
         public AbsTimeSlot() { }
 
@@ -31,6 +33,7 @@ namespace ReservationCalendar.Models
             EndTime = tSlot.endTime;
             TimeSlotStatus = tSlot.timeSlotStatus;
             Description = tSlot.description;
+            MeetingID = tSlot.meetingId;
             RowVersion = tSlot.rowVersion;
         }
     }
