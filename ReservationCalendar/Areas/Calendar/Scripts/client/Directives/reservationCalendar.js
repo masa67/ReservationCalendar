@@ -176,6 +176,10 @@
                         calBody.fullCalendar('destroy'); // destroy the calendar
                         calBody.fullCalendar({ //re-initialize the calendar
                             allDaySlot: false,
+                            buttonText: {
+                                prev: '<',
+                                next: '>'
+                            },
                             defaultView: fcState.view,
                             editable: true,
                             eventClick: clickCalEvent,
