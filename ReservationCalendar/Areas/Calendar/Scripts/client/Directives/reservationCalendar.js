@@ -202,7 +202,8 @@
                             viewRender: function (view) {
                                 fcState.view = view.name;
                             },
-                            weekends: false
+                            weekends: false,
+                            weekNumbers: true
                         });
                     }
 
