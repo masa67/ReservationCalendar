@@ -6,12 +6,21 @@
     var calLayerEditReq;
 
     function tsDelete(ts, rBook, hideCallback) {
-        var delTimeSlots = [];
+        var delTimeSlot, delTimeSlots = [];
 
-        delTimeSlots.push({
+        delTimeSlot = {
             dbId: ts.dbId,
             rowVersion: ts.rowVersion
-        });
+        };
+
+        if (ts.meeting) {
+            delTimeSlot.meeting = {
+                AbsTimeSlotID: ts.meeting.AbsTimeSlotID,
+                RowVersion : ts.meeting.RowVersion
+            };
+        }
+
+        delTimeSlots.push(delTimeSlot);
 
         calLayerEditReq = {
             updTimeSlots: [],
@@ -57,9 +66,9 @@
                             if (!tsOrig.meeting) {
                                 tsOrig.meeting = {};
                                 tsOrig.meeting.absTimeSlotId = tsOrig.dbId;
-                                tsOrig.meeting.title = 'test title';
-                                tsOrig.meeting.description = 'test description';
                             }
+                            tsOrig.meeting.Title = scope.model.meetingTitle;
+                            tsOrig.meeting.Description = scope.model.meetingDescription;
                             tsSubmit(tsOrig, rBook, retObj.hide);
                         });
                     }
@@ -74,8 +83,13 @@
 
                             tsOrig = par.tsOrig;
 
+                            scope.model.meetingTitle = tsOrig.meeting ? tsOrig.meeting.Title : '';
+                            scope.model.meetingDescription = tsOrig.meeting ? tsOrig.meeting.Description : '';
+
                             modalEl.modal('show');
                             isVisible = true;
+
+                            scope.$apply();
                         },
                         hide: function () {
                             modalEl.modal('hide');

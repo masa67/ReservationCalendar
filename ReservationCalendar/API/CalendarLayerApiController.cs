@@ -143,6 +143,12 @@ namespace ReservationCalendar.API
                         AbsTimeSlot aTS = new AbsTimeSlot(timeSlot);
 
                         db.AbsTimeSlots.Attach(aTS);
+
+                        if (aTS.Meeting != null)
+                        {
+                            db.Meetings.Attach(aTS.Meeting);
+                            db.Meetings.Remove(aTS.Meeting);
+                        }
                         db.AbsTimeSlots.Remove(aTS);
                     }
 
