@@ -8,7 +8,6 @@ namespace ReservationCalendar
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
         }
     }
 }

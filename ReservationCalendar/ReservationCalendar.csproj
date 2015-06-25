@@ -172,21 +172,14 @@
   <ItemGroup>
     <Compile Include="API\CalendarLayerApiController.cs" />
     <Compile Include="API\CalendarLayerEditReq.cs" />
-    <Compile Include="API\AbsCalendarTemplatesController.cs" />
     <Compile Include="API\CalendarLayerEditResp.cs" />
-    <Compile Include="API\DBUpdateConcurrencyException.cs" />
-    <Compile Include="API\DBUpdateConcurrencyException_2.cs" />
     <Compile Include="API\ReservationBookAbsApiController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AbsCalendarTemplateController.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ReservationBookAbsController.cs" />
     <Compile Include="Controllers\ReservationBookController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -196,12 +189,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\TimeHelper.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AbsCalendarLayer.cs" />
     <Compile Include="Models\CalendarBookAllocation.cs" />
     <Compile Include="Models\CalendarLayer.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Meeting.cs" />
     <Compile Include="Models\RelCalendarLayer.cs" />
     <Compile Include="Models\RelTimeSlot.cs" />
