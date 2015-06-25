@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
@@ -15,12 +16,11 @@ namespace ReservationCalendar.Models
         public long EndTime { get; set; }
         public TimeSlotStatus TimeSlotStatus { get; set; }
         public string Description { get; set; }
-        public int? MeetingID { get; set; }
-
+        
         [Timestamp]
         public byte[] RowVersion { get; set; }
 
-        public virtual AbsCalendarLayer AbsCalendarLayer { get; set; }
+        // public virtual AbsCalendarLayer AbsCalendarLayer { get; set; }
         public virtual Meeting Meeting { get; set; }
 
         public AbsTimeSlot() { }
@@ -33,7 +33,7 @@ namespace ReservationCalendar.Models
             EndTime = tSlot.endTime;
             TimeSlotStatus = tSlot.timeSlotStatus;
             Description = tSlot.description;
-            MeetingID = tSlot.meetingId;
+            Meeting = tSlot.meeting;
             RowVersion = tSlot.rowVersion;
         }
     }

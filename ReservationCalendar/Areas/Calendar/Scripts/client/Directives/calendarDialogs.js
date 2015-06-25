@@ -3,8 +3,10 @@
 (function () {
     'use strict';
 
+    var calLayerEditReq;
+
     function tsDelete(ts, rBook, hideCallback) {
-        var calLayerEditReq, delTimeSlots = [];
+        var delTimeSlots = [];
 
         delTimeSlots.push({
             dbId: ts.dbId,
@@ -14,6 +16,19 @@
         calLayerEditReq = {
             updTimeSlots: [],
             delTimeSlots: delTimeSlots
+        };
+
+        rBook.saveCalLayer(calLayerEditReq).then(hideCallback);
+    }
+
+    function tsSubmit(ts, rBook, hideCallback) {
+        var updTimeSlots = [];
+
+        updTimeSlots.push(ts);
+
+        calLayerEditReq = {
+            updTimeSlots: updTimeSlots,
+            delTimeSlots: []
         };
 
         rBook.saveCalLayer(calLayerEditReq).then(hideCallback);
@@ -30,11 +45,24 @@
                 restrict: 'E',
                 templateUrl: '/Areas/Calendar/Templates/meetingDetails.html',
                 link: function (scope, elem) {
-                    var modalEl = $('#meeting-details'), isVisible, tsOrig;
+                    var modalEl = $('#meeting-details'), isVisible, btnSubmit, tsOrig;
 
                     elem.find('.btn-delete').bind('click', function () {
                         tsDelete(tsOrig, rBook, retObj.hide);
                     });
+
+                    btnSubmit = elem.find('.btn-submit');
+                    if (btnSubmit) {
+                        btnSubmit.bind('click', function () {
+                            if (!tsOrig.meeting) {
+                                tsOrig.meeting = {};
+                                tsOrig.meeting.absTimeSlotId = tsOrig.dbId;
+                                tsOrig.meeting.title = 'test title';
+                                tsOrig.meeting.description = 'test description';
+                            }
+                            tsSubmit(tsOrig, rBook, retObj.hide);
+                        });
+                    }
 
                     modalEl.on('hide.bs.modal', function () {
                         isVisible = false;

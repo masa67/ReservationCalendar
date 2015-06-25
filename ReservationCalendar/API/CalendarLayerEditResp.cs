@@ -10,6 +10,7 @@ namespace ReservationCalendar.API
     {
         public int dbId;
         public byte[] rowVersion;
+        public byte[] rowVersionMeeting;
 
         public UpdTimeSlot() { }
     }

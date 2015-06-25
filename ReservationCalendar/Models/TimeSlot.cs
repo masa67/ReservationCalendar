@@ -17,6 +17,8 @@ namespace ReservationCalendar.Models
         public TimeSlotStatus timeSlotStatus { get; set; }
         public string description { get; set; }
         public int? meetingId { get; set; }
+        public Meeting meeting { get; set; }
+
         public byte[] rowVersion { get; set; }
 
         public TimeSlot() { }
@@ -30,7 +32,14 @@ namespace ReservationCalendar.Models
             endTime = aSlot.EndTime;
             timeSlotStatus = aSlot.TimeSlotStatus;
             description = aSlot.Description;
-            meetingId = aSlot.MeetingID;
+            meeting = aSlot.Meeting;
+
+            // The following prevents sending AbsTimeSlot data twice on Web API
+            if (meeting != null)
+            {
+                meeting.AbsTimeSlot = null;
+            }
+
             rowVersion = aSlot.RowVersion;
         }
 
@@ -65,6 +74,8 @@ namespace ReservationCalendar.Models
             timeSlotStatus = tSlot.timeSlotStatus;
             description = tSlot.description;
             meetingId = tSlot.meetingId;
+            meeting = tSlot.meeting;
+
             rowVersion = tSlot.rowVersion;
         }
 

@@ -9,11 +9,14 @@ namespace ReservationCalendar.Models
 {
     public class Meeting
     {
-        [Key, ForeignKey("AbsTimeSlot")]
-        public int ID { get; set; }       
+        [Key]
+        [ForeignKey("AbsTimeSlot")]
         public int AbsTimeSlotID { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
 
         public virtual AbsTimeSlot AbsTimeSlot { get; set; }
 

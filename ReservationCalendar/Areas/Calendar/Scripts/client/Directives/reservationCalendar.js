@@ -245,6 +245,9 @@
                                 for (j = 0; j < calLToEdit.length; j += 1) {
                                     if (calLToEdit[j].dbId === uTS.dbId) {
                                         calLToEdit[j].rowVersion = uTS.rowVersion;
+                                        if (uTS.rowVersionMeeting) {
+                                            calLToEdit[j].meeting.rowVersion = uTS.rowVersionMeeting;
+                                        }
                                         found = true;
                                         break;
                                     }
@@ -252,6 +255,9 @@
                                 if (!found) {
                                     tsToUpd[i].dbId = uTS.dbId;
                                     tsToUpd[i].rowVersion = uTS.rowVersion;
+                                    if (uTS.rowVersionMeeting) {
+                                        tsToUpd[i].meeting.rowVersion = uTS.rowVersionMeeting;
+                                    }
                                     calLToEdit.push(tsToUpd[i]);
                                 }
                             }

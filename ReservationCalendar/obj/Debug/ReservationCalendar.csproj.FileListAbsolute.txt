@@ -1,56 +1,3 @@
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\ReservationCalendar.dll.config
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\ReservationCalendar.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\ReservationCalendar.pdb
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Antlr3.Runtime.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\EntityFramework.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\EntityFramework.SqlServer.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.AspNet.Identity.Core.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.AspNet.Identity.EntityFramework.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.AspNet.Identity.Owin.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Host.SystemWeb.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Cookies.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Facebook.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Google.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.OAuth.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Twitter.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Web.Infrastructure.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Newtonsoft.Json.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Owin.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Helpers.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Mvc.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Optimization.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Razor.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.WebPages.Deployment.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.WebPages.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.WebPages.Razor.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\WebGrease.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Helpers.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Mvc.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Optimization.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Razor.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.WebPages.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.WebPages.Deployment.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.WebPages.Razor.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Antlr3.Runtime.pdb
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\EntityFramework.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\EntityFramework.SqlServer.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.AspNet.Identity.Core.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.AspNet.Identity.Owin.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.AspNet.Identity.EntityFramework.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Host.SystemWeb.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Facebook.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Cookies.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.OAuth.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Google.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Twitter.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.pdb
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\ReservationCalendar.dll.config
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\ReservationCalendar.dll
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\ReservationCalendar.pdb
@@ -104,16 +51,8 @@ G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCal
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.dll
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.pdb
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Newtonsoft.Json.xml
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\Newtonsoft.Json.xml
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Linq.Dynamic.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Linq.Dynamic.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Net.Http.Formatting.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.dll
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Net.Http.Formatting.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.xml
-C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.xml
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Net.Http.Formatting.dll
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.dll
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.dll
@@ -121,4 +60,65 @@ G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCal
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.xml
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.xml
 G:\SW Engineering\Visual Studio 2013\Projects\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.csprojResolveAssemblyReference.cache
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\ReservationCalendar.dll.config
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\ReservationCalendar.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\ReservationCalendar.pdb
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Antlr3.Runtime.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\EntityFramework.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\EntityFramework.SqlServer.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Facebook.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Google.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Twitter.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Web.Infrastructure.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Newtonsoft.Json.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Owin.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Linq.Dynamic.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Net.Http.Formatting.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Helpers.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Mvc.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Optimization.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Razor.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.WebPages.Deployment.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.WebPages.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.WebPages.Razor.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\WebGrease.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\EntityFramework.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\EntityFramework.SqlServer.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Newtonsoft.Json.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Net.Http.Formatting.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Helpers.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Http.WebHost.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Mvc.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Optimization.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.Razor.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.WebPages.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.WebPages.Deployment.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\System.Web.WebPages.Razor.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Antlr3.Runtime.pdb
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Google.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Workarea\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.dll
+C:\Workarea\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.pdb
 C:\Workarea\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.csprojResolveAssemblyReference.cache

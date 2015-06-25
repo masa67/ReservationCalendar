@@ -22,6 +22,7 @@ namespace ReservationCalendar.DAL
         public DbSet<ReservationBook> ReservationBooks { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserBookAllocation> UserBookAllocations { get; set; }
+        public DbSet<Meeting> Meetings { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

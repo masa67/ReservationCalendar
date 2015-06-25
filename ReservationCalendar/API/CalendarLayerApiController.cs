@@ -110,13 +110,29 @@ namespace ReservationCalendar.API
 
                         if (aTS.ID == 0)
                         {
-
                             db.AbsTimeSlots.Add(aTS);
+                            if (aTS.Meeting != null)
+                            {
+                                db.Meetings.Add(aTS.Meeting);
+                            }
                         }
                         else
                         {
                             db.AbsTimeSlots.Attach(aTS);
                             db.Entry(aTS).State = EntityState.Modified;
+
+                            if (aTS.Meeting != null)
+                            {
+                                if (aTS.Meeting.RowVersion == null)
+                                {
+                                    db.Meetings.Add(aTS.Meeting);
+                                }
+                                else
+                                {
+                                    db.Meetings.Attach(aTS.Meeting);
+                                    db.Entry(aTS.Meeting).State = EntityState.Modified;
+                                }
+                            }
                         }
 
                         updTimeSlots.Add(aTS);
@@ -136,11 +152,19 @@ namespace ReservationCalendar.API
 
                     foreach (AbsTimeSlot updTimeSlot in updTimeSlots)
                     {
+                        UpdTimeSlot uts;
+
                         if (resp.updTimeSlots == null)
                         {
                             resp.updTimeSlots = new List<UpdTimeSlot>();
                         }
-                        resp.updTimeSlots.Add(new UpdTimeSlot() { dbId = updTimeSlot.ID, rowVersion = updTimeSlot.RowVersion });
+
+                        uts = new UpdTimeSlot() { dbId = updTimeSlot.ID, rowVersion = updTimeSlot.RowVersion };
+                        if (updTimeSlot.Meeting != null)
+                        {
+                            uts.rowVersionMeeting = updTimeSlot.Meeting.RowVersion;
+                        }
+                        resp.updTimeSlots.Add(uts);
                     }
 
                     foreach (TimeSlot timeSlot in req.delTimeSlots)
