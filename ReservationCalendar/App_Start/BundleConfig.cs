@@ -104,6 +104,7 @@ namespace ReservationCalendar
                 .Include("~/Metronic/global/plugins/bootstrap-daterangepicker/moment.min.js")
                 .Include("~/Metronic/global/plugins/bootstrap-daterangepicker/daterangepicker.js")
                 .Include("~/Metronic/global/plugins/fullcalendar/fullcalendar.min.js")
+                .Include("~/Metronic/global/plugins/fullcalendar/lang-all.js")
                 .Include("~/Metronic/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js")
                 .Include("~/Metronic/global/plugins/jquery.sparkline.min.js")
                 .Include("~/Metronic/global/plugins/gritter/js/jquery.gritter.js")
@@ -123,6 +124,7 @@ namespace ReservationCalendar
                       "~/Areas/Calendar/Scripts/client/Helpers/fullCalendar.js",
                       "~/Areas/Calendar/Scripts/client/Helpers/timeSlot.js",
                       "~/Areas/Calendar/Scripts/client/Factories/globalDialogs.js",
+                      "~/Areas/Calendar/Scripts/client/Factories/locale.js",
                       "~/Areas/Calendar/Scripts/client/Factories/rBookService.js",
                       "~/Areas/Calendar/Scripts/client/Directives/calendarDialogs.js",
                       "~/Areas/Calendar/Scripts/client/Directives/reservationCalendar.js",

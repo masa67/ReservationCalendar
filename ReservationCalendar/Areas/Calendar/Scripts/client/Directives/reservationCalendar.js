@@ -5,7 +5,7 @@
 
     angular
         .module('ReservationCalendar', [])
-        .directive('reservationCalendar', ['rBook', 'globalDialogs', function (rBook, globalDialogs) {
+        .directive('reservationCalendar', ['rBook', 'locale', 'globalDialogs', function (rBook, locale, globalDialogs) {
             return {
                 restrict: 'E',
                 templateUrl: '/Areas/Calendar/Templates/reservationCalendar.html',
@@ -176,7 +176,6 @@
                         calBody.fullCalendar('destroy'); // destroy the calendar
                         calBody.fullCalendar({ //re-initialize the calendar
                             allDaySlot: false,
-                            defaultDate: moment('2015-05-15'),
                             defaultView: fcState.view,
                             editable: true,
                             eventClick: clickCalEvent,
@@ -187,8 +186,8 @@
                                 eventMod(ev, delta, revertFunc);
                             },
                             events: getCalEvents,
-                            firstDay: 1,
                             header: h,
+                            lang: locale.getLang(),
                             lazyFetching: useLazyFetching,
                             selectable: true,
                             selectHelper: true,
