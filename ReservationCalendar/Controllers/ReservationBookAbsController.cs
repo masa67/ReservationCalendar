@@ -5,6 +5,7 @@ using ReservationCalendar.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Net;
@@ -33,7 +34,7 @@ namespace ReservationCalendar.Controllers
 
             foreach (ReservationBook rBook in rBookQuery)
             {
-                rBooksAbs.Add(new ReservationBookAbs(rBook, null, true, true));
+                rBooksAbs.Add(new ReservationBookAbs(rBook, null, true, true, true));
             }
 
             return View(rBooksAbs);
@@ -49,8 +50,9 @@ namespace ReservationCalendar.Controllers
             ReservationBookAbs rBookAbs = null;
          
             var rBookQuery =
-               db.ReservationBooks.
-               Where(r => r.ID == (id + 1));
+               db.ReservationBooks
+                   .Include(r => r.CalendarBookAllocations)
+                   .Where(r => r.ID == (id + 1));
 
             if (id == null)
             {
@@ -59,7 +61,7 @@ namespace ReservationCalendar.Controllers
 
             foreach (ReservationBook rBook in rBookQuery)
             {
-                rBookAbs = new ReservationBookAbs(rBook, null, true, true);
+                rBookAbs = new ReservationBookAbs(rBook, null, true, true, true);
             }
 
             if (rBookAbs == null)

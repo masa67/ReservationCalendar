@@ -15,7 +15,31 @@
                     CONFLICT: 'conflict',
                     FAIL: 'fail'
                 },
-                getRBook: function (id, startTime, endTime) {
+                getRBook: function (id) {
+                    var d = $q.defer();
+
+                    $resource(
+                        '/api/ReservationBookAbsApi/GetReservationBookAbs/:id'
+                    ).get(
+                        {
+                            id: id
+                        },
+                        function (ret) {
+                            if (ret.Status) {
+                                d.resolve(ret.Data);
+                            } else {
+                                throw new Error('Reservation Book not found.');
+                            }
+                        },
+                        function () {
+                            throw new Error('GetRBook failed.');
+                        }
+                    );
+
+                    return d.promise;
+
+                },
+                getRBookFull: function (id, startTime, endTime) {
                     var d = $q.defer();
 
                     $resource(
@@ -34,7 +58,7 @@
                             }
                         },
                         function () {
-                            throw new Error('GetRreservationBookAbs failed.');
+                            throw new Error('GetRBookFull failed.');
                         }
                     );
 

@@ -24,10 +24,12 @@ namespace ReservationCalendar.DAL
             {
                 new ReservationBook{Description="Book #1",
                                     StartTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 1, 1), false),
-                                    EndTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 12, 31), false)},
+                                    EndTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 12, 31), false),
+                                    SlotDuration=30},
                 new ReservationBook{Description="Book #2",
                                     StartTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 1, 1), false),
-                                    EndTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 12, 31), false)}
+                                    EndTime=TimeHelper.DateTimeToUTCTimeStamp(new DateTime(2015, 12, 31), false),
+                                    SlotDuration=30}
             };
 
             reservationBooks.ForEach(r => context.ReservationBooks.Add(r));

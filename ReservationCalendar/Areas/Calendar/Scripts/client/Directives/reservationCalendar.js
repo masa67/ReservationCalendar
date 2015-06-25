@@ -21,6 +21,7 @@
                         },
                         h = {},
                         saving = false,
+                        slotDuration,
                         tsToDel = [],
                         tsToUpd = [],
                         calLToEdit,
@@ -30,6 +31,7 @@
                         combineAdj,
                         getCalEvents,
                         isOverlapping,
+                        minToDuration,
                         saveCalLayerDB,
                         tSlotLayer,
                         updateCalEvents,
@@ -173,6 +175,8 @@
 
                         scope.isMobile = (width && width <= 730) ? true : false;
 
+                        slotDuration = minToDuration(scope.rBook.reservationBook.SlotDuration);
+
                         calBody.fullCalendar('destroy'); // destroy the calendar
                         calBody.fullCalendar({ //re-initialize the calendar
                             allDaySlot: false,
@@ -196,8 +200,8 @@
                             selectable: true,
                             selectHelper: true,
                             select: addNewTS,
+                            slotDuration: slotDuration,
                             slotEventOverlap: true,
-                            slotMinutes: 15,
                             timezone: 'local',
                             viewRender: function (view) {
                                 fcState.view = view.name;
@@ -208,11 +212,11 @@
                     }
 
                     getCalEvents = function (start, end, timezone, callback) {
-                        rBook.getRBook(1, start.unix(), end.unix()).then(
+                        rBook.getRBookFull(1, start.unix(), end.unix()).then(
                             function (ret) {
                                 var i, sel;
 
-                                if (!scope.rBook || !useLazyFetching) {
+                                if (!scope.rBook || !scope.rBook.calendarLayers || !useLazyFetching) {
                                     scope.rBook = ret;
                                 } else {
                                     calLayerHelpers.merge(scope.rBook, ret);
@@ -292,6 +296,13 @@
                     isOverlapping = function (ts) {
                         ts.dbId = scope.rBook.calendarLayers[scope.model.layerInEdit].dbId;
                         return timeSlotHelpers.isOverlapping(ts, fullCalendarHelpers.eventsToTS());
+                    };
+
+                    minToDuration = function (pmin) {
+                        var hrs = Math.floor(pmin / 60),
+                            min = pmin - 60 * hrs;
+
+                        return ((hrs < 10) ? '0' : '') + hrs + ':' + ((min < 10) ? '0' : '') + min + ':00';
                     };
 
                     saveCalLayerDB = function () {
@@ -421,7 +432,12 @@
                     };
 
                     // watchWidthChanges();
-                    fcRedraw();
+                    rBook.getRBook(1).then(
+                        function (ret) {
+                            scope.rBook = ret;
+                            fcRedraw();
+                        }
+                    );
                 }
             };
         }])

@@ -17,34 +17,37 @@ namespace ReservationCalendar.Models
         {
         }
 
-        public ReservationBookAbs(ReservationBook rBook, TimePeriod timePeriod, Boolean inclCBAlloc, Boolean inclComb)
+        public ReservationBookAbs(ReservationBook rBook, TimePeriod timePeriod, Boolean inclCalLayers, Boolean inclCBAlloc, Boolean inclComb)
         {
             reservationBook = rBook;
-            
-            calendarLayers = new List<CalendarLayer>();
 
-            if (timePeriod == null)
+            if (inclCalLayers)
             {
-                timePeriod = new TimePeriod { unitsAsDays = true, startTime = rBook.StartTime, endTime = rBook.EndTime };
-            }
-            foreach (CalendarBookAllocation cal in rBook.CalendarBookAllocations)
-            {
-                CalendarLayer calTempl;
+                calendarLayers = new List<CalendarLayer>();
 
-                switch (cal.CalendarDbType)
+                if (timePeriod == null)
                 {
-                    case CalendarDbType.Absolute:
-                        calTempl = new CalendarLayer(cal.AbsCalendarLayer, timePeriod);
-                        break;
-                    case CalendarDbType.Relative:
-                        calTempl = new CalendarLayer(cal.RelCalendarLayer, timePeriod);
-                        break;
-                    default:
-                        throw new ArgumentException("Invalid CalendarType", "rBook");
+                    timePeriod = new TimePeriod { unitsAsDays = true, startTime = rBook.StartTime, endTime = rBook.EndTime };
                 }
+                foreach (CalendarBookAllocation cal in rBook.CalendarBookAllocations)
+                {
+                    CalendarLayer calTempl;
 
-                calTempl.weight = cal.Weight;
-                calendarLayers.Add(calTempl);
+                    switch (cal.CalendarDbType)
+                    {
+                        case CalendarDbType.Absolute:
+                            calTempl = new CalendarLayer(cal.AbsCalendarLayer, timePeriod);
+                            break;
+                        case CalendarDbType.Relative:
+                            calTempl = new CalendarLayer(cal.RelCalendarLayer, timePeriod);
+                            break;
+                        default:
+                            throw new ArgumentException("Invalid CalendarType", "rBook");
+                    }
+
+                    calTempl.weight = cal.Weight;
+                    calendarLayers.Add(calTempl);
+                }
             }
 
             if (!inclCBAlloc)
@@ -52,7 +55,7 @@ namespace ReservationCalendar.Models
                 reservationBook.CalendarBookAllocations = null;
             }
 
-            if (inclComb)
+            if (inclCalLayers && inclComb)
             {
                 combinedCalendar = new CalendarLayer(calendarLayers);
             }
