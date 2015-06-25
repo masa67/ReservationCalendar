@@ -357,7 +357,7 @@
                                 editable: tsLayer === scope.model.layerInEdit,
                                 end: moment(1000 * tSlot.endTime).format(),
                                 start: moment(1000 * tSlot.startTime).format(),
-                                title: tSlot.description,
+                                title: tSlot.meeting ? tSlot.meeting.Title : undefined,
                                 tsOrig: tSlot.tsOrig // || tSlot for listAllTimeSlots
                             };
 
