@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -14,6 +15,13 @@ using System.Web.Http.Description;
 
 namespace ReservationCalendar.API
 {
+    public class ConcurrencyConflictException : System.Exception
+    {
+        public ConcurrencyConflictException() : base() { }
+        public ConcurrencyConflictException(string message) : base(message) { }
+        public ConcurrencyConflictException(string message, System.Exception inner) : base(message, inner) { }
+    }
+
     public class CalendarLayerApiController : ApiController
     {
         private ReservationCalendarContext db = new ReservationCalendarContext();
@@ -30,7 +38,7 @@ namespace ReservationCalendar.API
                 }
             }
 
-            throw new System.ApplicationException("DB concurrency conflict detected");
+            throw new ConcurrencyConflictException();
         }
 
         private async Task<List<AbsTimeSlot>> queryTS(int calDbId, long startTime, long endTime)
@@ -103,7 +111,7 @@ namespace ReservationCalendar.API
 
                                 if (!found)
                                 {
-                                    throw new System.ApplicationException("Timeslot in request overlaps with timeslot in DB");
+                                    throw new ConcurrencyConflictException();
                                 }
                             }
                         }                       
@@ -184,9 +192,17 @@ namespace ReservationCalendar.API
 
                     ret = new OperationStatus { Status = true, Data = resp };
                 }
+                catch (ConcurrencyConflictException ex)
+                {
+                    ret = OperationStatus.CreateFromException("Concurrency conflict", ex);
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    ret = OperationStatus.CreateFromException("Concurrency conflict", ex);
+                }
                 catch (Exception ex)
                 {
-                    ret = new OperationStatus { Status = false, Message = "DB save failed" };
+                    ret = OperationStatus.CreateFromException("DB save failed", ex);
                 }
             }   
             else

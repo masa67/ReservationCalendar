@@ -6,9 +6,15 @@
     angular
         .module('RBookService', [])
         .factory('rBook', ['$resource', '$q', function ($resource, $q) {
-            var calLayerChangeCallback;
+            var calLayerChangeCallback,
+                retObj;
 
-            return {
+            retObj = {
+                OpStatusType: {
+                    OK: 'ok',
+                    CONFLICT: 'conflict',
+                    FAIL: 'fail'
+                },
                 getRBook: function (id, startTime, endTime) {
                     var d = $q.defer();
 
@@ -40,24 +46,32 @@
                     $resource(
                         '/api/CalendarLayerApi/Edit/1'
                     ).save(data, function (ret) {
-                        if (ret.Data) {
-                            d.resolve(ret.Data);
+                        if (ret.Status) {
+                            d.resolve({
+                                status: retObj.OpStatusType.OK,
+                                data: ret.Data
+                            });
 
                             if (calLayerChangeCallback) {
                                 calLayerChangeCallback(ret.Data);
                             }
                         } else {
-                            throw new Error('CalendarLayerApi/Edit failed: ' +
-                                ret.Message);
-                            // d.reject();
+                            if (ret.Message === 'Concurrency conflict') {
+                                d.resolve({
+                                    status: retObj.OpStatusType.CONFLICT
+                                });
+                            } else
+                                throw new Error('CalendarLayerApi/Edit failed: ' +
+                                    ret.Message);
                         }
                     }, function () {
                         throw new Error('CalendarLayerApi/Edit failed.');
-                        // d.reject(err);
                     });
 
                     return d.promise;
                 }
             };
+
+            return retObj;
         }]);
 }());

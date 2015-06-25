@@ -310,8 +310,13 @@
                         };
 
                         rBook.saveCalLayer(calLayerEditReq).then(
-                            function (data) {
-                                handleCalLEditResp(data);
+                            function (ret) {
+                                if (ret.status === rBook.OpStatusType.OK) {
+                                    handleCalLEditResp(ret.data);
+                                } else {
+                                    // refetch everything after concurrency conflict
+                                    fcRedraw();
+                                }
                                 saving = false;
                             }
                         );

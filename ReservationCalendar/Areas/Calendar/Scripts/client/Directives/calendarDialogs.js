@@ -27,7 +27,15 @@
             delTimeSlots: delTimeSlots
         };
 
-        rBook.saveCalLayer(calLayerEditReq).then(hideCallback);
+        rBook.saveCalLayer(calLayerEditReq).then(
+            function (resp) {
+                if (resp.status === rBook.OpStatusType.OK) {
+                    hideCallback();
+                } else {
+                    throw new Error('Unhandled concurrency conflict');
+                }
+            }
+        );
     }
 
     function tsSubmit(ts, rBook, hideCallback) {
@@ -40,7 +48,15 @@
             delTimeSlots: []
         };
 
-        rBook.saveCalLayer(calLayerEditReq).then(hideCallback);
+        rBook.saveCalLayer(calLayerEditReq).then(
+            function (resp) {
+                if (resp.status === rBook.OpStatusType.OK) {
+                    hideCallback();
+                } else {
+                    throw new Error('Unhandled concurrency conflict');
+                }
+            }
+        );
     }
 
     angular
