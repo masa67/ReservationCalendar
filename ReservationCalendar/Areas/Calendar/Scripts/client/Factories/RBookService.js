@@ -27,11 +27,14 @@
                             endTime: endTime
                         },
                         function (ret) {
-                            d.resolve(ret);
+                            if (ret.Status) {
+                                d.resolve(ret.Data);
+                            } else {
+                                throw new Error('Reservation Book not found.');
+                            }
                         },
                         function () {
                             throw new Error('GetRreservationBookAbs failed.');
-                            // d.reject(err);
                         }
                     );
 
