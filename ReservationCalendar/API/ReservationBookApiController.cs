@@ -14,21 +14,21 @@ using System.Web.Http.Description;
 
 namespace ReservationCalendar.API
 {
-    public class ReservationBookAbsApiController : ApiController
+    public class ReservationBookApiController : ApiController
     {
         private ReservationCalendarContext db = new ReservationCalendarContext();
 
-        // GET: api/ReservationBookAbsApi/GetReservationBookAbs/1
-        [ResponseType(typeof(ReservationBookAbs))]
-        public async Task<OperationStatus> GetReservationBookAbs(int id)
+        // GET: api/ReservationBookApi/GetReservationBook/1
+        [ResponseType(typeof(ReservationBookDTO))]
+        public async Task<OperationStatus> GetReservationBook(int id)
         {
             ReservationBook rBook = await db.ReservationBooks.Where(r => r.ID == id).SingleOrDefaultAsync<ReservationBook>();
-            ReservationBookAbs rBookAbs = new ReservationBookAbs(rBook, null, false, false, false);
+            ReservationBookDTO rBookDTO = new ReservationBookDTO(rBook, null, false, false, false);
             OperationStatus ret;
 
-            if (rBookAbs != null)
+            if (rBookDTO != null)
             {
-                ret = new OperationStatus { Status = true, Data = rBookAbs };
+                ret = new OperationStatus { Status = true, Data = rBookDTO };
             }
             else
             {
@@ -38,20 +38,20 @@ namespace ReservationCalendar.API
             return ret;
         }       
 
-        // GET: api/ReservationBookAbsApi/GetReservationBookAbs/1?startTime=<long>&endTime=<long>
-        [ResponseType(typeof(ReservationBookAbs))]
-        public async Task<OperationStatus> GetReservationBookAbs(int id, long startTime, long endTime)
+        // GET: api/ReservationBookApi/GetReservationBook/1?startTime=<long>&endTime=<long>
+        [ResponseType(typeof(ReservationBookDTO))]
+        public async Task<OperationStatus> GetReservationBook(int id, long startTime, long endTime)
         {
             ReservationBook rBook = await db.ReservationBooks
                 .Include(r => r.CalendarBookAllocations)
                 .Where(r => r.ID == id).SingleOrDefaultAsync<ReservationBook>();
             TimePeriod timePeriod = new TimePeriod { unitsAsDays = true, startTime = startTime, endTime = endTime };
-            ReservationBookAbs rBookAbs = new ReservationBookAbs(rBook, timePeriod, true, false, false);
+            ReservationBookDTO rBookDTO = new ReservationBookDTO(rBook, timePeriod, true, false, false);
             OperationStatus ret;
 
-            if (rBookAbs != null)
+            if (rBookDTO != null)
             {
-                ret = new OperationStatus { Status = true, Data = rBookAbs };
+                ret = new OperationStatus { Status = true, Data = rBookDTO };
             }
             else
             {

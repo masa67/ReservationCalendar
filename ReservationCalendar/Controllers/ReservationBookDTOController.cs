@@ -16,38 +16,39 @@ using System.Web.Script.Serialization;
 
 namespace ReservationCalendar.Controllers
 {
-    public class ReservationBookAbsController : Controller
+    public class ReservationBookDTOController : Controller
     {
         private ReservationCalendarContext db = new ReservationCalendarContext();
 
-        public ReservationBookAbsController()
+        public ReservationBookDTOController()
         {
         }
 
-        // GET: ReservationBookAbs
+        // GET: ReservationBookDTO
         public ActionResult Index()
         {
-            IQueryable<ReservationBook> rBookQuery =
-                from rbook in db.ReservationBooks
-                select rbook;
-            List<ReservationBookAbs> rBooksAbs = new List<ReservationBookAbs>();
+            List<ReservationBook> rBooks = db.ReservationBooks
+                .Include(r => r.CalendarBookAllocations)
+                .ToList<ReservationBook>();
+            
+            List<ReservationBookDTO> rBooksDTO = new List<ReservationBookDTO>();
 
-            foreach (ReservationBook rBook in rBookQuery)
+            foreach (ReservationBook rBook in rBooks)
             {
-                rBooksAbs.Add(new ReservationBookAbs(rBook, null, true, true, true));
+                rBooksDTO.Add(new ReservationBookDTO(rBook, null, true, true, true));
             }
 
-            return View(rBooksAbs);
+            return View(rBooksDTO);
         }
 
-        // GET: ReservationBookAbs/Details/1
+        // GET: ReservationBookDTO/Details/1
         public ActionResult Details(int? id)
         {
             // IQueryable<ReservationBook> rBookQuery =
             //        from rbook in db.ReservationBooks
             //        select rbook;
            
-            ReservationBookAbs rBookAbs = null;
+            ReservationBookDTO rBookDTO = null;
          
             var rBookQuery =
                db.ReservationBooks
@@ -61,15 +62,15 @@ namespace ReservationCalendar.Controllers
 
             foreach (ReservationBook rBook in rBookQuery)
             {
-                rBookAbs = new ReservationBookAbs(rBook, null, true, true, true);
+                rBookDTO = new ReservationBookDTO(rBook, null, true, true, true);
             }
 
-            if (rBookAbs == null)
+            if (rBookDTO == null)
             {
                 return HttpNotFound();
             }
 
-            return View(rBookAbs);
+            return View(rBookDTO);
         }       
     }
 }

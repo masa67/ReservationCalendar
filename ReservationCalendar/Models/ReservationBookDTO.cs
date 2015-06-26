@@ -7,17 +7,17 @@ using System.Web.Mvc;
 
 namespace ReservationCalendar.Models
 {
-    public class ReservationBookAbs
+    public class ReservationBookDTO
     {
         public ReservationBook reservationBook { get; set; }
         public ICollection<CalendarLayer> calendarLayers { get; set; }
         public CalendarLayer combinedCalendar { get; set; }
 
-        public ReservationBookAbs()
+        public ReservationBookDTO()
         {
         }
 
-        public ReservationBookAbs(ReservationBook rBook, TimePeriod timePeriod, Boolean inclCalLayers, Boolean inclCBAlloc, Boolean inclComb)
+        public ReservationBookDTO(ReservationBook rBook, TimePeriod timePeriod, Boolean inclCalLayers, Boolean inclCBAlloc, Boolean inclComb)
         {
             reservationBook = rBook;
 

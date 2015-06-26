@@ -19,7 +19,7 @@
                     var d = $q.defer();
 
                     $resource(
-                        '/api/ReservationBookAbsApi/GetReservationBookAbs/:id'
+                        '/api/ReservationBookApi/GetReservationBook/:id'
                     ).get(
                         {
                             id: id
@@ -43,7 +43,7 @@
                     var d = $q.defer();
 
                     $resource(
-                        '/api/ReservationBookAbsApi/GetReservationBookAbs/:id?startTime=:startTime&endTime=:endTime'
+                        '/api/ReservationBookApi/GetReservationBook/:id?startTime=:startTime&endTime=:endTime'
                     ).get(
                         {
                             id: id,
