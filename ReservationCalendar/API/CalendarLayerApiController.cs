@@ -76,7 +76,7 @@ namespace ReservationCalendar.API
                         }
                     }
 
-                    foreach (TimeSlot timeSlot in req.updTimeSlots)
+                    foreach (CalTimeSlot timeSlot in req.updTimeSlots)
                     {
                         AbsTimeSlot aTS = new AbsTimeSlot(timeSlot);
 
@@ -88,7 +88,7 @@ namespace ReservationCalendar.API
                             {
                                 Boolean found = false;
 
-                                foreach (TimeSlot ts in req.updTimeSlots)
+                                foreach (CalTimeSlot ts in req.updTimeSlots)
                                 {
                                     if (ts.dbId == sTS.ID)
                                     {
@@ -99,7 +99,7 @@ namespace ReservationCalendar.API
 
                                 if (!found)
                                 {
-                                    foreach (TimeSlot ts in req.delTimeSlots)
+                                    foreach (CalTimeSlot ts in req.delTimeSlots)
                                     {
                                         if (ts.dbId == sTS.ID)
                                         {
@@ -146,7 +146,7 @@ namespace ReservationCalendar.API
                         updTimeSlots.Add(aTS);
                     }
 
-                    foreach (TimeSlot timeSlot in req.delTimeSlots)
+                    foreach (CalTimeSlot timeSlot in req.delTimeSlots)
                     {
                         AbsTimeSlot aTS = new AbsTimeSlot(timeSlot);
 
@@ -181,7 +181,7 @@ namespace ReservationCalendar.API
                         resp.updTimeSlots.Add(uts);
                     }
 
-                    foreach (TimeSlot timeSlot in req.delTimeSlots)
+                    foreach (CalTimeSlot timeSlot in req.delTimeSlots)
                     {
                         if (resp.delTimeSlots == null)
                         {

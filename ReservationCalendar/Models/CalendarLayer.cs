@@ -8,8 +8,8 @@ namespace ReservationCalendar.Models
 {
     public class TimeSlotConflict
     {
-        public TimeSlot aSlot { get; set; }
-        public TimeSlot bSlot { get; set; }
+        public CalTimeSlot aSlot { get; set; }
+        public CalTimeSlot bSlot { get; set; }
         public TimeSlotOverlap timeSlotOverlap { get; set; }
     }
 
@@ -22,7 +22,7 @@ namespace ReservationCalendar.Models
         public string description { get; set; }
         public int? weight { get; set; }
         public Boolean useMerging { get; set; }
-        public ICollection<TimeSlot> timeSlots { get; set; }
+        public ICollection<CalTimeSlot> timeSlots { get; set; }
         public ICollection<TimeSlotConflict> timeSlotConflicts { get; set; }
 
         # region DB constructors 
@@ -37,7 +37,7 @@ namespace ReservationCalendar.Models
             dbId = aCal.ID;
             description = aCal.Description;
             useMerging = aCal.UseMerging;
-            timeSlots = new List<TimeSlot>();
+            timeSlots = new List<CalTimeSlot>();
 
             if (timePeriod.unitsAsDays)
             {
@@ -46,7 +46,7 @@ namespace ReservationCalendar.Models
                     if ((aSlot.StartTime >= timePeriod.startTime && aSlot.StartTime <= timePeriod.endTime) ||
                         (aSlot.EndTime >= timePeriod.startTime && aSlot.EndTime <= timePeriod.endTime))
                     {
-                        TimeSlot ts = new TimeSlot(aSlot);
+                        CalTimeSlot ts = new CalTimeSlot(aSlot);
                         timeSlots.Add(ts);
                     }
                 }
@@ -64,7 +64,7 @@ namespace ReservationCalendar.Models
             dbId = rCal.ID;
             description = rCal.Description;
             useMerging = rCal.UseMerging;
-            timeSlots = new List<TimeSlot>();
+            timeSlots = new List<CalTimeSlot>();
 
             if (timePeriod.unitsAsDays)
             {
@@ -81,7 +81,7 @@ namespace ReservationCalendar.Models
                                 (rCal.RelCalendarType == RelCalendarType.Weekly &&
                                  rSlot.Weekday == dt.DayOfWeek))
                             {
-                                TimeSlot ts = new TimeSlot(rSlot, day);
+                                CalTimeSlot ts = new CalTimeSlot(rSlot, day);
                                 timeSlots.Add(ts);
                             }
 
@@ -104,18 +104,18 @@ namespace ReservationCalendar.Models
         public CalendarLayer(ICollection<CalendarLayer> cals)
         {
             sourceType = CalendarSourceType.Layered;
-            timeSlots = new List<TimeSlot>();
+            timeSlots = new List<CalTimeSlot>();
             timeSlotConflicts = new List<TimeSlotConflict>();
 
             List<CalendarLayer> orderdCals = cals.OrderBy(x => -x.weight).ToList();
 
             foreach (CalendarLayer cal in orderdCals)
             {
-                foreach (TimeSlot slot in cal.timeSlots)
+                foreach (CalTimeSlot slot in cal.timeSlots)
                 {
-                    ICollection<TimeSlot> timeSlotsToDelete = new List<TimeSlot>();
+                    ICollection<CalTimeSlot> timeSlotsToDelete = new List<CalTimeSlot>();
 
-                    foreach (TimeSlot mSlot in timeSlots)
+                    foreach (CalTimeSlot mSlot in timeSlots)
                     {
                         TimeSlotOverlap tsCmp = slot.checkOverlap(mSlot);
 
@@ -139,7 +139,7 @@ namespace ReservationCalendar.Models
                                 timeSlotsToDelete.Add(mSlot);
                                 break;
                             case TimeSlotOverlap.SplitOverlap:
-                                TimeSlot dSlot = new TimeSlot(mSlot);
+                                CalTimeSlot dSlot = new CalTimeSlot(mSlot);
                                 dSlot.origTimeSlot = mSlot.origTimeSlot;
 
                                 mSlot.endTime = slot.startTime;
@@ -151,12 +151,12 @@ namespace ReservationCalendar.Models
                         }
                     }
 
-                    foreach (TimeSlot dSlot in timeSlotsToDelete)
+                    foreach (CalTimeSlot dSlot in timeSlotsToDelete)
                     {
                         timeSlots.Remove(dSlot);
                     }
 
-                    timeSlots.Add(new TimeSlot(slot));
+                    timeSlots.Add(new CalTimeSlot(slot));
                 }
             }
 

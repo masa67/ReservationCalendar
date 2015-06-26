@@ -178,7 +178,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\AbsCalendarTemplateController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReservationBookDTOController.cs" />
     <Compile Include="Controllers\ReservationBookController.cs" />
@@ -199,7 +198,7 @@
     <Compile Include="Models\AbsTimeSlot.cs" />
     <Compile Include="Models\ReservationBookDTO.cs" />
     <Compile Include="Models\ReservationCalendarCommon.cs" />
-    <Compile Include="Models\TimeSlot.cs" />
+    <Compile Include="Models\CalTimeSlot.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserBookAllocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -207,9 +206,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Calendar\Helpers\calendar.js" />
     <Content Include="Areas\Calendar\Scripts\client\app.js" />
-    <Content Include="Areas\Calendar\Scripts\client\Controllers\reservationCalendar.js" />
     <Content Include="Areas\Calendar\Templates\meetingDetails.html" />
     <Content Include="Areas\Calendar\Templates\timeslotDialog.html" />
     <Content Include="Content\bootstrap.css" />
@@ -261,36 +258,8 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Users\Create.cshtml" />
-    <Content Include="Views\Users\Delete.cshtml" />
-    <Content Include="Views\Users\Details.cshtml" />
-    <Content Include="Views\Users\Edit.cshtml" />
-    <Content Include="Views\Users\Index.cshtml" />
-    <Content Include="Views\User\Create.cshtml" />
-    <Content Include="Views\User\Delete.cshtml" />
-    <Content Include="Views\User\Details.cshtml" />
-    <Content Include="Views\User\Edit.cshtml" />
-    <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\ReservationBook\Create.cshtml" />
     <Content Include="Views\ReservationBook\Delete.cshtml" />
     <Content Include="Views\ReservationBook\Details.cshtml" />
@@ -303,8 +272,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\AbsCalendarTemplate\" />
-    <Folder Include="Views\Reservations\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

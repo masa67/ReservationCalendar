@@ -6,12 +6,12 @@ using System.Web;
 
 namespace ReservationCalendar.Models
 {
-    public class TimeSlot
+    public class CalTimeSlot
     {
         public CalendarDbType calDbType { get; set; }
         public int calDbId { get; set; }
         public int dbId { get; set; }
-        public TimeSlot origTimeSlot { get; set; }
+        public CalTimeSlot origTimeSlot { get; set; }
         public long startTime { get; set; }
         public long endTime { get; set; }
         public TimeSlotStatus timeSlotStatus { get; set; }
@@ -21,9 +21,9 @@ namespace ReservationCalendar.Models
 
         public byte[] rowVersion { get; set; }
 
-        public TimeSlot() { }
+        public CalTimeSlot() { }
 
-        public TimeSlot(AbsTimeSlot aSlot)
+        public CalTimeSlot(AbsTimeSlot aSlot)
         {
             calDbType = CalendarDbType.Absolute;
             calDbId = aSlot.AbsCalendarLayerID;
@@ -43,7 +43,7 @@ namespace ReservationCalendar.Models
             rowVersion = aSlot.RowVersion;
         }
 
-        public TimeSlot(RelTimeSlot rSlot, long timeBase)
+        public CalTimeSlot(RelTimeSlot rSlot, long timeBase)
         {
             calDbType = CalendarDbType.Relative;
             calDbId = rSlot.RelCalendarLayerID;
@@ -61,7 +61,7 @@ namespace ReservationCalendar.Models
             rowVersion = rSlot.RowVersion;
         }
 
-        public TimeSlot(TimeSlot tSlot)
+        public CalTimeSlot(CalTimeSlot tSlot)
         {
             calDbType = tSlot.calDbType;
             calDbId = tSlot.calDbId;
@@ -79,7 +79,7 @@ namespace ReservationCalendar.Models
             rowVersion = tSlot.rowVersion;
         }
 
-        public TimeSlotOverlap checkOverlap(TimeSlot ts)
+        public TimeSlotOverlap checkOverlap(CalTimeSlot ts)
         {
             
             if (startTime >= ts.endTime || endTime <= ts.startTime)

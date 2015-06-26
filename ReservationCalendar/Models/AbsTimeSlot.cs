@@ -25,7 +25,7 @@ namespace ReservationCalendar.Models
 
         public AbsTimeSlot() { }
 
-        public AbsTimeSlot(TimeSlot tSlot)
+        public AbsTimeSlot(CalTimeSlot tSlot)
         {
             ID = tSlot.dbId;
             AbsCalendarLayerID = tSlot.calDbId;

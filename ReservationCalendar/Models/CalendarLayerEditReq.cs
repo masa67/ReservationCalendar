@@ -8,8 +8,8 @@ namespace ReservationCalendar.API
 {
     public class CalendarLayerEditReq
     {
-        public ICollection<TimeSlot> delTimeSlots { get; set; }
-        public ICollection<TimeSlot> updTimeSlots { get; set; }
+        public ICollection<CalTimeSlot> delTimeSlots { get; set; }
+        public ICollection<CalTimeSlot> updTimeSlots { get; set; }
 
         CalendarLayerEditReq() { }
     }
