@@ -4,7 +4,7 @@
     'use strict';
 
     angular
-        .module('RBookService', [])
+        .module('RBook', [])
         .factory('rBook', ['$resource', '$q', function ($resource, $q) {
             var calLayerChangeCallback,
                 retObj;

@@ -120,12 +120,10 @@ namespace ReservationCalendar
 
             bundles.Add(new ScriptBundle("~/bundles/calendarApp").Include(
                       "~/Areas/Calendar/Scripts/client/Helpers/cal.js",
-                      "~/Areas/Calendar/Scripts/client/Helpers/calLayer.js",
-                      "~/Areas/Calendar/Scripts/client/Helpers/fullCalendar.js",
                       "~/Areas/Calendar/Scripts/client/Helpers/timeSlot.js",
                       "~/Areas/Calendar/Scripts/client/Factories/globalDialogs.js",
                       "~/Areas/Calendar/Scripts/client/Factories/locale.js",
-                      "~/Areas/Calendar/Scripts/client/Factories/rBookService.js",
+                      "~/Areas/Calendar/Scripts/client/Factories/rBook.js",
                       "~/Areas/Calendar/Scripts/client/Directives/calendarDialogs.js",
                       "~/Areas/Calendar/Scripts/client/Directives/reservationCalendar.js",
                       "~/Areas/Calendar/Scripts/client/app.js"));

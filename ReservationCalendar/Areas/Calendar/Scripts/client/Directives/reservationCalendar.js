@@ -1,5 +1,5 @@
 ﻿
-/*global alert, angular, calHelpers, calLayerHelpers, fullCalendarHelpers, jQuery, Metronic, moment, timeSlotHelpers */
+/*global alert, angular, calHelpers, jQuery, Metronic, moment, timeSlotHelpers */
 (function () {
     'use strict';
 
@@ -37,8 +37,6 @@
                         updateCalEvents,
                         updateCalLayerOnChange;
                     // watchWidthChanges; // function
-
-                    fullCalendarHelpers.init(calBody);
 
                     function addNewTS(start, end) {
                         var ts, tsOrig;
@@ -158,6 +156,23 @@
                         }
                     }
 
+                    function eventsToTS() {
+                        var calEv = calBody.fullCalendar('clientEvents'), ev, i, retArr = [];
+
+                        for (i = 0; i < calEv.length; i += 1) {
+                            ev = calEv[i];
+                            /*jslint nomen: true */
+                            retArr.push({
+                                id: ev._id,
+                                startTime: ev.start.unix(),
+                                endTime: ev.end && ev.end.unix(),
+                                tsOrig: ev.tsOrig
+                            });
+                        }
+
+                        return retArr;
+                    }
+
                     function fcRedraw(width) {
                         if (Metronic.isRTL()) {
                             h = {
@@ -219,10 +234,10 @@
                                 if (!scope.rBook || !scope.rBook.calendarLayers || !useLazyFetching) {
                                     scope.rBook = ret;
                                 } else {
-                                    calLayerHelpers.merge(scope.rBook, ret);
+                                    calHelpers.merge(scope.rBook, ret);
                                 }
 
-                                calLayerHelpers.sortCalByWeight(scope.rBook.calendarLayers);
+                                calHelpers.sortCalByWeight(scope.rBook.calendarLayers);
                                 sel = scope.model.calendarLayerSelected;
                                 sel.length = 0;
                                 for (i = 0; i < scope.rBook.calendarLayers.length; i += 1) {
@@ -295,7 +310,7 @@
 
                     isOverlapping = function (ts) {
                         ts.dbId = scope.rBook.calendarLayers[scope.model.layerInEdit].dbId;
-                        return timeSlotHelpers.isOverlapping(ts, fullCalendarHelpers.eventsToTS());
+                        return timeSlotHelpers.isOverlapping(ts, eventsToTS());
                     };
 
                     minToDuration = function (pmin) {
@@ -351,7 +366,7 @@
                     updateCalEvents = function (doRefresh) {
                         var i, tSlots, tSlot, ts, tsLayer;
 
-                        combCal = calLayerHelpers.createCombinedCalLayer(
+                        combCal = calHelpers.createCombinedCalLayer(
                             scope.rBook.calendarLayers,
                             (scope.model.calMode === 'combined') ? undefined : scope.model.calendarLayerSelected,
                             true
