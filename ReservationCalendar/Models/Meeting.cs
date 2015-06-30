@@ -11,7 +11,7 @@ namespace ReservationCalendar.Models
     {
         [Key]
         [ForeignKey("AbsTimeSlot")]
-        public int AbsTimeSlotID { get; set; }
+        public int MeetingID { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
 
