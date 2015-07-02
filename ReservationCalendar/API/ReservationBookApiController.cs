@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using ReservationCalendar.DAL;
+using ReservationCalendar.Interfaces;
 using ReservationCalendar.Models;
+using ReservationCalendar.Repository;
 using ReservationCalendar.Services;
 using System;
 using System.Collections.Generic;
@@ -16,13 +18,17 @@ namespace ReservationCalendar.API
 {
     public class ReservationBookApiController : ApiController
     {
-        private ReservationCalendarContext db = new ReservationCalendarContext();
+        private IGenericRepository _calendarRepository;
 
+        public ReservationBookApiController()
+        {
+            _calendarRepository = new CalendarRepository();
+        }
         // GET: api/ReservationBookApi/GetReservationBook/1
         [ResponseType(typeof(ReservationBookDTO))]
         public async Task<OperationStatus> GetReservationBook(int id)
         {
-            ReservationBook rBook = await db.ReservationBooks.Where(r => r.ID == id).SingleOrDefaultAsync<ReservationBook>();
+            ReservationBook rBook = await _calendarRepository.SingleAsync<ReservationBook>(r => r.ID == id);
             ReservationBookDTO rBookDTO = new ReservationBookDTO(rBook, null, false, false, false);
             OperationStatus ret;
 
@@ -42,9 +48,7 @@ namespace ReservationCalendar.API
         [ResponseType(typeof(ReservationBookDTO))]
         public async Task<OperationStatus> GetReservationBook(int id, long startTime, long endTime)
         {
-            ReservationBook rBook = await db.ReservationBooks
-                .Include(r => r.CalendarBookAllocations)
-                .Where(r => r.ID == id).SingleOrDefaultAsync<ReservationBook>();
+            ReservationBook rBook = await _calendarRepository.SingleAsync<ReservationBook>(r => r.ID == id, "CalendarBookAllocations");               
             TimePeriod timePeriod = new TimePeriod { unitsAsDays = true, startTime = startTime, endTime = endTime };
             ReservationBookDTO rBookDTO = new ReservationBookDTO(rBook, timePeriod, true, false, false);
             OperationStatus ret;

@@ -4,7 +4,7 @@
     'use strict';
 
     angular
-        .module('ReservationCalendar', [])
+        .module('ReservationCalendar', [ 'RBook', 'Locale' ])
         .directive('reservationCalendar', ['rBook', 'locale', 'globalDialogs', function (rBook, locale, globalDialogs) {
             return {
                 restrict: 'E',

@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using ReservationCalendar.DAL;
+using ReservationCalendar.Interfaces;
 using ReservationCalendar.Models;
+using ReservationCalendar.Repository;
 using ReservationCalendar.Services;
 using System;
 using System.Collections.Generic;
@@ -24,7 +26,7 @@ namespace ReservationCalendar.API
 
     public class CalendarLayerApiController : ApiController
     {
-        private ReservationCalendarContext db = new ReservationCalendarContext();
+        private IGenericRepository _calendarRepository;
         private List<AbsTimeSlot> storedTimeSlots;
 
         private void deleteTSFromStoredList(AbsTimeSlot ts)
@@ -43,13 +45,18 @@ namespace ReservationCalendar.API
 
         private async Task<List<AbsTimeSlot>> queryTS(int calDbId, long startTime, long endTime)
         {
-            List<AbsTimeSlot> ret = await db.AbsTimeSlots.AsNoTracking().Where(
+            List<AbsTimeSlot> ret = await _calendarRepository.QueryNoTracking<AbsTimeSlot>(
                 t => t.AbsCalendarLayerID == calDbId &&
                     ((t.StartTime >= startTime && t.StartTime < endTime) ||
                      (t.EndTime > startTime && t.EndTime <= endTime) ||
                      (t.StartTime < startTime && t.EndTime > endTime))).ToListAsync();
 
             return ret;
+        }
+
+        public CalendarLayerApiController()
+        {
+            _calendarRepository = new CalendarRepository();
         }
 
         // POST: api/CalendarLayerApi/Edit
@@ -118,27 +125,25 @@ namespace ReservationCalendar.API
 
                         if (aTS.ID == 0)
                         {
-                            db.AbsTimeSlots.Add(aTS);
+                            _calendarRepository.Add<AbsTimeSlot>(aTS);
                             if (aTS.Meeting != null)
                             {
-                                db.Meetings.Add(aTS.Meeting);
+                                _calendarRepository.Add<Meeting>(aTS.Meeting);
                             }
                         }
                         else
                         {
-                            db.AbsTimeSlots.Attach(aTS);
-                            db.Entry(aTS).State = EntityState.Modified;
+                            _calendarRepository.UpdateNoSave<AbsTimeSlot>(aTS);
 
                             if (aTS.Meeting != null)
                             {
                                 if (aTS.Meeting.RowVersion == null)
                                 {
-                                    db.Meetings.Add(aTS.Meeting);
+                                    _calendarRepository.Add<Meeting>(aTS.Meeting);
                                 }
                                 else
                                 {
-                                    db.Meetings.Attach(aTS.Meeting);
-                                    db.Entry(aTS.Meeting).State = EntityState.Modified;
+                                    _calendarRepository.UpdateNoSave<Meeting>(aTS.Meeting);
                                 }
                             }
                         }
@@ -150,17 +155,15 @@ namespace ReservationCalendar.API
                     {
                         AbsTimeSlot aTS = new AbsTimeSlot(timeSlot);
 
-                        db.AbsTimeSlots.Attach(aTS);
-
                         if (aTS.Meeting != null)
                         {
-                            db.Meetings.Attach(aTS.Meeting);
-                            db.Meetings.Remove(aTS.Meeting);
+                            _calendarRepository.DeleteNoSave<Meeting>(aTS.Meeting);
                         }
-                        db.AbsTimeSlots.Remove(aTS);
+
+                        _calendarRepository.DeleteNoSave<AbsTimeSlot>(aTS);
                     }
 
-                    await db.SaveChangesAsync();
+                    await _calendarRepository.SaveChangesAsync();
 
                     resp = new CalendarLayerEditResp();
 
