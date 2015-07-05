@@ -121,3 +121,4 @@ C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.
 C:\Workarea\ReservationCalendar\ReservationCalendar\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Workarea\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.dll
 C:\Workarea\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.pdb
+C:\Workarea\ReservationCalendar\ReservationCalendar\obj\Debug\ReservationCalendar.csprojResolveAssemblyReference.cache

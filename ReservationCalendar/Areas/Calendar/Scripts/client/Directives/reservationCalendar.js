@@ -68,7 +68,17 @@
                                 tsToUpd.push(tsOrig);
                             }
 
-                            saveCalLayerDB();
+                            rBook.notifyOnCalLayerChange(updateCalLayerOnChange);
+
+                            if (scope.rBook.calendarLayers[scope.model.layerInEdit].layerType ===
+                                calHelpers.CalendarLayerType.MEETING) {
+                                globalDialogs.dialogs.meetingDetailsDialog.show({
+                                    tsOrig: ts.tsOrig,
+                                    calLToEdit: calLToEdit
+                                });
+                            } else {
+                                saveCalLayerDB();
+                            }
                         } else {
                             saving = false;
                         }
@@ -402,6 +412,8 @@
                             calBody.fullCalendar('removeEvents');
                             calBody.fullCalendar('addEventSource', calEvents);
                         }
+
+                        saving = false;
                     };
 
                     updateCalLayerOnChange = function (data) {
