@@ -312,6 +312,11 @@ namespace ReservationCalendar.Repository
             return status;
         }
 
+        public void SaveChanges()
+        {
+            DataContext.SaveChanges();
+        }
+
         public async Task SaveChangesAsync()
         {
             await DataContext.SaveChangesAsync();

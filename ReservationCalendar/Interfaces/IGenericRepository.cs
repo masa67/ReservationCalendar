@@ -22,6 +22,7 @@ namespace ReservationCalendar.Interfaces
         OperationStatus Delete<T>(T entity) where T : class;
         void DeleteNoSave<T>(T entity) where T : class;
         OperationStatus DeleteAll<T>(Expression<Func<T, bool>> predicate) where T : class;
+        void SaveChanges();
 
         T Add<T>(T entity) where T : class;
 
@@ -36,7 +37,6 @@ namespace ReservationCalendar.Interfaces
         Task<OperationStatus> DeleteAsync<T>(T entity) where T : class;
         Task<OperationStatus> DeleteAllAsync<T>(Expression<Func<T, bool>> predicate) where T : class;
         Task<OperationStatus> DeleteAllAsync<T>() where T : class;
-
         Task SaveChangesAsync();
 
         void SetConnection(string connection);
