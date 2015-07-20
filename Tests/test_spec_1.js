@@ -4,6 +4,8 @@ describe('open the calendar', function() {
 
         element(by.css('.fc-next-button')).click();
 
+        element.all(by.model('model.layerInEdit')).get(2).click();
 
+        element.all(by.css('.fc-slats tr')).get(9).click();
     })
 });
