@@ -2,8 +2,8 @@
 <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
 <!--[if !IE]><!-->
-<html lang="en">
- <!--<![endif]-->
+<html lang="en" ng-app="calApp">
+<!--<![endif]-->
 <head>
     <meta charset="utf-8" />
     <title>@ViewBag.Title - Calendar Demo</title>
@@ -70,7 +70,7 @@
     @Scripts.Render("~/bundles/calendarApp")
     @RenderSection("scripts", required: false)
     <script>
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             Metronic.init(); // init metronic core componets
             Layout.init(); // init layout
             QuickSidebar.init() // init quick sidebar
